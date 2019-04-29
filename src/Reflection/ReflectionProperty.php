@@ -8,6 +8,8 @@ use Closure;
 use Exception;
 use InvalidArgumentException;
 use phpDocumentor\Reflection\Type;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -347,34 +349,6 @@ class ReflectionProperty implements CoreReflector
         }, $instance, $declaringClassName)->__invoke($instance, $this->getName());
     }
 
-    public function getType() : ?ReflectionType
-    {
-        if ($this->hasType()) {
-            $allowsNull = false;
-            if ($this->node->type instanceof NullableType) {
-                $allowsNull = true;
-                $type       = $this->node->type->type->name;
-            } else {
-                $type = $this->node->type->name;
-            }
-
-            return ReflectionType::createFromTypeAndReflector($type, $allowsNull, $this->reflector);
-        }
-
-        return null;
-    }
-
-    public function hasType() : bool
-    {
-        return $this->node->type !== null;
-    }
-
-    // todo
-//    public function isInitialized(object $object) : bool
-//    {
-//
-//    }
-
     /**
      * @param object     $object
      * @param mixed|null $value
@@ -404,6 +378,38 @@ class ReflectionProperty implements CoreReflector
             $instance->{$propertyName} = $value;
         }, $instance, $declaringClassName)->__invoke($instance, $this->getName(), $value);
     }
+
+    public function getType() : ?ReflectionType
+    {
+        if ($this->hasType()) {
+            $allowsNull = false;
+            if ($this->node->type instanceof NullableType) {
+                $allowsNull = true;
+                $type       = $this->node->type->type->name;
+            } else {
+                if ($this->node->type instanceof Identifier) {
+                    $type = $this->node->type->name;
+                } else if ($this->node->type instanceof FullyQualified) {
+                    $type = $this->node->type->toCodeString();
+                }
+            }
+
+            return ReflectionType::createFromTypeAndReflector($type, $allowsNull, $this->reflector);
+        }
+
+        return null;
+    }
+
+    public function hasType() : bool
+    {
+        return $this->node->type !== null;
+    }
+
+    // todo
+//    public function isInitialized(object $object) : bool
+//    {
+//
+//    }
 
     /**
      * @throws ClassDoesNotExist

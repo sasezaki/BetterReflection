@@ -22,6 +22,7 @@ use Roave\BetterReflection\Reflection\Exception\NotAnObject;
 use Roave\BetterReflection\Reflection\Exception\ObjectNotInstanceOfClass;
 use Roave\BetterReflection\Reflection\Exception\Uncloneable;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
+use Roave\BetterReflection\Reflection\ReflectionType;
 use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
 use Roave\BetterReflection\SourceLocator\Type\ComposerSourceLocator;
@@ -32,6 +33,7 @@ use Roave\BetterReflectionTest\Fixture\ClassForHinting;
 use Roave\BetterReflectionTest\Fixture\ExampleClass;
 use Roave\BetterReflectionTest\Fixture\PropertyGetSet;
 use Roave\BetterReflectionTest\Fixture\StaticPropertyGetSet;
+use Roave\BetterReflectionTest\Fixture\TypedProperty;
 use stdClass;
 use Throwable;
 use TraitWithProperty;
@@ -600,5 +602,33 @@ PHP;
         $propertyReflection->setValue($object, 'batman');
 
         self::assertSame('batman', $propertyReflection->getValue($object));
+    }
+
+    public function testType() : void
+    {
+        $typedProperty = __DIR__ . '/../Fixture/TypedProperty.php';
+
+        $reflector = new ClassReflector(new StringSourceLocator(file_get_contents($typedProperty), $this->astLocator));
+        $classReflection  = $reflector->reflect(TypedProperty::class);
+
+        self::assertFalse($classReflection->getProperty('nonTyped')->hasType());
+        self::assertNull($classReflection->getProperty('nonTyped')->getType());
+
+        $propertyNumber = $classReflection->getProperty('number');
+        self::assertTrue($propertyNumber->hasType());
+        self::assertInstanceOf(ReflectionType::class, $propertyNumber->getType());
+        self::assertTrue($propertyNumber->getType()->isBuiltin());
+        self::assertFalse($propertyNumber->getType()->allowsNull());
+
+        $propertyNullableNumber = $classReflection->getProperty('nullableNumber');
+        self::assertTrue($propertyNullableNumber->hasType());
+        self::assertInstanceOf(ReflectionType::class, $propertyNullableNumber->getType());
+        self::assertTrue($propertyNullableNumber->getType()->allowsNull());
+
+        $propertyDate = $classReflection->getProperty('date');
+        self::assertTrue($propertyDate->hasType());
+        self::assertInstanceOf(ReflectionType::class, $propertyDate->getType());
+        self::assertFalse($propertyDate->getType()->isBuiltin());
+        self::assertSame(\DateTimeImmutable::class, $propertyDate->getType()->__toString());
     }
 }
