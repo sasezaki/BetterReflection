@@ -8,6 +8,7 @@ use Closure;
 use Exception;
 use InvalidArgumentException;
 use phpDocumentor\Reflection\Type;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property as PropertyNode;
@@ -345,6 +346,34 @@ class ReflectionProperty implements CoreReflector
             return $instance->{$propertyName};
         }, $instance, $declaringClassName)->__invoke($instance, $this->getName());
     }
+
+    public function getType() : ?ReflectionType
+    {
+        if ($this->hasType()) {
+            $allowsNull = false;
+            if ($this->node->type instanceof NullableType) {
+                $allowsNull = true;
+                $type       = $this->node->type->type->name;
+            } else {
+                $type = $this->node->type->name;
+            }
+
+            return ReflectionType::createFromTypeAndReflector($type, $allowsNull, $this->reflector);
+        }
+
+        return null;
+    }
+
+    public function hasType() : bool
+    {
+        return $this->node->type !== null;
+    }
+
+    // todo
+//    public function isInitialized(object $object) : bool
+//    {
+//
+//    }
 
     /**
      * @param object     $object
