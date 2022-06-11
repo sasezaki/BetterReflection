@@ -10,6 +10,14 @@
     autoloader="psalm.bootstrap.php"
 >
     <projectFiles>
-        <directory name="src" />
+        <directory name="src"/>
+        <directory name="test/benchmark"/>
+        <directory name="test/unit"/>
+        <ignoreFiles>
+            <directory name="test/unit/Fixture"/>
+        </ignoreFiles>
     </projectFiles>
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
 </psalm>
