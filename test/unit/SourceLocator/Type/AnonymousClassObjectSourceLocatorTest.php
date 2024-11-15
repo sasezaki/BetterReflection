@@ -274,7 +274,7 @@ class AnonymousClassObjectSourceLocatorTest extends TestCase
     {
         $realPath = realpath($path);
 
-        assert(is_string($realPath) && $realPath !== '');
+        assert(is_string($realPath));
 
         return $realPath;
     }

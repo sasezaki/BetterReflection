@@ -48,7 +48,7 @@ class ReflectionObjectTest extends TestCase
     public static function anonymousClassInstancesProvider(): array
     {
         $file = realpath(__DIR__ . '/../Fixture/AnonymousClassInstances.php');
-        assert(is_string($file) && $file !== '');
+        assert(is_string($file));
 
         $file = FileHelper::normalizeWindowsPath($file);
 
@@ -76,7 +76,7 @@ class ReflectionObjectTest extends TestCase
     public function testReflectionForAnonymousClassWithInterface(): void
     {
         $file = realpath(__DIR__ . '/../Fixture/AnonymousClassInstanceWithInterfaceForRequire.php');
-        assert(is_string($file) && $file !== '');
+        assert(is_string($file));
 
         $file = FileHelper::normalizeWindowsPath($file);
 
@@ -116,8 +116,8 @@ class ReflectionObjectTest extends TestCase
     public function testReflectionWorksWithDynamicallyDeclaredMembers(): void
     {
         $foo      = new RuntimeProperties();
-        $foo->bar = 'huzzah'; // @phpstan-ignore-line
-        $foo->baz = 'bazzah'; // @phpstan-ignore-line
+        $foo->bar = 'huzzah'; // @phpstan-ignore property.notFound
+        $foo->baz = 'bazzah'; // @phpstan-ignore property.notFound
 
         $classInfo = ReflectionObject::createFromInstance($foo);
 
@@ -139,7 +139,7 @@ class ReflectionObjectTest extends TestCase
     public function testExceptionThrownWhenInvalidInstanceGiven(): void
     {
         $foo      = new RuntimeProperties();
-        $foo->bar = 'huzzah'; // @phpstan-ignore-line
+        $foo->bar = 'huzzah'; // @phpstan-ignore property.notFound
 
         $classInfo = ReflectionObject::createFromInstance($foo);
 
@@ -162,8 +162,8 @@ class ReflectionObjectTest extends TestCase
     public function testGetRuntimePropertiesWithFilter(): void
     {
         $foo      = new RuntimeProperties();
-        $foo->bar = 'huzzah'; // @phpstan-ignore-line
-        $foo->baz = 'bazzah'; // @phpstan-ignore-line
+        $foo->bar = 'huzzah'; // @phpstan-ignore property.notFound
+        $foo->baz = 'bazzah'; // @phpstan-ignore property.notFound
 
         $classInfo = ReflectionObject::createFromInstance($foo);
 
@@ -176,8 +176,8 @@ class ReflectionObjectTest extends TestCase
     public function testGetRuntimeImmediatePropertiesWithFilter(): void
     {
         $foo      = new RuntimeProperties();
-        $foo->bar = 'huzzah'; // @phpstan-ignore-line
-        $foo->baz = 'bazzah'; // @phpstan-ignore-line
+        $foo->bar = 'huzzah'; // @phpstan-ignore property.notFound
+        $foo->baz = 'bazzah'; // @phpstan-ignore property.notFound
 
         $classInfo = ReflectionObject::createFromInstance($foo);
 
@@ -190,7 +190,7 @@ class ReflectionObjectTest extends TestCase
     public function testRuntimePropertyCannotBePromoted(): void
     {
         $foo      = new RuntimeProperties();
-        $foo->bar = 'huzzah'; // @phpstan-ignore-line
+        $foo->bar = 'huzzah'; // @phpstan-ignore property.notFound
 
         $classInfo    = ReflectionObject::createFromInstance($foo);
         $propertyInfo = $classInfo->getProperty('bar');
@@ -202,7 +202,7 @@ class ReflectionObjectTest extends TestCase
     public function testGetDefaultPropertiesShouldIgnoreRuntimeProperty(): void
     {
         $object                     = new DefaultProperties();
-        $object->notDefaultProperty = null; // @phpstan-ignore-line
+        $object->notDefaultProperty = null; // @phpstan-ignore property.notFound
 
         $classInfo = ReflectionObject::createFromInstance($object);
 

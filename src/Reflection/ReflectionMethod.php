@@ -151,7 +151,8 @@ class ReflectionMethod
     /** @internal */
     public function withCurrentClass(ReflectionClass $currentClass): self
     {
-        $clone               = clone $this;
+        $clone = clone $this;
+        /** @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor */
         $clone->currentClass = $currentClass;
 
         if ($clone->returnType !== null) {
@@ -430,6 +431,7 @@ class ReflectionMethod
         /** @psalm-suppress InvalidStringClass */
         $closure = Closure::bind(fn (string $implementingClassName, string $_methodName, array $methodArgs): mixed => $implementingClassName::{$_methodName}(...$methodArgs), null, $implementingClassName);
 
+        /** @phpstan-ignore function.alreadyNarrowedType, instanceof.alwaysTrue */
         assert($closure instanceof Closure);
 
         return $closure->__invoke($implementingClassName, $this->getName(), $args);
@@ -441,6 +443,7 @@ class ReflectionMethod
         /** @psalm-suppress MixedMethodCall */
         $closure = Closure::bind(fn (object $object, string $methodName, array $methodArgs): mixed => $object->{$methodName}(...$methodArgs), $object, $this->getImplementingClass()->getName());
 
+        /** @phpstan-ignore function.alreadyNarrowedType, instanceof.alwaysTrue */
         assert($closure instanceof Closure);
 
         return $closure->__invoke($object, $this->getName(), $args);

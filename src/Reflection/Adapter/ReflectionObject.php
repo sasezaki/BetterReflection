@@ -82,13 +82,13 @@ final class ReflectionObject extends CoreReflectionObject
     }
 
     /** @psalm-mutation-free */
-    public function getStartLine(): int|false
+    public function getStartLine(): int
     {
         return $this->betterReflectionObject->getStartLine();
     }
 
     /** @psalm-mutation-free */
-    public function getEndLine(): int|false
+    public function getEndLine(): int
     {
         return $this->betterReflectionObject->getEndLine();
     }

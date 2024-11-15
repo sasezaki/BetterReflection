@@ -88,7 +88,7 @@ class ClosureSourceLocatorTest extends TestCase
     {
         eval('$closure = function () {};');
 
-        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore variable.undefined */
         $locator = new ClosureSourceLocator($closure, $this->parser);
 
         $this->expectException(EvaledClosureCannotBeLocated::class);
@@ -233,7 +233,7 @@ class ClosureSourceLocatorTest extends TestCase
     {
         $realPath = realpath($path);
 
-        assert(is_string($realPath) && $realPath !== '');
+        assert(is_string($realPath));
 
         return $realPath;
     }

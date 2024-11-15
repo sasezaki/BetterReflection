@@ -11,7 +11,6 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Parser;
 use ReflectionClass as CoreReflectionClass;
-use ReflectionException;
 use Roave\BetterReflection\Identifier\Identifier;
 use Roave\BetterReflection\Identifier\IdentifierType;
 use Roave\BetterReflection\Reflection\Reflection;
@@ -36,7 +35,6 @@ final class AnonymousClassObjectSourceLocator implements SourceLocator
 {
     private CoreReflectionClass $coreClassReflection;
 
-    /** @throws ReflectionException */
     public function __construct(object $anonymousClassObject, private Parser $parser)
     {
         $this->coreClassReflection = new CoreReflectionClass($anonymousClassObject);

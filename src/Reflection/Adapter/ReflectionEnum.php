@@ -91,12 +91,12 @@ final class ReflectionEnum extends CoreReflectionEnum
         return $fileName !== null ? FileHelper::normalizeSystemPath($fileName) : false;
     }
 
-    public function getStartLine(): int|false
+    public function getStartLine(): int
     {
         return $this->betterReflectionEnum->getStartLine();
     }
 
-    public function getEndLine(): int|false
+    public function getEndLine(): int
     {
         return $this->betterReflectionEnum->getEndLine();
     }

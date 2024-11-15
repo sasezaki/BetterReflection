@@ -11,7 +11,7 @@ use function trait_exists;
 /** @internal */
 class ClassExistenceChecker
 {
-    /** @psalm-assert-if-true class-string $name */
+    /** @psalm-assert-if-true class-string|trait-string $name */
     public static function exists(string $name): bool
     {
         return self::classExists($name) || self::interfaceExists($name) || self::traitExists($name);

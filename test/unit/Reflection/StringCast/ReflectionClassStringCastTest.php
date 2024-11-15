@@ -132,7 +132,7 @@ class ReflectionClassStringCastTest extends TestCase
 
         $object = new StringCastClassObject();
 
-        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore property.notFound */
         $object->dynamicProperty = 'string';
 
         $objectReflection = ReflectionObject::createFromInstance($object);

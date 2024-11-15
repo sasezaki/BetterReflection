@@ -25,12 +25,19 @@ parameters:
         - phar://%currentWorkingDirectory%/test/unit/Fixture/autoload.phar/vendor/autoload.php
 
     ignoreErrors:
-        # Impossible to define type hint for anonymous class
-        -
-            message: '#Call to an undefined method PhpParser\\NodeVisitorAbstract::(getNode|setConstantName)\(\)#'
-            path: src/SourceLocator/Type/AutoloadSourceLocator.php
-        -
-            message: '#Method Roave\\BetterReflection\\Reflection\\ReflectionClass::computeModifiers\(\) never returns \d+ so it can be removed from the return type#'
-            path: src/Reflection/ReflectionClass.php
         -
             identifier: missingType.generics
+        -
+            identifier: possiblyImpure.functionCall
+        -
+            identifier: possiblyImpure.methodCall
+        -
+            identifier: possiblyImpure.new
+        -
+            identifier: property.readOnlyByPhpDocAssignNotInConstructor
+        -
+            identifier: staticMethod.alreadyNarrowedType
+            path: test/unit/
+        -
+            identifier: varTag.nativeType
+            path: test/unit/

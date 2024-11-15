@@ -95,13 +95,13 @@ final class ReflectionFunction extends CoreReflectionFunction
     }
 
     /** @psalm-mutation-free */
-    public function getStartLine(): int|false
+    public function getStartLine(): int
     {
         return $this->betterReflectionFunction->getStartLine();
     }
 
     /** @psalm-mutation-free */
-    public function getEndLine(): int|false
+    public function getEndLine(): int
     {
         return $this->betterReflectionFunction->getEndLine();
     }

@@ -96,7 +96,6 @@ use UnitEnum;
 
 use function array_keys;
 use function array_map;
-use function array_values;
 use function array_walk;
 use function basename;
 use function class_exists;
@@ -468,7 +467,7 @@ class ReflectionClassTest extends TestCase
         );
     }
 
-    /** @return list<array{string, class-string, list<class-string>}> */
+    /** @return list<array{string, class-string, list<string>}> */
     public static function getInterfaceClassNamesDataProvider(): array
     {
         return [
@@ -1597,7 +1596,7 @@ PHP;
         );
     }
 
-    /** @return list<array{string, class-string, list<class-string>}> */
+    /** @return list<array{string, class-string, list<string>}> */
     public static function getTraitClassNamesDataProvider(): array
     {
         return [
@@ -2010,7 +2009,7 @@ PHP;
 
         $this->expectException(TypeError::class);
 
-        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore argument.type */
         $class->isInstance('foo');
     }
 
@@ -2229,8 +2228,8 @@ PHP;
         sort($cInterfaces);
         sort($dInterfaces);
 
-        self::assertSame(['B'], array_values($cInterfaces));
-        self::assertSame(['A', 'C'], array_values($dInterfaces));
+        self::assertSame(['B'], $cInterfaces);
+        self::assertSame(['A', 'C'], $dInterfaces);
     }
 
     public function testReflectedTraitHasNoInterfaces(): void

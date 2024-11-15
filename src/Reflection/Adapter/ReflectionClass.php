@@ -102,13 +102,13 @@ final class ReflectionClass extends CoreReflectionClass
     }
 
     /** @psalm-mutation-free */
-    public function getStartLine(): int|false
+    public function getStartLine(): int
     {
         return $this->betterReflectionClass->getStartLine();
     }
 
     /** @psalm-mutation-free */
-    public function getEndLine(): int|false
+    public function getEndLine(): int
     {
         return $this->betterReflectionClass->getEndLine();
     }
