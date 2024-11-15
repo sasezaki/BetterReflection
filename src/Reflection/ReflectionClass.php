@@ -53,7 +53,6 @@ use function array_reverse;
 use function array_slice;
 use function array_values;
 use function assert;
-use function end;
 use function in_array;
 use function is_int;
 use function is_string;
@@ -120,7 +119,7 @@ class ReflectionClass implements Reflection
     private array $immediateMethods;
 
     /** @var array{
-     *     aliases: array<non-empty-string, non-empty-string>,
+     *     aliases: array<trait-string, list<array{alias: non-empty-string, method: non-empty-string, hash: non-empty-string}>>,
      *     modifiers: array<non-empty-string, int-mask-of<ReflectionMethodAdapter::IS_*>>,
      *     precedences: array<non-empty-string, non-empty-string>,
      *     hashes: array<non-empty-string, non-empty-string>,
@@ -391,12 +390,22 @@ class ReflectionClass implements Reflection
             $methods[] = $createMethod($method->getAliasName());
         }
 
-        foreach ($this->traitsData['aliases'] as $aliasMethodName => $traitAliasDefinition) {
-            if ($lowerCasedMethodHash !== $traitAliasDefinition) {
-                continue;
-            }
+        if ($this->traitsData['aliases'] !== []) {
+            $traits = array_combine($this->traitClassNames, $this->getTraits());
 
-            $methods[] = $createMethod($aliasMethodName);
+            foreach ($this->traitsData['aliases'] as $traitClassName => $traitAliasDefinitions) {
+                foreach ($traitAliasDefinitions as $traitAliasDefinition) {
+                    if ($lowerCasedMethodHash !== $traitAliasDefinition['hash']) {
+                        continue;
+                    }
+
+                    if (! $traits[$traitClassName]->hasMethod($traitAliasDefinition['method'])) {
+                        continue;
+                    }
+
+                    $methods[] = $createMethod($traitAliasDefinition['alias']);
+                }
+            }
         }
 
         return $methods;
@@ -1366,10 +1375,24 @@ class ReflectionClass implements Reflection
      */
     public function getTraitAliases(): array
     {
-        return array_map(
-            fn (string $lowerCasedMethodHash): string => $this->traitsData['hashes'][$lowerCasedMethodHash],
-            $this->traitsData['aliases'],
-        );
+        if ($this->traitsData['aliases'] === []) {
+            return [];
+        }
+
+        $traits       = array_combine($this->traitClassNames, $this->getTraits());
+        $traitAliases = [];
+
+        foreach ($this->traitsData['aliases'] as $traitClassName => $traitAliasDefinitions) {
+            foreach ($traitAliasDefinitions as $traitAliasDefinition) {
+                if (! $traits[$traitClassName]->hasMethod($traitAliasDefinition['method'])) {
+                    continue;
+                }
+
+                $traitAliases[$traitAliasDefinition['alias']] = $this->traitsData['hashes'][$traitAliasDefinition['hash']];
+            }
+        }
+
+        return $traitAliases;
     }
 
     /**
@@ -1377,7 +1400,7 @@ class ReflectionClass implements Reflection
      *
      * 'aliases': List of the aliases used when importing traits. In format:
      *
-     *   'aliasedMethodName' => 'ActualClass::actualMethod'
+     *   'traitClassName' => ['alias' => 'aliasedMethodName', 'method' => 'actualMethodName', 'hash' => 'traitClassName::actualMethodName'],
      *
      *   Example:
      *   // When reflecting a code such as:
@@ -1387,7 +1410,7 @@ class ReflectionClass implements Reflection
      *   }
      *
      *   // This method would return
-     *   //   ['myAliasedMethod' => 'MyTrait::myTraitMethod']
+     *   //   ['MyTrait' => ['alias' => 'myAliasedMethod', 'method' => 'myTraitMethod', 'hash' => 'mytrait::mytraitmethod']]
      *
      * 'modifiers': Used modifiers when importing traits. In format:
      *
@@ -1418,7 +1441,7 @@ class ReflectionClass implements Reflection
      *   //   ['MyTrait1::foo' => 'MyTrait2::foo']
      *
      * @return array{
-     *     aliases: array<non-empty-string, non-empty-string>,
+     *     aliases: array<trait-string, list<array{alias: non-empty-string, method: non-empty-string, hash: non-empty-string}>>,
      *     modifiers: array<non-empty-string, int-mask-of<ReflectionMethodAdapter::IS_*>>,
      *     precedences: array<non-empty-string, non-empty-string>,
      *     hashes: array<non-empty-string, non-empty-string>,
@@ -1434,37 +1457,60 @@ class ReflectionClass implements Reflection
         ];
 
         foreach ($node->getTraitUses() as $traitUsage) {
-            $traitNames  = $traitUsage->traits;
-            $adaptations = $traitUsage->adaptations;
+            foreach ($traitUsage->adaptations as $adaptation) {
+                $usedTraits = $adaptation->trait !== null ? [$adaptation->trait] : $traitUsage->traits;
+                $traitsData = $this->processTraitAdaptation($adaptation, $usedTraits, $traitsData);
+            }
+        }
 
-            foreach ($adaptations as $adaptation) {
-                $usedTrait = $adaptation->trait;
-                if ($usedTrait === null) {
-                    $usedTrait = end($traitNames);
+        return $traitsData;
+    }
+
+    /**
+     * @phpcs:disable Squiz.Commenting.FunctionComment.MissingParamName
+     *
+     * @param array<array-key, Node\Name> $usedTraits
+     * @param array{
+     *     aliases: array<trait-string, list<array{alias: non-empty-string, method: non-empty-string, hash: non-empty-string}>>,
+     *     modifiers: array<non-empty-string, int-mask-of<ReflectionMethodAdapter::IS_*>>,
+     *     precedences: array<non-empty-string, non-empty-string>,
+     *     hashes: array<non-empty-string, non-empty-string>,
+     * } $traitsData
+     *
+     * @return array{
+     *     aliases: array<trait-string, list<array{alias: non-empty-string, method: non-empty-string, hash: non-empty-string}>>,
+     *     modifiers: array<non-empty-string, int-mask-of<ReflectionMethodAdapter::IS_*>>,
+     *     precedences: array<non-empty-string, non-empty-string>,
+     *     hashes: array<non-empty-string, non-empty-string>,
+     * }
+     */
+    private function processTraitAdaptation(Node\Stmt\TraitUseAdaptation $adaptation, array $usedTraits, array $traitsData): array
+    {
+        foreach ($usedTraits as $usedTrait) {
+            $methodHash           = $this->methodHash($usedTrait->toString(), $adaptation->method->toString());
+            $lowerCasedMethodHash = $this->lowerCasedMethodHash($usedTrait->toString(), $adaptation->method->toString());
+
+            $traitsData['hashes'][$lowerCasedMethodHash] = $methodHash;
+
+            if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Alias) {
+                if ($adaptation->newModifier !== null) {
+                    /** @var int-mask-of<ReflectionMethodAdapter::IS_*> $modifier */
+                    $modifier                                       = $adaptation->newModifier;
+                    $traitsData['modifiers'][$lowerCasedMethodHash] = $modifier;
                 }
 
-                $methodHash           = $this->methodHash($usedTrait->toString(), $adaptation->method->toString());
-                $lowerCasedMethodHash = $this->lowerCasedMethodHash($usedTrait->toString(), $adaptation->method->toString());
-
-                $traitsData['hashes'][$lowerCasedMethodHash] = $methodHash;
-
-                if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Alias) {
-                    if ($adaptation->newModifier !== null) {
-                        /** @var int-mask-of<ReflectionMethodAdapter::IS_*> $modifier */
-                        $modifier                                       = $adaptation->newModifier;
-                        $traitsData['modifiers'][$lowerCasedMethodHash] = $modifier;
-                    }
-
-                    if ($adaptation->newName) {
-                        $traitsData['aliases'][$adaptation->newName->name] = $lowerCasedMethodHash;
-                        continue;
-                    }
+                if ($adaptation->newName !== null) {
+                    // We need to save all possible combinations of trait and method names
+                    // The real aliases will be filtered in getters
+                    /** @var trait-string $usedTraitClassName */
+                    $usedTraitClassName                           = $usedTrait->toString();
+                    $traitsData['aliases'][$usedTraitClassName][] = [
+                        'alias' => $adaptation->newName->name,
+                        'method' => $adaptation->method->toString(),
+                        'hash' => $lowerCasedMethodHash,
+                    ];
                 }
-
-                if (! $adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence || ! $adaptation->insteadof) {
-                    continue;
-                }
-
+            } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
                 foreach ($adaptation->insteadof as $insteadof) {
                     $adaptationNameHash = $this->lowerCasedMethodHash($insteadof->toString(), $adaptation->method->toString());
 
