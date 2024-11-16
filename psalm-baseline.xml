@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.25.0@01a8eb06b9e9cc6cfb6a320bf9fb14331919d505">
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="src/Reflection/Attribute/ReflectionAttributeHelper.php">
     <ImpureMethodCall>
       <code><![CDATA[toLowerString]]></code>
@@ -32,8 +32,8 @@
             [$valueParameter],
             new Node\NullableType(new Node\Identifier('static')),
         )]]></code>
-      <code><![CDATA[$createMethod($aliasMethodName)]]></code>
       <code><![CDATA[$createMethod($method->getAliasName())]]></code>
+      <code><![CDATA[$createMethod($traitAliasDefinition['alias'])]]></code>
       <code><![CDATA[$createMethod('cases', [], new Node\Identifier('array'))]]></code>
       <code><![CDATA[$createProperty('name', new Node\Identifier('string'))]]></code>
       <code><![CDATA[$createProperty('name', new Node\Identifier('string'))]]></code>
@@ -42,7 +42,6 @@
                     new Node\Identifier('int'),
                     new Node\Identifier('string'),
                 ]))]]></code>
-      <code><![CDATA[array_map]]></code>
       <code><![CDATA[array_map]]></code>
       <code><![CDATA[array_map]]></code>
       <code><![CDATA[array_map]]></code>
