@@ -59,7 +59,7 @@ final class Psr4Mapping implements PsrAutoloaderMapping
         $className        = $identifier->getName();
         $matchingPrefixes = $this->matchingPrefixes($className);
 
-        return array_values(array_filter(array_merge(
+        return array_merge(
             [],
             ...array_map(static function (array $paths, string $prefix) use ($className): array {
                 $subPath = ltrim(str_replace('\\', '/', substr($className, strlen($prefix))), '/');
@@ -70,7 +70,7 @@ final class Psr4Mapping implements PsrAutoloaderMapping
 
                 return array_map(static fn (string $path): string => $path . '/' . $subPath . '.php', $paths);
             }, $matchingPrefixes, array_keys($matchingPrefixes)),
-        )));
+        );
     }
 
     /** @return array<string, list<string>> */

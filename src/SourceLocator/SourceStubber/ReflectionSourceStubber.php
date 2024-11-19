@@ -79,6 +79,7 @@ final class ReflectionSourceStubber implements SourceStubber
     /** @param class-string|trait-string $className */
     public function generateClassStub(string $className): StubData|null
     {
+        /** @phpstan-ignore staticMethod.alreadyNarrowedType */
         if (! ClassExistenceChecker::exists($className)) {
             return null;
         }
@@ -139,10 +140,7 @@ final class ReflectionSourceStubber implements SourceStubber
         $this->addDocComment($functionNode, $functionReflection);
         $this->addParameters($functionNode, $functionReflection);
 
-        $returnType = $functionReflection->getReturnType();
-        if ($returnType === null && method_exists($functionReflection, 'getTentativeReturnType')) {
-            $returnType = $functionReflection->getTentativeReturnType();
-        }
+        $returnType = $functionReflection->getReturnType() ?? $functionReflection->getTentativeReturnType();
 
         if ($returnType !== null) {
             assert($returnType instanceof CoreReflectionNamedType || $returnType instanceof CoreReflectionUnionType || $returnType instanceof CoreReflectionIntersectionType);
@@ -228,7 +226,7 @@ final class ReflectionSourceStubber implements SourceStubber
                 $annotations[] = '@deprecated';
             }
 
-            if (method_exists($reflection, 'hasTentativeReturnType') && $reflection->hasTentativeReturnType()) {
+            if ($reflection->hasTentativeReturnType()) {
                 $annotations[] = sprintf('@%s', AnnotationHelper::TENTATIVE_RETURN_TYPE_ANNOTATION);
             }
         }
@@ -253,6 +251,7 @@ final class ReflectionSourceStubber implements SourceStubber
         }
 
         $backingType = $enumReflection->getBackingType();
+        /** @phpstan-ignore function.alreadyNarrowedType, instanceof.alwaysTrue */
         assert($backingType instanceof CoreReflectionNamedType);
 
         $enumNode->setScalarType($backingType->getName());
@@ -378,7 +377,7 @@ final class ReflectionSourceStubber implements SourceStubber
 
     private function addPropertyModifiers(Property $propertyNode, CoreReflectionProperty $propertyReflection): void
     {
-        if (method_exists($propertyReflection, 'isReadOnly') && $propertyReflection->isReadOnly()) {
+        if ($propertyReflection->isReadOnly()) {
             $propertyNode->makeReadonly();
         }
 
@@ -411,7 +410,7 @@ final class ReflectionSourceStubber implements SourceStubber
     private function addClassConstants(Class_|Interface_|Trait_|Enum_ $classNode, CoreReflectionClass $classReflection): void
     {
         foreach ($classReflection->getReflectionConstants() as $constantReflection) {
-            if (method_exists($constantReflection, 'isEnumCase') && $constantReflection->isEnumCase()) {
+            if ($constantReflection->isEnumCase()) {
                 continue;
             }
 
@@ -442,7 +441,7 @@ final class ReflectionSourceStubber implements SourceStubber
 
     private function addClassConstantModifiers(ClassConst $classConstantNode, CoreReflectionClassConstant $classConstantReflection): void
     {
-        if (method_exists($classConstantReflection, 'isFinal') && $classConstantReflection->isFinal()) {
+        if ($classConstantReflection->isFinal()) {
             $classConstantNode->makeFinal();
         }
 
@@ -468,10 +467,7 @@ final class ReflectionSourceStubber implements SourceStubber
             $this->addDocComment($methodNode, $methodReflection);
             $this->addParameters($methodNode, $methodReflection);
 
-            $returnType = $methodReflection->getReturnType();
-            if ($returnType === null && method_exists($methodReflection, 'getTentativeReturnType')) {
-                $returnType = $methodReflection->getTentativeReturnType();
-            }
+            $returnType = $methodReflection->getReturnType() ?? $methodReflection->getTentativeReturnType();
 
             if ($returnType !== null) {
                 assert($returnType instanceof CoreReflectionNamedType || $returnType instanceof CoreReflectionUnionType || $returnType instanceof CoreReflectionIntersectionType);

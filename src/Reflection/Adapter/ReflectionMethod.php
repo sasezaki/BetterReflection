@@ -363,6 +363,7 @@ final class ReflectionMethod extends CoreReflectionMethod
      * @codeCoverageIgnore
      * @infection-ignore-all
      * @psalm-pure
+     * @phpstan-ignore pureMethod.void
      */
     public function setAccessible(bool $accessible): void
     {

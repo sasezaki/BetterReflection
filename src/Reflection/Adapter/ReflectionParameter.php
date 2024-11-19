@@ -117,7 +117,7 @@ final class ReflectionParameter extends CoreReflectionParameter
         }
 
         try {
-            /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore variable.undefined */
             return new ReflectionClass($classType->getClass());
         } catch (LogicException) {
             return null;
@@ -217,6 +217,7 @@ final class ReflectionParameter extends CoreReflectionParameter
         return $this->betterReflectionParameter->hasType();
     }
 
+    /** @phpstan-ignore return.unusedType */
     public function getType(): ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|ReflectionType|null
     {
         return ReflectionType::fromTypeOrNull($this->betterReflectionParameter->getType());

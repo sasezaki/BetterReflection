@@ -385,7 +385,7 @@ class ReflectionEnumBackedCaseTest extends TestCase
         $reflectionEnumBackedCaseAdapter = new ReflectionEnumBackedCaseAdapter($betterReflectionEnumCase);
         $this->expectException(OutOfBoundsException::class);
         $this->expectExceptionMessage('Property Roave\BetterReflection\Reflection\Adapter\ReflectionEnumBackedCase::$foo does not exist.');
-        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore property.notFound, expr.resultUnused */
         $reflectionEnumBackedCaseAdapter->foo;
     }
 }

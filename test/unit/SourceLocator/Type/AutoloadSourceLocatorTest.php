@@ -86,6 +86,7 @@ class AutoloadSourceLocatorTest extends TestCase
         $reflector = new DefaultReflector(new AutoloadSourceLocator($this->astLocator));
 
         // Ensure class is loaded first
+        /** @phpstan-ignore new.resultUnused */
         new ClassForHinting();
         self::assertTrue(class_exists(ClassForHinting::class, false));
 
@@ -100,6 +101,7 @@ class AutoloadSourceLocatorTest extends TestCase
         $reflector = new DefaultReflector(new AutoloadSourceLocator($this->astLocator));
 
         // Ensure class is loaded first
+        /** @phpstan-ignore new.resultUnused */
         new ClassForHinting();
         self::assertTrue(class_exists(ClassForHinting::class, false));
 
@@ -403,7 +405,7 @@ class AutoloadSourceLocatorTest extends TestCase
             return true;
         };
 
-        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore argument.type */
         spl_autoload_register($autoload);
 
         self::assertNotNull(

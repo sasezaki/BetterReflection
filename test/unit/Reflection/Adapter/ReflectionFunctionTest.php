@@ -433,7 +433,7 @@ class ReflectionFunctionTest extends TestCase
         $reflectionFunctionAdapter = new ReflectionFunctionAdapter($betterReflectionFunction);
         $this->expectException(OutOfBoundsException::class);
         $this->expectExceptionMessage('Property Roave\BetterReflection\Reflection\Adapter\ReflectionFunction::$foo does not exist.');
-        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore property.notFound, expr.resultUnused */
         $reflectionFunctionAdapter->foo;
     }
 

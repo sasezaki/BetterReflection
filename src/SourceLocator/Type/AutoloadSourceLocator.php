@@ -246,7 +246,10 @@ class AutoloadSourceLocator extends AbstractSourceLocator
             return null;
         }
 
-        /** @psalm-suppress UndefinedMethod */
+        /**
+         * @psalm-suppress UndefinedMethod
+         * @phpstan-ignore method.notFound
+         */
         $this->constantVisitor->setConstantName($constantName);
 
         $constantFileName = null;
@@ -268,7 +271,10 @@ class AutoloadSourceLocator extends AbstractSourceLocator
 
             $this->nodeTraverser->traverse($ast);
 
-            /** @psalm-suppress UndefinedMethod */
+            /**
+             * @psalm-suppress UndefinedMethod
+             * @phpstan-ignore method.notFound
+             */
             if ($this->constantVisitor->getNode() !== null) {
                 $constantFileName = $includedFileName;
                 break;

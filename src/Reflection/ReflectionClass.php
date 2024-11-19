@@ -162,19 +162,19 @@ class ReflectionClass implements Reflection
         private LocatedSource $locatedSource,
         private string|null $namespace = null,
     ) {
-        $this->name      = null;
-        $this->shortName = null;
+        $name      = null;
+        $shortName = null;
+
         if ($node->name instanceof Node\Identifier) {
             $namespacedName = $node->namespacedName;
             assert($namespacedName instanceof Node\Name);
             /** @psalm-var class-string|trait-string */
             $name      = $namespacedName->toString();
             $shortName = $node->name->name;
-
-            $this->name      = $name;
-            $this->shortName = $shortName;
         }
 
+        $this->name         = $name;
+        $this->shortName    = $shortName;
         $this->isInterface  = $node instanceof InterfaceNode;
         $this->isTrait      = $node instanceof TraitNode;
         $this->isEnum       = $node instanceof EnumNode;
@@ -380,7 +380,7 @@ class ReflectionClass implements Reflection
         $createMethod = function (string|null $aliasMethodName) use ($method, $methodModifiers): ReflectionMethod {
             assert($aliasMethodName === null || $aliasMethodName !== '');
 
-            /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore argument.type */
             return $method->withImplementingClass($this, $aliasMethodName, $methodModifiers);
         };
 
@@ -1229,7 +1229,11 @@ class ReflectionClass implements Reflection
         return $this->modifiers;
     }
 
-    /** @return int-mask-of<ReflectionClassAdapter::IS_*> */
+    /**
+     * @return int-mask-of<ReflectionClassAdapter::IS_*>
+     *
+     * @phpstan-ignore-next-line return.unusedType
+     */
     private function computeModifiers(ClassNode|InterfaceNode|TraitNode|EnumNode $node): int
     {
         if (! $node instanceof ClassNode) {

@@ -859,7 +859,7 @@ PHP;
                             return $this->next->getName();
                         }
 
-                        public function getFileName(): string|null
+                        public function getFileName(): string
                         {
                             return '/non/existing/path/to/sources.php';
                         }
@@ -1096,7 +1096,7 @@ PHP
     {
         $realPath = realpath($path);
 
-        assert(is_string($realPath) && $realPath !== '');
+        assert(is_string($realPath));
 
         return $realPath;
     }

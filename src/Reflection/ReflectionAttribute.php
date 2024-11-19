@@ -20,7 +20,7 @@ class ReflectionAttribute
     private string $name;
 
     /** @var array<int|string, Node\Expr> */
-    private array $arguments = [];
+    private array $arguments;
 
     /** @internal */
     public function __construct(
@@ -31,9 +31,12 @@ class ReflectionAttribute
     ) {
         $this->name = $node->name->toString();
 
+        $arguments = [];
         foreach ($node->args as $argNo => $arg) {
-            $this->arguments[$arg->name?->toString() ?? $argNo] = $arg->value;
+            $arguments[$arg->name?->toString() ?? $argNo] = $arg->value;
         }
+
+        $this->arguments = $arguments;
     }
 
     /** @internal */

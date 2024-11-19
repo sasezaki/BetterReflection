@@ -79,7 +79,7 @@ class FileIteratorSourceLocatorTest extends TestCase
     {
         $this->expectException(InvalidFileInfo::class);
 
-        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore argument.type */
         new FileIteratorSourceLocator(new ArrayIterator([new stdClass()]), BetterReflectionSingleton::instance()->astLocator());
     }
 }

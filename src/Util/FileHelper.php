@@ -23,6 +23,8 @@ class FileHelper
     public static function normalizeWindowsPath(string $path): string
     {
         $path = str_replace('\\', '/', $path);
+
+        /** @phpstan-ignore function.alreadyNarrowedType, notIdentical.alwaysTrue */
         assert($path !== '');
 
         return $path;
@@ -50,6 +52,7 @@ class FileHelper
             $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
         }
 
+        /** @phpstan-ignore function.alreadyNarrowedType, notIdentical.alwaysTrue */
         assert($path !== '');
 
         return ($scheme !== null ? sprintf('%s://', $scheme) : '') . $path;

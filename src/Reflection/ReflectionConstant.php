@@ -325,7 +325,9 @@ class ReflectionConstant implements Reflection
             $shortName = $constNode->name->name;
         }
 
-        $this->name      = $name;
+        /** @phpstan-ignore assign.readOnlyPropertyByPhpDoc */
+        $this->name = $name;
+        /** @phpstan-ignore assign.readOnlyPropertyByPhpDoc */
         $this->shortName = $shortName;
     }
 

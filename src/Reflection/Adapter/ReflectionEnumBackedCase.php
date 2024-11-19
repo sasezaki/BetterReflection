@@ -40,7 +40,7 @@ final class ReflectionEnumBackedCase extends CoreReflectionEnumBackedCase
         return false;
     }
 
-    public function getType(): ReflectionUnionType|ReflectionNamedType|ReflectionIntersectionType|null
+    public function getType(): null
     {
         return null;
     }
