@@ -30,6 +30,20 @@ final class ReflectionProperty extends CoreReflectionProperty
      */
     public const IS_FINAL_COMPATIBILITY = 32;
 
+    /**
+     * @internal
+     *
+     * @see CoreReflectionProperty::IS_PROTECTED_SET
+     */
+    public const IS_PROTECTED_SET_COMPATIBILITY = 2048;
+
+    /**
+     * @internal
+     *
+     * @see CoreReflectionProperty::IS_PRIVATE_SET
+     */
+    public const IS_PRIVATE_SET_COMPATIBILITY = 4096;
+
     public function __construct(private BetterReflectionProperty $betterReflectionProperty)
     {
         unset($this->name);
@@ -113,9 +127,21 @@ final class ReflectionProperty extends CoreReflectionProperty
     }
 
     /** @psalm-mutation-free */
+    public function isPrivateSet(): bool
+    {
+        return $this->betterReflectionProperty->isPrivateSet();
+    }
+
+    /** @psalm-mutation-free */
     public function isProtected(): bool
     {
         return $this->betterReflectionProperty->isProtected();
+    }
+
+    /** @psalm-mutation-free */
+    public function isProtectedSet(): bool
+    {
+        return $this->betterReflectionProperty->isProtectedSet();
     }
 
     /** @psalm-mutation-free */
