@@ -13,6 +13,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\FindingVisitor;
 use Roave\BetterReflection\Reflection\Annotation\AnnotationHelper;
 use Roave\BetterReflection\Reflection\Attribute\ReflectionAttributeHelper;
+use Roave\BetterReflection\Reflection\Deprecated\DeprecatedHelper;
 use Roave\BetterReflection\Reflection\Exception\CodeLocationMissing;
 use Roave\BetterReflection\SourceLocator\Located\LocatedSource;
 use Roave\BetterReflection\Util\CalculateReflectionColumn;
@@ -97,7 +98,7 @@ trait ReflectionFunctionAbstract
     abstract public function getShortName(): string;
 
     /** @psalm-external-mutation-free */
-    private function fillFromNode(MethodNode|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node): void
+    private function fillFromNode(MethodNode|Node\PropertyHook|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node): void
     {
         $this->parameters       = $this->createParameters($node);
         $this->returnsReference = $node->returnsByRef();
@@ -135,7 +136,7 @@ trait ReflectionFunctionAbstract
     }
 
     /** @return array<non-empty-string, ReflectionParameter> */
-    private function createParameters(Node\Stmt\ClassMethod|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node): array
+    private function createParameters(Node\Stmt\ClassMethod|Node\PropertyHook|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node): array
     {
         $parameters = [];
 
@@ -283,7 +284,7 @@ trait ReflectionFunctionAbstract
 
     public function isDeprecated(): bool
     {
-        return AnnotationHelper::isDeprecated($this->docComment);
+        return DeprecatedHelper::isDeprecated($this);
     }
 
     public function isInternal(): bool
@@ -326,7 +327,7 @@ trait ReflectionFunctionAbstract
         return $this->couldThrow;
     }
 
-    private function computeCouldThrow(MethodNode|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node): bool
+    private function computeCouldThrow(MethodNode|Node\PropertyHook|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node): bool
     {
         $statements = $node->getStmts();
 
@@ -497,7 +498,7 @@ trait ReflectionFunctionAbstract
         return $this->returnType;
     }
 
-    private function createReturnType(MethodNode|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node): ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null
+    private function createReturnType(MethodNode|Node\PropertyHook|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node): ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null
     {
         $returnType = $node->getReturnType();
 

@@ -34,23 +34,25 @@ class ReflectionMethod
     private int $modifiers;
 
     /**
+     * @param non-empty-string      $name
      * @param non-empty-string|null $aliasName
      * @param non-empty-string|null $namespace
      */
     private function __construct(
         private Reflector $reflector,
-        MethodNode|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node,
+        MethodNode|Node\PropertyHook|Node\Stmt\Function_|Node\Expr\Closure|Node\Expr\ArrowFunction $node,
         private LocatedSource $locatedSource,
+        string $name,
         private string|null $namespace,
         private ReflectionClass $declaringClass,
         private ReflectionClass $implementingClass,
         private ReflectionClass $currentClass,
         private string|null $aliasName,
     ) {
-        assert($node instanceof MethodNode);
+        assert($node instanceof MethodNode || $node instanceof Node\PropertyHook);
 
-        $this->name      = $node->name->name;
-        $this->modifiers = $this->computeModifiers($node);
+        $this->name      = $name;
+        $this->modifiers = $node instanceof MethodNode ? $this->computeModifiers($node) : 0;
 
         $this->fillFromNode($node);
     }
@@ -58,13 +60,15 @@ class ReflectionMethod
     /**
      * @internal
      *
+     * @param non-empty-string      $name
      * @param non-empty-string|null $aliasName
      * @param non-empty-string|null $namespace
      */
     public static function createFromNode(
         Reflector $reflector,
-        MethodNode $node,
+        MethodNode|Node\PropertyHook $node,
         LocatedSource $locatedSource,
+        string $name,
         string|null $namespace,
         ReflectionClass $declaringClass,
         ReflectionClass $implementingClass,
@@ -75,6 +79,7 @@ class ReflectionMethod
             $reflector,
             $node,
             $locatedSource,
+            $name,
             $namespace,
             $declaringClass,
             $implementingClass,
@@ -287,7 +292,7 @@ class ReflectionMethod
      */
     public function isAbstract(): bool
     {
-        return ($this->modifiers & CoreReflectionMethod::IS_ABSTRACT) === CoreReflectionMethod::IS_ABSTRACT
+        return (bool) ($this->modifiers & CoreReflectionMethod::IS_ABSTRACT)
             || $this->declaringClass->isInterface();
     }
 
@@ -296,7 +301,7 @@ class ReflectionMethod
      */
     public function isFinal(): bool
     {
-        return ($this->modifiers & CoreReflectionMethod::IS_FINAL) === CoreReflectionMethod::IS_FINAL;
+        return (bool) ($this->modifiers & CoreReflectionMethod::IS_FINAL);
     }
 
     /**
@@ -304,7 +309,7 @@ class ReflectionMethod
      */
     public function isPrivate(): bool
     {
-        return ($this->modifiers & CoreReflectionMethod::IS_PRIVATE) === CoreReflectionMethod::IS_PRIVATE;
+        return (bool) ($this->modifiers & CoreReflectionMethod::IS_PRIVATE);
     }
 
     /**
@@ -312,7 +317,7 @@ class ReflectionMethod
      */
     public function isProtected(): bool
     {
-        return ($this->modifiers & CoreReflectionMethod::IS_PROTECTED) === CoreReflectionMethod::IS_PROTECTED;
+        return (bool) ($this->modifiers & CoreReflectionMethod::IS_PROTECTED);
     }
 
     /**
@@ -320,7 +325,7 @@ class ReflectionMethod
      */
     public function isPublic(): bool
     {
-        return ($this->modifiers & CoreReflectionMethod::IS_PUBLIC) === CoreReflectionMethod::IS_PUBLIC;
+        return (bool) ($this->modifiers & CoreReflectionMethod::IS_PUBLIC);
     }
 
     /**
@@ -328,7 +333,7 @@ class ReflectionMethod
      */
     public function isStatic(): bool
     {
-        return ($this->modifiers & CoreReflectionMethod::IS_STATIC) === CoreReflectionMethod::IS_STATIC;
+        return (bool) ($this->modifiers & CoreReflectionMethod::IS_STATIC);
     }
 
     /**

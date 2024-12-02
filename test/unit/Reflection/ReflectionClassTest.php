@@ -24,6 +24,7 @@ use ReflectionClassConstant as CoreReflectionClassConstant;
 use ReflectionMethod as CoreReflectionMethod;
 use ReflectionProperty as CoreReflectionProperty;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionClassConstant as ReflectionClassConstantAdapter;
+use Roave\BetterReflection\Reflection\Adapter\ReflectionProperty as ReflectionPropertyAdapter;
 use Roave\BetterReflection\Reflection\Exception\CircularReference;
 use Roave\BetterReflection\Reflection\Exception\NotAClassReflection;
 use Roave\BetterReflection\Reflection\Exception\NotAnInterfaceReflection;
@@ -615,7 +616,7 @@ class ReflectionClassTest extends TestCase
         $properties = $classInfo->getProperties();
 
         self::assertContainsOnlyInstancesOf(ReflectionProperty::class, $properties);
-        self::assertCount(9, $properties);
+        self::assertCount(10, $properties);
     }
 
     public function testGetPropertiesForPureEnum(): void
@@ -637,6 +638,7 @@ class ReflectionClassTest extends TestCase
         self::assertTrue($property->isReadOnly());
         self::assertFalse($property->isPromoted());
         self::assertTrue($property->isDefault());
+        self::assertFalse($property->isDynamic());
 
         // No value property for pure enum
         self::assertArrayNotHasKey('value', $properties);
@@ -695,6 +697,7 @@ class ReflectionClassTest extends TestCase
             self::assertTrue($property->isReadOnly(), $fullPropertyName);
             self::assertFalse($property->isPromoted(), $fullPropertyName);
             self::assertTrue($property->isDefault(), $fullPropertyName);
+            self::assertFalse($property->isDynamic(), $fullPropertyName);
             self::assertSame($propertyType, $property->getType()->__toString(), $fullPropertyName);
         }
     }
@@ -724,20 +727,24 @@ PHP;
         self::assertSame($expectedPropertiesNames, array_keys($properties));
     }
 
-    /** @return list<array{0: int-mask-of<CoreReflectionProperty::IS_*>, 1: int}> */
+    /** @return list<array{0: int-mask-of<ReflectionPropertyAdapter::IS_*>, 1: int}> */
     public static function getPropertiesWithFilterDataProvider(): array
     {
         return [
             [CoreReflectionProperty::IS_STATIC, 3],
-            [CoreReflectionProperty::IS_PUBLIC, 3],
+            [ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY, 1],
+            [ReflectionPropertyAdapter::IS_ABSTRACT_COMPATIBILITY, 0],
+            [CoreReflectionProperty::IS_PUBLIC, 4],
             [CoreReflectionProperty::IS_PROTECTED, 2],
             [CoreReflectionProperty::IS_PRIVATE, 4],
             [
                 CoreReflectionProperty::IS_STATIC |
+                ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY |
+                ReflectionPropertyAdapter::IS_ABSTRACT_COMPATIBILITY |
                 CoreReflectionProperty::IS_PUBLIC |
                 CoreReflectionProperty::IS_PROTECTED |
                 CoreReflectionProperty::IS_PRIVATE,
-                9,
+                10,
             ],
         ];
     }
@@ -748,6 +755,54 @@ PHP;
     {
         $reflector = new DefaultReflector($this->getComposerLocator());
         $classInfo = $reflector->reflectClass(ExampleClass::class);
+
+        self::assertCount($count, $classInfo->getProperties($filter));
+        self::assertCount($count, $classInfo->getImmediateProperties($filter));
+    }
+
+    /** @return list<array{0: int-mask-of<ReflectionPropertyAdapter::IS_*>, 1: int}> */
+    public static function getPropertiesWithAsymetricVisibilityFilterDataProvider(): array
+    {
+        return [
+            [CoreReflectionProperty::IS_PUBLIC, 6],
+            [CoreReflectionProperty::IS_PROTECTED, 4],
+            [CoreReflectionProperty::IS_PRIVATE, 2],
+            [ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY, 4],
+            [ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY, 6],
+            [
+                CoreReflectionProperty::IS_PUBLIC |
+                ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY,
+                10,
+            ],
+        ];
+    }
+
+    /** @param int-mask-of<CoreReflectionProperty::IS_*> $filter */
+    #[DataProvider('getPropertiesWithAsymetricVisibilityFilterDataProvider')]
+    public function testGetPropertiesWithAsymetricVisibilityFilter(int $filter, int $count): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+
+        self::assertCount($count, $classInfo->getProperties($filter));
+        self::assertCount($count, $classInfo->getImmediateProperties($filter));
+    }
+
+    /** @return list<array{0: int-mask-of<ReflectionPropertyAdapter::IS_*>, 1: int}> */
+    public static function getPropertiesWithVirtualFilterDataProvider(): array
+    {
+        return [
+            [0, 3],
+            [ReflectionPropertyAdapter::IS_VIRTUAL_COMPATIBILITY, 1],
+        ];
+    }
+
+    /** @param int-mask-of<CoreReflectionProperty::IS_*> $filter */
+    #[DataProvider('getPropertiesWithVirtualFilterDataProvider')]
+    public function testGetPropertiesWithVirtualFilter(int $filter, int $count): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/PropertyHooks.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\PropertyHooks');
 
         self::assertCount($count, $classInfo->getProperties($filter));
         self::assertCount($count, $classInfo->getImmediateProperties($filter));
@@ -2253,6 +2308,17 @@ PHP;
         );
     }
 
+    public function testToStringWithAsymetricVisibility(): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+
+        self::assertStringMatchesFormat(
+            file_get_contents(__DIR__ . '/../Fixture/AsymetricVisibilityClassExport.txt'),
+            $classInfo->__toString(),
+        );
+    }
+
     public function testGetStaticProperties(): void
     {
         $staticPropertiesFixtureFile = __DIR__ . '/../Fixture/StaticProperties.php';
@@ -2793,7 +2859,7 @@ PHP;
     }
 
     /** @return list<array{0: string, 1: bool}> */
-    public static function deprecatedDocCommentProvider(): array
+    public static function deprecatedProvider(): array
     {
         return [
             [
@@ -2815,12 +2881,12 @@ PHP;
         ];
     }
 
-    #[DataProvider('deprecatedDocCommentProvider')]
-    public function testIsDeprecated(string $docComment, bool $isDeprecated): void
+    #[DataProvider('deprecatedProvider')]
+    public function testIsDeprecated(string $deprecatedCode, bool $isDeprecated): void
     {
         $php = sprintf('<?php
         %s
-        class Foo {}', $docComment);
+        class Foo {}', $deprecatedCode);
 
         $reflector       = new DefaultReflector(new StringSourceLocator($php, $this->astLocator));
         $classReflection = $reflector->reflectClass('Foo');

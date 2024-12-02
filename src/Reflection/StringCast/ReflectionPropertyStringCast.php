@@ -16,7 +16,7 @@ final class ReflectionPropertyStringCast
      *
      * @psalm-pure
      */
-    public static function toString(ReflectionProperty $propertyReflection): string
+    public static function toString(ReflectionProperty $propertyReflection, bool $indentDocComment = true): string
     {
         $stateModifier = '';
 
@@ -27,7 +27,8 @@ final class ReflectionPropertyStringCast
         $type = $propertyReflection->getType();
 
         return sprintf(
-            'Property [%s %s%s%s%s $%s ]',
+            '%sProperty [%s %s%s%s%s $%s ]',
+            ReflectionStringCastHelper::docCommentToString($propertyReflection, $indentDocComment),
             $stateModifier,
             self::visibilityToString($propertyReflection),
             $propertyReflection->isStatic() ? ' static' : '',

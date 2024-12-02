@@ -15,6 +15,7 @@ use ReflectionMethod as CoreReflectionMethod;
 use ReflectionObject as CoreReflectionObject;
 use ReflectionProperty as CoreReflectionProperty;
 use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplemented;
+use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplementedBecauseItTriggersAutoloading;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionAttribute as ReflectionAttributeAdapter;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionClass as ReflectionClassAdapter;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionClassConstant as ReflectionClassConstantAdapter;
@@ -90,9 +91,9 @@ class ReflectionObjectTest extends TestCase
             ['isReadOnly', [], true, null, true],
             ['getModifiers', [], 123, null, 123],
             ['isInstance', [new stdClass()], true, null, true],
-            ['newInstance', [], null, NotImplemented::class, null],
-            ['newInstanceWithoutConstructor', [], null, NotImplemented::class, null],
-            ['newInstanceArgs', [], null, NotImplemented::class, null],
+            ['newInstance', [], null, NotImplementedBecauseItTriggersAutoloading::class, null],
+            ['newInstanceWithoutConstructor', [], null, NotImplementedBecauseItTriggersAutoloading::class, null],
+            ['newInstanceArgs', [], null, NotImplementedBecauseItTriggersAutoloading::class, null],
             ['getParentClass', [], null, null, null],
             ['isSubclassOf', ['\stdClass'], true, null, true],
             ['getStaticProperties', [], [], null, []],
@@ -1238,5 +1239,93 @@ class ReflectionObjectTest extends TestCase
         self::assertCount(1, $reflectionObjectAdapter->getProperties(CoreReflectionProperty::IS_PUBLIC));
         self::assertCount(1, $reflectionObjectAdapter->getProperties(CoreReflectionProperty::IS_PRIVATE));
         self::assertCount(1, $reflectionObjectAdapter->getProperties(CoreReflectionProperty::IS_PROTECTED));
+    }
+
+    public function testNewLazyGhost(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
+
+        $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
+        $reflectionObjectAdapter->newLazyGhost(static fn () => null);
+    }
+
+    public function testNewLazyProxy(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
+
+        $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
+        $reflectionObjectAdapter->newLazyProxy(static fn () => null);
+    }
+
+    public function testMarkLazyObjectAsInitialized(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
+
+        $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
+        $reflectionObjectAdapter->markLazyObjectAsInitialized(new stdClass());
+    }
+
+    public function testGetLazyInitializer(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
+
+        $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
+        $reflectionObjectAdapter->getLazyInitializer(new stdClass());
+    }
+
+    public function testInitializeLazyObject(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
+
+        $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
+        $reflectionObjectAdapter->initializeLazyObject(new stdClass());
+    }
+
+    public function testIsUninitializedLazyObject(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
+
+        $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
+        $reflectionObjectAdapter->isUninitializedLazyObject(new stdClass());
+    }
+
+    public function testResetAsLazyGhost(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
+
+        $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
+        $reflectionObjectAdapter->resetAsLazyGhost(new stdClass(), static fn () => null);
+    }
+
+    public function testResetAsLazyProxy(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
+
+        $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
+        $reflectionObjectAdapter->resetAsLazyProxy(new stdClass(), static fn () => null);
     }
 }

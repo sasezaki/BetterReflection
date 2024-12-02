@@ -21,8 +21,8 @@ use Roave\BetterReflection\Reflection\Adapter\ReflectionClass as ReflectionClass
 use Roave\BetterReflection\Reflection\Adapter\ReflectionClassConstant as ReflectionClassConstantAdapter;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionMethod as ReflectionMethodAdapter;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionProperty as ReflectionPropertyAdapter;
-use Roave\BetterReflection\Reflection\Annotation\AnnotationHelper;
 use Roave\BetterReflection\Reflection\Attribute\ReflectionAttributeHelper;
+use Roave\BetterReflection\Reflection\Deprecated\DeprecatedHelper;
 use Roave\BetterReflection\Reflection\Exception\CircularReference;
 use Roave\BetterReflection\Reflection\Exception\ClassDoesNotExist;
 use Roave\BetterReflection\Reflection\Exception\NoObjectProvided;
@@ -571,6 +571,7 @@ class ReflectionClass implements Reflection
                 $reflector,
                 $methodNode,
                 $this->locatedSource,
+                $methodNode->name->name,
                 $this->getNamespaceName(),
                 $this,
                 $this,
@@ -596,6 +597,8 @@ class ReflectionClass implements Reflection
     {
         $internalLocatedSource = new InternalLocatedSource('', $this->getName(), 'Core');
         $createMethod          = function (string $name, array $params, Node\Identifier|Node\NullableType $returnType) use ($internalLocatedSource): ReflectionMethod {
+            assert($name !== '');
+
             /** @var array{flags: int, params: Node\Param[], returnType: Node\Identifier|Node\NullableType} $classMethodSubnodes */
             $classMethodSubnodes = [
                 'flags' => Modifiers::PUBLIC | Modifiers::STATIC,
@@ -610,6 +613,7 @@ class ReflectionClass implements Reflection
                     $classMethodSubnodes,
                 ),
                 $internalLocatedSource,
+                $name,
                 $this->getNamespaceName(),
                 $this,
                 $this,
@@ -1191,7 +1195,7 @@ class ReflectionClass implements Reflection
 
     public function isDeprecated(): bool
     {
-        return AnnotationHelper::isDeprecated($this->docComment);
+        return DeprecatedHelper::isDeprecated($this);
     }
 
     /**
@@ -1199,7 +1203,7 @@ class ReflectionClass implements Reflection
      */
     public function isAbstract(): bool
     {
-        return ($this->modifiers & CoreReflectionClass::IS_EXPLICIT_ABSTRACT) === CoreReflectionClass::IS_EXPLICIT_ABSTRACT;
+        return (bool) ($this->modifiers & CoreReflectionClass::IS_EXPLICIT_ABSTRACT);
     }
 
     /**
@@ -1211,12 +1215,12 @@ class ReflectionClass implements Reflection
             return true;
         }
 
-        return ($this->modifiers & CoreReflectionClass::IS_FINAL) === CoreReflectionClass::IS_FINAL;
+        return (bool) ($this->modifiers & CoreReflectionClass::IS_FINAL);
     }
 
     public function isReadOnly(): bool
     {
-        return ($this->modifiers & CoreReflectionClass::IS_READONLY) === CoreReflectionClass::IS_READONLY;
+        return (bool) ($this->modifiers & CoreReflectionClass::IS_READONLY);
     }
 
     /**

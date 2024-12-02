@@ -45,9 +45,10 @@ final class ReflectionEnumBackedCase extends CoreReflectionEnumBackedCase
         return null;
     }
 
+    /** @return never */
     public function getValue(): UnitEnum
     {
-        throw new Exception\NotImplemented('Not implemented');
+        throw Exception\NotImplementedBecauseItTriggersAutoloading::create();
     }
 
     public function isPublic(): bool
@@ -127,6 +128,11 @@ final class ReflectionEnumBackedCase extends CoreReflectionEnumBackedCase
     public function getBackingValue(): int|string
     {
         return $this->betterReflectionEnumCase->getValue();
+    }
+
+    public function isDeprecated(): bool
+    {
+        return $this->betterReflectionEnumCase->isDeprecated();
     }
 
     public function __get(string $name): mixed

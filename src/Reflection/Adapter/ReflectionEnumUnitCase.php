@@ -45,9 +45,10 @@ final class ReflectionEnumUnitCase extends CoreReflectionEnumUnitCase
         return null;
     }
 
+    /** @return never */
     public function getValue(): UnitEnum
     {
-        throw new Exception\NotImplemented('Not implemented');
+        throw Exception\NotImplementedBecauseItTriggersAutoloading::create();
     }
 
     public function isPublic(): bool
@@ -122,6 +123,11 @@ final class ReflectionEnumUnitCase extends CoreReflectionEnumUnitCase
     public function getEnum(): ReflectionEnum
     {
         return new ReflectionEnum($this->betterReflectionEnumCase->getDeclaringEnum());
+    }
+
+    public function isDeprecated(): bool
+    {
+        return $this->betterReflectionEnumCase->isDeprecated();
     }
 
     public function __get(string $name): mixed

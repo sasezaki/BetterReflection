@@ -18,13 +18,14 @@ final class ReflectionClassConstantStringCast
      *
      * @psalm-pure
      */
-    public static function toString(ReflectionClassConstant $constantReflection): string
+    public static function toString(ReflectionClassConstant $constantReflection, bool $indentDocComment = true): string
     {
         /** @psalm-var scalar|array<scalar> $value */
         $value = $constantReflection->getValue();
 
         return sprintf(
-            "Constant [ %s%s %s %s ] { %s }\n",
+            "%sConstant [ %s%s %s %s ] { %s }\n",
+            ReflectionStringCastHelper::docCommentToString($constantReflection, $indentDocComment),
             $constantReflection->isFinal() ? 'final ' : '',
             self::visibilityToString($constantReflection),
             gettype($value),

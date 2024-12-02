@@ -100,7 +100,7 @@ class ReflectionClassConstantTest extends TestCase
 
     public function testToString(): void
     {
-        self::assertSame("Constant [ public integer MY_CONST_1 ] { 123 }\n", (string) $this->getExampleConstant('MY_CONST_1'));
+        self::assertSame("/**\n     * This comment for constant should be used.\n     */\nConstant [ public integer MY_CONST_2 ] { 234 }\n", (string) $this->getExampleConstant('MY_CONST_2'));
     }
 
     /** @param non-empty-string $const */
@@ -236,9 +236,13 @@ class ReflectionClassConstantTest extends TestCase
     }
 
     /** @return list<array{0: string, 1: bool}> */
-    public static function deprecatedDocCommentProvider(): array
+    public static function deprecatedProvider(): array
     {
         return [
+            [
+                '#[Deprecated]',
+                true,
+            ],
             [
                 '/**
                   * @deprecated since 8.0
@@ -258,14 +262,14 @@ class ReflectionClassConstantTest extends TestCase
         ];
     }
 
-    #[DataProvider('deprecatedDocCommentProvider')]
-    public function testIsDeprecated(string $docComment, bool $isDeprecated): void
+    #[DataProvider('deprecatedProvider')]
+    public function testIsDeprecated(string $deprecatedCode, bool $isDeprecated): void
     {
         $php = sprintf('<?php
         class Foo {
             %s
             public const FOO = "foo";
-        }', $docComment);
+        }', $deprecatedCode);
 
         $reflector          = new DefaultReflector(new StringSourceLocator($php, BetterReflectionSingleton::instance()->astLocator()));
         $classReflection    = $reflector->reflectClass('Foo');

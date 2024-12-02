@@ -17,7 +17,7 @@ final class ReflectionEnumCaseStringCast
      *
      * @psalm-pure
      */
-    public static function toString(ReflectionEnumCase $enumCaseReflection): string
+    public static function toString(ReflectionEnumCase $enumCaseReflection, bool $indentDocComment = true): string
     {
         $enumReflection = $enumCaseReflection->getDeclaringEnum();
 
@@ -25,7 +25,8 @@ final class ReflectionEnumCaseStringCast
         $type  = $enumReflection->isBacked() ? gettype($value) : $enumReflection->getName();
 
         return sprintf(
-            "Constant [ public %s %s ] { %s }\n",
+            "%sConstant [ public %s %s ] { %s }\n",
+            ReflectionStringCastHelper::docCommentToString($enumCaseReflection, $indentDocComment),
             $type,
             $enumCaseReflection->getName(),
             $value,

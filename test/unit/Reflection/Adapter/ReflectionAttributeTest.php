@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Roave\BetterReflectionTest\Reflection\Adapter;
 
+use OutOfBoundsException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionAttribute as CoreReflectionAttribute;
 use ReflectionClass as CoreReflectionClass;
-use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplemented;
+use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplementedBecauseItTriggersAutoloading;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionAttribute as ReflectionAttributeAdapter;
 use Roave\BetterReflection\Reflection\ReflectionAttribute as BetterReflectionAttribute;
 
@@ -46,7 +47,7 @@ class ReflectionAttributeTest extends TestCase
             ['getTarget', null, 1, []],
             ['isRepeated', null, false, []],
             ['getArguments', null, [], []],
-            ['newInstance', NotImplemented::class, null, []],
+            ['newInstance', NotImplementedBecauseItTriggersAutoloading::class, null, []],
         ];
     }
 
@@ -69,5 +70,27 @@ class ReflectionAttributeTest extends TestCase
 
         $adapter = new ReflectionAttributeAdapter($reflectionStub);
         $adapter->{$methodName}(...$args);
+    }
+
+    public function testPropertyName(): void
+    {
+        $betterReflectionAttribute = $this->createMock(BetterReflectionAttribute::class);
+        $betterReflectionAttribute
+            ->method('getName')
+            ->willReturn('Foo');
+
+        $reflectionAttributeAdapter = new ReflectionAttributeAdapter($betterReflectionAttribute);
+        self::assertSame('Foo', $reflectionAttributeAdapter->name);
+    }
+
+    public function testUnknownProperty(): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage('Property Roave\BetterReflection\Reflection\Adapter\ReflectionAttribute::$foo does not exist.');
+
+        $betterReflectionAttribute  = $this->createMock(BetterReflectionAttribute::class);
+        $reflectionAttributeAdapter = new ReflectionAttributeAdapter($betterReflectionAttribute);
+        /** @phpstan-ignore property.notFound, expr.resultUnused */
+        $reflectionAttributeAdapter->foo;
     }
 }

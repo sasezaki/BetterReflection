@@ -16,6 +16,7 @@ use ReflectionException as CoreReflectionException;
 use ReflectionMethod as CoreReflectionMethod;
 use ReflectionProperty as CoreReflectionProperty;
 use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplemented;
+use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplementedBecauseItTriggersAutoloading;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionAttribute as ReflectionAttributeAdapter;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionClass as ReflectionClassAdapter;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionClassConstant as ReflectionClassConstantAdapter;
@@ -97,9 +98,9 @@ class ReflectionEnumTest extends TestCase
             ['isReadOnly', [], true, null, true],
             ['getModifiers', [], 123, null, 123],
             ['isInstance', [new stdClass()], true, null, true],
-            ['newInstance', [], null, NotImplemented::class, null],
-            ['newInstanceWithoutConstructor', [], null, NotImplemented::class, null],
-            ['newInstanceArgs', [], null, NotImplemented::class, null],
+            ['newInstance', [], null, NotImplementedBecauseItTriggersAutoloading::class, null],
+            ['newInstanceWithoutConstructor', [], null, NotImplementedBecauseItTriggersAutoloading::class, null],
+            ['newInstanceArgs', [], null, NotImplementedBecauseItTriggersAutoloading::class, null],
             ['isSubclassOf', ['\stdClass'], true, null, true],
             ['getStaticProperties', [], [], null, []],
             ['getDefaultProperties', [], ['foo' => 'bar'], null, null],
@@ -1139,5 +1140,93 @@ class ReflectionEnumTest extends TestCase
         self::assertCount(1, $reflectionEnumAdapter->getProperties(CoreReflectionProperty::IS_PUBLIC));
         self::assertCount(1, $reflectionEnumAdapter->getProperties(CoreReflectionProperty::IS_PRIVATE));
         self::assertCount(1, $reflectionEnumAdapter->getProperties(CoreReflectionProperty::IS_PROTECTED));
+    }
+
+    public function testNewLazyGhost(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
+
+        $reflectionEnumAdapter = new ReflectionEnumAdapter($betterReflectionEnum);
+        $reflectionEnumAdapter->newLazyGhost(static fn () => null);
+    }
+
+    public function testNewLazyProxy(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
+
+        $reflectionEnumAdapter = new ReflectionEnumAdapter($betterReflectionEnum);
+        $reflectionEnumAdapter->newLazyProxy(static fn () => null);
+    }
+
+    public function testMarkLazyObjectAsInitialized(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
+
+        $reflectionEnumAdapter = new ReflectionEnumAdapter($betterReflectionEnum);
+        $reflectionEnumAdapter->markLazyObjectAsInitialized(new stdClass());
+    }
+
+    public function testGetLazyInitializer(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
+
+        $reflectionEnumAdapter = new ReflectionEnumAdapter($betterReflectionEnum);
+        $reflectionEnumAdapter->getLazyInitializer(new stdClass());
+    }
+
+    public function testInitializeLazyObject(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
+
+        $reflectionEnumAdapter = new ReflectionEnumAdapter($betterReflectionEnum);
+        $reflectionEnumAdapter->initializeLazyObject(new stdClass());
+    }
+
+    public function testIsUninitializedLazyObject(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
+
+        $reflectionEnumAdapter = new ReflectionEnumAdapter($betterReflectionEnum);
+        $reflectionEnumAdapter->isUninitializedLazyObject(new stdClass());
+    }
+
+    public function testResetAsLazyGhost(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
+
+        $reflectionEnumAdapter = new ReflectionEnumAdapter($betterReflectionEnum);
+        $reflectionEnumAdapter->resetAsLazyGhost(new stdClass(), static fn () => null);
+    }
+
+    public function testResetAsLazyProxy(): void
+    {
+        self::expectException(NotImplementedBecauseItTriggersAutoloading::class);
+        self::expectExceptionMessage('Not implemented because it triggers autoloading');
+
+        $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
+
+        $reflectionEnumAdapter = new ReflectionEnumAdapter($betterReflectionEnum);
+        $reflectionEnumAdapter->resetAsLazyProxy(new stdClass(), static fn () => null);
     }
 }
