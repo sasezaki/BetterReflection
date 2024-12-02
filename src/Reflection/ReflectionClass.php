@@ -1203,7 +1203,7 @@ class ReflectionClass implements Reflection
      */
     public function isAbstract(): bool
     {
-        return ($this->modifiers & CoreReflectionClass::IS_EXPLICIT_ABSTRACT) === CoreReflectionClass::IS_EXPLICIT_ABSTRACT;
+        return (bool) ($this->modifiers & CoreReflectionClass::IS_EXPLICIT_ABSTRACT);
     }
 
     /**
@@ -1215,12 +1215,12 @@ class ReflectionClass implements Reflection
             return true;
         }
 
-        return ($this->modifiers & CoreReflectionClass::IS_FINAL) === CoreReflectionClass::IS_FINAL;
+        return (bool) ($this->modifiers & CoreReflectionClass::IS_FINAL);
     }
 
     public function isReadOnly(): bool
     {
-        return ($this->modifiers & CoreReflectionClass::IS_READONLY) === CoreReflectionClass::IS_READONLY;
+        return (bool) ($this->modifiers & CoreReflectionClass::IS_READONLY);
     }
 
     /**

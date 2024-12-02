@@ -267,12 +267,12 @@ class ReflectionProperty
      */
     public function isPrivate(): bool
     {
-        return ($this->modifiers & CoreReflectionProperty::IS_PRIVATE) === CoreReflectionProperty::IS_PRIVATE;
+        return (bool) ($this->modifiers & CoreReflectionProperty::IS_PRIVATE);
     }
 
     public function isPrivateSet(): bool
     {
-        return ($this->modifiers & ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY) === ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY;
+        return (bool) ($this->modifiers & ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY);
     }
 
     /**
@@ -280,12 +280,12 @@ class ReflectionProperty
      */
     public function isProtected(): bool
     {
-        return ($this->modifiers & CoreReflectionProperty::IS_PROTECTED) === CoreReflectionProperty::IS_PROTECTED;
+        return (bool) ($this->modifiers & CoreReflectionProperty::IS_PROTECTED);
     }
 
     public function isProtectedSet(): bool
     {
-        return ($this->modifiers & ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY) === ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY;
+        return (bool) ($this->modifiers & ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY);
     }
 
     /**
@@ -293,7 +293,7 @@ class ReflectionProperty
      */
     public function isPublic(): bool
     {
-        return ($this->modifiers & CoreReflectionProperty::IS_PUBLIC) === CoreReflectionProperty::IS_PUBLIC;
+        return (bool) ($this->modifiers & CoreReflectionProperty::IS_PUBLIC);
     }
 
     /**
@@ -301,7 +301,7 @@ class ReflectionProperty
      */
     public function isStatic(): bool
     {
-        return ($this->modifiers & CoreReflectionProperty::IS_STATIC) === CoreReflectionProperty::IS_STATIC;
+        return (bool) ($this->modifiers & CoreReflectionProperty::IS_STATIC);
     }
 
     public function isFinal(): bool
@@ -342,7 +342,7 @@ class ReflectionProperty
 
     public function isReadOnly(): bool
     {
-        return ($this->modifiers & ReflectionPropertyAdapter::IS_READONLY) === ReflectionPropertyAdapter::IS_READONLY
+        return (bool) ($this->modifiers & ReflectionPropertyAdapter::IS_READONLY)
             || $this->getDeclaringClass()->isReadOnly();
     }
 
