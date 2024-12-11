@@ -1121,4 +1121,16 @@ PHP;
         self::assertFalse($hookProperty->hasHook(ReflectionPropertyHookType::Set));
         self::assertSame('Roave\BetterReflectionTest\Fixture\PropertyHookTrait', $hookProperty->getHook(ReflectionPropertyHookType::Get)->getDeclaringClass()->getName());
     }
+
+    public function testPromotedPropertyWithHooks(): void
+    {
+        $reflector    = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/PropertyHooks.php', $this->astLocator));
+        $getClassInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\PromotedPropertyHooks');
+
+        $hookProperty = $getClassInfo->getProperty('hook');
+        self::assertTrue($hookProperty->isPromoted());
+        self::assertCount(1, $hookProperty->getHooks());
+        self::assertTrue($hookProperty->hasHook(ReflectionPropertyHookType::Get));
+        self::assertFalse($hookProperty->hasHook(ReflectionPropertyHookType::Set));
+    }
 }

@@ -863,7 +863,7 @@ class ReflectionClass implements Reflection
             }
 
             foreach ($methodNode->params as $parameterNode) {
-                if ($parameterNode->flags === 0) {
+                if ($parameterNode->flags === 0 && $parameterNode->hooks === []) {
                     // No flags, no promotion
                     continue;
                 }
@@ -878,6 +878,7 @@ class ReflectionClass implements Reflection
                     $parameterNode->getAttributes(),
                     $parameterNode->type,
                     $parameterNode->attrGroups,
+                    $parameterNode->hooks,
                 );
                 $property                         = ReflectionProperty::createFromNode(
                     $reflector,
