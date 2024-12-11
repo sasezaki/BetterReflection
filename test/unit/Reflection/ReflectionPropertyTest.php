@@ -915,13 +915,37 @@ PHP;
 
     /** @param non-empty-string $propertyName */
     #[DataProvider('asymetricVisibilityModifierProvider')]
-    public function testGetAsymetricVisibilityModifiers(string $propertyName, int $expectedModifier): void
+    public function testGetAsymetricVisibilityMethods(string $propertyName, int $expectedModifier): void
     {
         $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
         $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
         $property  = $classInfo->getProperty($propertyName);
 
         self::assertSame($expectedModifier, $property->getModifiers());
+    }
+
+    public function testIsProtectedSet(): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+
+        $publicPublicSetProperty    = $classInfo->getProperty('publicPublicSet');
+        $publicProtectedSetProperty = $classInfo->getProperty('publicProtectedSet');
+
+        self::assertFalse($publicPublicSetProperty->isProtectedSet());
+        self::assertTrue($publicProtectedSetProperty->isProtectedSet());
+    }
+
+    public function testIsPrivateSet(): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+
+        $protectedProtectedSet = $classInfo->getProperty('protectedProtectedSet');
+        $protectedPrivateSet   = $classInfo->getProperty('protectedPrivateSet');
+
+        self::assertFalse($protectedProtectedSet->isPrivateSet());
+        self::assertTrue($protectedPrivateSet->isPrivateSet());
     }
 
     public function testIsAbstract(): void
