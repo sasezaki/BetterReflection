@@ -135,3 +135,27 @@ class PromotedPropertyHooks
     {
     }
 }
+
+class SetPropertyHooksParameters
+{
+    public string $hookWithImplicitParameter { set => strtolower($value); }
+
+    public int $hookWithExplicitParameter {
+        set (int $value) {
+            $this->hookWithExplicitParameter = $value;
+        }
+     }
+
+}
+
+class GetPropertyHooksReturnTypes
+{
+    public string $hookWithString { get => 'string'; }
+
+    public int $hookWithInteger { get => 42; }
+
+    public string|int $hookWithUnion { get => 'string'; }
+
+    public $hookWithoutType { get => 'string'; }
+
+}
