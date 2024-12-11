@@ -723,24 +723,7 @@ class ReflectionProperty
             return true;
         }
 
-        $visitor   = new FindingVisitor(static fn (Node $node): bool => $node instanceof Node\Expr\PropertyFetch);
-        $traverser = new NodeTraverser($visitor);
-        $traverser->traverse($getHookBody);
-
-        foreach ($visitor->getFoundNodes() as $propertyFetchNode) {
-            assert($propertyFetchNode instanceof Node\Expr\PropertyFetch);
-
-            if (
-                $propertyFetchNode->var instanceof Node\Expr\Variable
-                && $propertyFetchNode->var->name === 'this'
-                && $propertyFetchNode->name instanceof Node\Identifier
-                && $propertyFetchNode->name->name === $this->name
-            ) {
-                return false;
-            }
-        }
-
-        return true;
+        return ! $this->isHookUsingThisProperty($getHook);
     }
 
     private function computeImmediateVirtualBasedOnSetHook(Node\PropertyHook $setHook): bool
@@ -757,26 +740,29 @@ class ReflectionProperty
             return false;
         }
 
-        $visitor   = new FindingVisitor(static fn (Node $node): bool => $node instanceof Node\Expr\Assign);
-        $traverser = new NodeTraverser($visitor);
-        $traverser->traverse($setHookBody);
+        return ! $this->isHookUsingThisProperty($setHook);
+    }
 
-        foreach ($visitor->getFoundNodes() as $assigNode) {
-            assert($assigNode instanceof Node\Expr\Assign);
-            $variableToAssign = $assigNode->var;
+    private function isHookUsingThisProperty(Node\PropertyHook $hook): bool
+    {
+        $visitor   = new FindingVisitor(static fn (Node $node): bool => $node instanceof Node\Expr\PropertyFetch);
+        $traverser = new NodeTraverser($visitor);
+        $traverser->traverse([$hook]);
+
+        foreach ($visitor->getFoundNodes() as $propertyFetchNode) {
+            assert($propertyFetchNode instanceof Node\Expr\PropertyFetch);
 
             if (
-                $variableToAssign instanceof Node\Expr\PropertyFetch
-                && $variableToAssign->var instanceof Node\Expr\Variable
-                && $variableToAssign->var->name === 'this'
-                && $variableToAssign->name instanceof Node\Identifier
-                && $variableToAssign->name->name === $this->name
+                $propertyFetchNode->var instanceof Node\Expr\Variable
+                && $propertyFetchNode->var->name === 'this'
+                && $propertyFetchNode->name instanceof Node\Identifier
+                && $propertyFetchNode->name->name === $this->name
             ) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /** @return array{get?: ReflectionMethod, set?: ReflectionMethod} */
