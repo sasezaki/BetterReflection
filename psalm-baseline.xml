@@ -220,7 +220,6 @@
       <code><![CDATA[isStatic]]></code>
       <code><![CDATA[traitExists]]></code>
       <code><![CDATA[traverse]]></code>
-      <code><![CDATA[traverse]]></code>
     </ImpureMethodCall>
   </file>
   <file src="src/Reflection/ReflectionType.php">

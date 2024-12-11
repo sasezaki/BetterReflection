@@ -128,3 +128,10 @@ interface InterfacePropertyHooks
 
     public string $readAndWriteHook { get; set; }
 }
+
+class PromotedPropertyHooks
+{
+    public function __construct(string $hook{ get {} })
+    {
+    }
+}
