@@ -760,6 +760,7 @@ PHP;
         ]));
         $classInfo = $reflector->reflectClass('Bat');
 
+        $this->expectException(UnableToCompileNode::class);
         $this->expectExceptionMessage('An enum expression Foo::ONE is not supported in class Bat in file ');
         $classInfo->getConstant('ONE_VALUE')->getValue();
     }

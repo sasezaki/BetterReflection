@@ -111,20 +111,22 @@ class ReflectionNamedTypeTest extends TestCase
     }
 
     /** @return list<array{0: string}> */
-    public static function dataNotBuildin(): array
+    public static function dataIsBuildin(): array
     {
         return [
-            ['self'],
-            ['sElF'],
-            ['static'],
-            ['sTaTiC'],
-            ['parent'],
-            ['PaReNt'],
+            ['string', true],
+            ['int', true],
+            ['self', false],
+            ['sElF', false],
+            ['static', false],
+            ['sTaTiC', false],
+            ['parent', false],
+            ['PaReNt', false],
         ];
     }
 
-    #[DataProvider('dataNotBuildin')]
-    public function testIsNotBuiltin(string $type): void
+    #[DataProvider('dataIsBuildin')]
+    public function testIsBuiltin(string $type, bool $isBuiltin): void
     {
         $reflector = $this->createMock(Reflector::class);
         $owner     = $this->createMock(BetterReflectionMethod::class);
@@ -132,6 +134,23 @@ class ReflectionNamedTypeTest extends TestCase
         $betterReflectionNamedType = new BetterReflectionNamedType($reflector, $owner, new Node\Name($type));
         $reflectionTypeAdapter     = new ReflectionNamedTypeAdapter($betterReflectionNamedType, false);
 
-        self::assertFalse($reflectionTypeAdapter->isBuiltin());
+        self::assertSame($isBuiltin, $reflectionTypeAdapter->isBuiltin());
+    }
+
+    public function testTypeWithoutBetterReflection(): void
+    {
+        $reflectionTypeAdapter = new ReflectionNamedTypeAdapter('never');
+
+        self::assertSame('never', $reflectionTypeAdapter->getName());
+        self::assertSame('never', $reflectionTypeAdapter->__toString());
+        self::assertTrue($reflectionTypeAdapter->isBuiltin());
+        self::assertFalse($reflectionTypeAdapter->allowsNull());
+    }
+
+    public function testDefaultAllowsNull(): void
+    {
+        $reflectionTypeAdapter = new ReflectionNamedTypeAdapter('never');
+
+        self::assertFalse($reflectionTypeAdapter->allowsNull());
     }
 }

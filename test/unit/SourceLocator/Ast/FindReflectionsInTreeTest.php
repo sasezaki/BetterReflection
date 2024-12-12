@@ -7,6 +7,7 @@ namespace Roave\BetterReflectionTest\Reflector;
 use PhpParser\Node;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\TestCase;
 use Roave\BetterReflection\Identifier\Identifier;
 use Roave\BetterReflection\Identifier\IdentifierType;
@@ -215,6 +216,12 @@ class FindReflectionsInTreeTest extends TestCase
 
         $strategy->expects($this->once())
             ->method('__invoke')
+            ->with(
+                $this->isInstanceOf(Reflector::class),
+                new Callback(
+                    static fn (Node $node): bool => $node instanceof Node\Expr\FuncCall && $node->getDocComment() !== null,
+                ),
+            )
             ->willReturn($mockReflection);
 
         $reflector = $this->createMock(Reflector::class);
@@ -224,6 +231,7 @@ class FindReflectionsInTreeTest extends TestCase
 
         $source        = <<<'PHP'
 <?php
+/** @var int */
 define("FOO", 1);
 PHP;
         $locatedSource = new LocatedSource($source, 'FOO');
