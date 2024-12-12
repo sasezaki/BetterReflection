@@ -567,11 +567,10 @@ class ReflectionClass implements Reflection
         $methods = [];
 
         foreach ($node->getMethods() as $methodNode) {
-            $method = ReflectionMethod::createFromNode(
+            $method = ReflectionMethod::createFromMethodNode(
                 $reflector,
                 $methodNode,
                 $this->locatedSource,
-                $methodNode->name->name,
                 $this->getNamespaceName(),
                 $this,
                 $this,
@@ -606,14 +605,13 @@ class ReflectionClass implements Reflection
                 'returnType' => $returnType,
             ];
 
-            return ReflectionMethod::createFromNode(
+            return ReflectionMethod::createFromMethodNode(
                 $this->reflector,
                 new ClassMethod(
                     new Node\Identifier($name),
                     $classMethodSubnodes,
                 ),
                 $internalLocatedSource,
-                $name,
                 $this->getNamespaceName(),
                 $this,
                 $this,

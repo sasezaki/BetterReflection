@@ -774,12 +774,15 @@ class ReflectionProperty
             $hookName = $hook->name->name;
             assert($hookName === 'get' || $hookName === 'set');
 
-            $hooks[$hookName] = ReflectionMethod::createFromNode(
+            $hookType = $node->type;
+            assert($hookType === null || $hookType instanceof Node\Identifier || $hookType instanceof Node\Name || $hookType instanceof Node\NullableType || $hookType instanceof Node\UnionType || $hookType instanceof Node\IntersectionType);
+
+            $hooks[$hookName] = ReflectionMethod::createFromPropertyHook(
                 $this->reflector,
                 $hook,
                 $this->getDeclaringClass()->getLocatedSource(),
                 sprintf('$%s::%s', $this->name, $hookName),
-                null,
+                $hookType,
                 $this->getDeclaringClass(),
                 $this->getImplementingClass(),
                 $this->getDeclaringClass(),

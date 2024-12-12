@@ -53,7 +53,7 @@
       <code><![CDATA[createEmpty]]></code>
       <code><![CDATA[createEmpty]]></code>
       <code><![CDATA[createEmpty]]></code>
-      <code><![CDATA[createFromNode]]></code>
+      <code><![CDATA[createFromMethodNode]]></code>
       <code><![CDATA[createFromNode]]></code>
       <code><![CDATA[createFromNode]]></code>
       <code><![CDATA[createFromNode]]></code>
@@ -205,7 +205,7 @@
     <ImpureMethodCall>
       <code><![CDATA[__invoke]]></code>
       <code><![CDATA[classExists]]></code>
-      <code><![CDATA[createFromNode]]></code>
+      <code><![CDATA[createFromPropertyHook]]></code>
       <code><![CDATA[getEndLine]]></code>
       <code><![CDATA[getStartLine]]></code>
       <code><![CDATA[getStmts]]></code>

@@ -60,15 +60,13 @@ class ReflectionMethod
     /**
      * @internal
      *
-     * @param non-empty-string      $name
      * @param non-empty-string|null $aliasName
      * @param non-empty-string|null $namespace
      */
-    public static function createFromNode(
+    public static function createFromMethodNode(
         Reflector $reflector,
-        MethodNode|Node\PropertyHook $node,
+        MethodNode $node,
         LocatedSource $locatedSource,
-        string $name,
         string|null $namespace,
         ReflectionClass $declaringClass,
         ReflectionClass $implementingClass,
@@ -79,13 +77,63 @@ class ReflectionMethod
             $reflector,
             $node,
             $locatedSource,
-            $name,
+            $node->name->name,
             $namespace,
             $declaringClass,
             $implementingClass,
             $currentClass,
             $aliasName,
         );
+    }
+
+    /**
+     * @internal
+     *
+     * @param non-empty-string $name
+     */
+    public static function createFromPropertyHook(
+        Reflector $reflector,
+        Node\PropertyHook $node,
+        LocatedSource $locatedSource,
+        string $name,
+        Node\Identifier|Node\Name|Node\NullableType|Node\UnionType|Node\IntersectionType|null $type,
+        ReflectionClass $declaringClass,
+        ReflectionClass $implementingClass,
+        ReflectionClass $currentClass,
+    ): self {
+        $method = new self(
+            $reflector,
+            $node,
+            $locatedSource,
+            $name,
+            null,
+            $declaringClass,
+            $implementingClass,
+            $currentClass,
+            null,
+        );
+
+        if ($node->name->name === 'set') {
+            $method->returnType = ReflectionType::createFromNode($reflector, $method, new Node\Identifier('void'));
+
+            if ($method->parameters === []) {
+                $parameter = ReflectionParameter::createFromNode(
+                    $reflector,
+                    new Node\Param(new Node\Expr\Variable('value'), type: $type),
+                    $method,
+                    0,
+                    false,
+                );
+
+                $method->parameters['value'] = $parameter;
+            }
+        } elseif ($node->name->name === 'get') {
+            $method->returnType = $type !== null
+                ? ReflectionType::createFromNode($reflector, $method, $type)
+                : null;
+        }
+
+        return $method;
     }
 
     /**

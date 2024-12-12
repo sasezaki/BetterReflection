@@ -39,13 +39,13 @@ trait ReflectionFunctionAbstract
      * @var array<non-empty-string, ReflectionParameter>
      * @psalm-allow-private-mutation
      */
-    private array $parameters;
+    protected array $parameters;
 
     /** @psalm-allow-private-mutation */
     private bool $returnsReference;
 
     /** @psalm-allow-private-mutation */
-    private ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $returnType;
+    protected ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $returnType;
 
     /**
      * @var list<ReflectionAttribute>

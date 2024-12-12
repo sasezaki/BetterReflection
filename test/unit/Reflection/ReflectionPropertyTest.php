@@ -25,8 +25,10 @@ use Roave\BetterReflection\Reflection\Exception\NotAnObject;
 use Roave\BetterReflection\Reflection\Exception\ObjectNotInstanceOfClass;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
+use Roave\BetterReflection\Reflection\ReflectionParameter;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
 use Roave\BetterReflection\Reflection\ReflectionPropertyHookType;
+use Roave\BetterReflection\Reflection\ReflectionType;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\Reflector\Reflector;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
@@ -1132,5 +1134,72 @@ PHP;
         self::assertCount(1, $hookProperty->getHooks());
         self::assertTrue($hookProperty->hasHook(ReflectionPropertyHookType::Get));
         self::assertFalse($hookProperty->hasHook(ReflectionPropertyHookType::Set));
+    }
+
+    public function testSetPropertyHookHasImplicitParameter(): void
+    {
+        $reflector    = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/PropertyHooks.php', $this->astLocator));
+        $getClassInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\SetPropertyHooksParameters');
+
+        $hookProperty = $getClassInfo->getProperty('hookWithImplicitParameter');
+        self::assertTrue($hookProperty->hasHook(ReflectionPropertyHookType::Set));
+
+        $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
+        self::assertInstanceOf(ReflectionType::class, $hookReflection->getReturnType());
+        self::assertSame('void', $hookReflection->getReturnType()->getName());
+
+        self::assertSame(1, $hookReflection->getNumberOfParameters());
+        self::assertInstanceOf(ReflectionParameter::class, $hookReflection->getParameter('value'));
+
+        $hookParameterReflection = $hookReflection->getParameter('value');
+        self::assertSame(0, $hookParameterReflection->getPosition());
+        self::assertFalse($hookParameterReflection->isOptional());
+        self::assertInstanceOf(ReflectionType::class, $hookParameterReflection->getType());
+        self::assertSame('string', $hookParameterReflection->getType()->getName());
+    }
+
+    public function testSetPropertyHookHasExplicitParameter(): void
+    {
+        $reflector    = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/PropertyHooks.php', $this->astLocator));
+        $getClassInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\SetPropertyHooksParameters');
+
+        $hookProperty = $getClassInfo->getProperty('hookWithExplicitParameter');
+        self::assertTrue($hookProperty->hasHook(ReflectionPropertyHookType::Set));
+
+        $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
+        self::assertInstanceOf(ReflectionType::class, $hookReflection->getReturnType());
+        self::assertSame('void', $hookReflection->getReturnType()->getName());
+
+        self::assertSame(1, $hookReflection->getNumberOfParameters());
+        self::assertInstanceOf(ReflectionParameter::class, $hookReflection->getParameter('value'));
+
+        $hookParameterReflection = $hookReflection->getParameter('value');
+        self::assertSame(0, $hookParameterReflection->getPosition());
+        self::assertFalse($hookParameterReflection->isOptional());
+        self::assertInstanceOf(ReflectionType::class, $hookParameterReflection->getType());
+        self::assertSame('int', $hookParameterReflection->getType()->getName());
+    }
+
+    /** @return list<array{0: non-empty-string, 1: string|null}> */
+    public static function getPropertyHookReturnTypeProvider(): array
+    {
+        return [
+            ['hookWithString', 'string'],
+            ['hookWithInteger', 'int'],
+            ['hookWithUnion', 'string|int'],
+            ['hookWithoutType', null],
+        ];
+    }
+
+    #[DataProvider('getPropertyHookReturnTypeProvider')]
+    public function testGetPropertyHookReturnType(string $propertyName, string|null $returnType): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/PropertyHooks.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\GetPropertyHooksReturnTypes');
+
+        $hookProperty      = $classInfo->getProperty($propertyName);
+        $getHookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Get);
+        self::assertNotNull($getHookReflection);
+        self::assertSame($returnType, $getHookReflection->getReturnType()?->__toString());
     }
 }
