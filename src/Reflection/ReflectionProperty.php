@@ -707,19 +707,15 @@ class ReflectionProperty
             return true;
         }
 
-        return $this->computeImmediateVirtualBasedOnGetHook($node, $getHook);
+        return $this->computeImmediateVirtualBasedOnGetHook($getHook);
     }
 
-    private function computeImmediateVirtualBasedOnGetHook(PropertyNode $node, Node\PropertyHook $getHook): bool
+    private function computeImmediateVirtualBasedOnGetHook(Node\PropertyHook $getHook): bool
     {
         $getHookBody = $getHook->getStmts();
 
         // Abstract property or property in interface
         if ($getHookBody === null) {
-            return true;
-        }
-
-        if (! $node->isPublic()) {
             return true;
         }
 
