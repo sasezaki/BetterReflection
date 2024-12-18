@@ -1094,8 +1094,7 @@ PHP;
     {
         return [
             ['notVirtualBecauseNoHooks', false],
-            ['notVirtualBecauseOfPublicVisibilityAndThePropertyIsUsedInGet', false],
-            ['virtualBecauseOfNotPublicVisibilityAndNoSet', true],
+            ['notVirtualBecauseThePropertyIsUsedInGet', false],
             ['notVirtualBecauseOfShortSyntax', false],
             ['virtualBecauseThePropertyIsNotUsedInGet', true],
             ['virtualBecauseSetWorksWithDifferentProperty', true],

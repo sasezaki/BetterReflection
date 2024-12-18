@@ -35,15 +35,9 @@ abstract class ToBeVirtualOrNotToBeVirtualThatIsTheQuestion
 {
     public string $notVirtualBecauseNoHooks = 'string';
 
-    public string $notVirtualBecauseOfPublicVisibilityAndThePropertyIsUsedInGet {
+    public string $notVirtualBecauseThePropertyIsUsedInGet {
         get {
-            return strtoupper($this->notVirtualBecauseOfPublicVisibilityAndThePropertyIsUsedInGet);
-        }
-    }
-
-    protected string $virtualBecauseOfNotPublicVisibilityAndNoSet {
-        get {
-            return strtoupper($this->virtualBecauseOfNotPublicVisibilityAndNoSet);
+            return strtoupper($this->notVirtualBecauseThePropertyIsUsedInGet);
         }
     }
 
