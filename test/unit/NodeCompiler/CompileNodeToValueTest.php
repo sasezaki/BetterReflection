@@ -19,6 +19,7 @@ use Roave\BetterReflection\NodeCompiler\CompileNodeToValue;
 use Roave\BetterReflection\NodeCompiler\CompilerContext;
 use Roave\BetterReflection\NodeCompiler\Exception\UnableToCompileNode;
 use Roave\BetterReflection\Reflection\Reflection;
+use Roave\BetterReflection\Reflection\ReflectionPropertyHookType;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\Reflector\Reflector;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
@@ -33,6 +34,7 @@ use Roave\BetterReflection\Util\FileHelper;
 use Roave\BetterReflectionTest\BetterReflectionSingleton;
 use Roave\BetterReflectionTest\Fixture\ClassWithNewInInitializers;
 use Roave\BetterReflectionTest\Fixture\MagicConstantsClass;
+use Roave\BetterReflectionTest\Fixture\MagicConstantsInPropertyHooks;
 use Roave\BetterReflectionTest\Fixture\MagicConstantsTrait;
 
 use function assert;
@@ -801,6 +803,7 @@ PHP;
             ['_TRAIT', ''],
             ['_METHOD', ''],
             ['_FUNCTION', ''],
+            ['_PROPERTY', ''],
         ];
     }
 
@@ -821,12 +824,13 @@ PHP;
         return [
             ['_DIR', $dir],
             ['_FILE', $dir . '/MagicConstants.php'],
-            ['_LINE', 20],
+            ['_LINE', 21],
             ['_NAMESPACE', 'Roave\BetterReflectionTest\Fixture'],
             ['_CLASS', ''],
             ['_TRAIT', ''],
             ['_METHOD', ''],
             ['_FUNCTION', ''],
+            ['_PROPERTY', ''],
         ];
     }
 
@@ -944,12 +948,13 @@ PHP
         return [
             ['dir', $dir],
             ['file', $dir . '/MagicConstants.php'],
-            ['line', 31],
+            ['line', 33],
             ['namespace', 'Roave\BetterReflectionTest\Fixture'],
             ['class', 'Roave\BetterReflectionTest\Fixture\MagicConstantsTrait'],
             ['trait', 'Roave\BetterReflectionTest\Fixture\MagicConstantsTrait'],
             ['method', ''],
             ['function', ''],
+            ['property', ''],
         ];
     }
 
@@ -972,12 +977,13 @@ PHP
         return [
             ['dir', $dir],
             ['file', $dir . '/MagicConstants.php'],
-            ['line', 43],
+            ['line', 46],
             ['namespace', 'Roave\BetterReflectionTest\Fixture'],
             ['class', 'Roave\BetterReflectionTest\Fixture\MagicConstantsClass'],
             ['trait', ''],
             ['method', ''],
             ['function', ''],
+            ['property', ''],
         ];
     }
 
@@ -1000,12 +1006,13 @@ PHP
         return [
             ['dir', $dir],
             ['file', $dir . '/MagicConstants.php'],
-            ['line', 53],
+            ['line', 57],
             ['namespace', 'Roave\BetterReflectionTest\Fixture'],
             ['class', 'Roave\BetterReflectionTest\Fixture\MagicConstantsClass'],
             ['trait', ''],
             ['method', 'Roave\BetterReflectionTest\Fixture\MagicConstantsClass::magicConstantsMethod'],
             ['function', 'magicConstantsMethod'],
+            ['property', ''],
         ];
     }
 
@@ -1029,12 +1036,13 @@ PHP
         return [
             ['dir', $dir],
             ['file', $dir . '/MagicConstants.php'],
-            ['line', 67],
+            ['line', 72],
             ['namespace', 'Roave\BetterReflectionTest\Fixture'],
             ['class', ''],
             ['trait', ''],
             ['method', 'Roave\BetterReflectionTest\Fixture\magicConstantsFunction'],
             ['function', 'Roave\BetterReflectionTest\Fixture\magicConstantsFunction'],
+            ['property', ''],
         ];
     }
 
@@ -1090,6 +1098,30 @@ PHP
         ));
 
         $parameter->getDefaultValue();
+    }
+
+    /** @return list<array{0: non-empty-string, 1: mixed}> */
+    public static function magicConstantsInPropertyHooks(): array
+    {
+        return [
+            ['propertyMagicConstantMethod', 'Roave\BetterReflectionTest\Fixture\MagicConstantsInPropertyHooks::$propertyMagicConstantMethod::set'],
+            ['propertyMagicConstantFunction', '$propertyMagicConstantFunction::set'],
+            ['propertyMagicConstantProperty', 'propertyMagicConstantProperty'],
+        ];
+    }
+
+    /** @param non-empty-string $propertyName */
+    #[DataProvider('magicConstantsInPropertyHooks')]
+    public function testMagicConstantsInPropertyHooks(string $propertyName, mixed $expectedValue): void
+    {
+        $reflector                 = new DefaultReflector(new SingleFileSourceLocator(self::realPath(__DIR__ . '/../Fixture/MagicConstantsInPropertyHooks.php'), $this->astLocator));
+        $class                     = $reflector->reflectClass(MagicConstantsInPropertyHooks::class);
+        $property                  = $class->getProperty($propertyName);
+        $getHook                   = $property->getHook(ReflectionPropertyHookType::Set);
+        $getHookParameter          = $getHook->getParameters()[0];
+        $getHookParameterAttribute = $getHookParameter->getAttributes()[0];
+
+        self::assertSame($expectedValue, $getHookParameterAttribute->getArguments()[0]);
     }
 
     /** @return non-empty-string */

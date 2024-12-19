@@ -782,6 +782,7 @@ class ReflectionProperty
                 $this->getDeclaringClass(),
                 $this->getImplementingClass(),
                 $this->getDeclaringClass(),
+                $this,
             );
         }
 
