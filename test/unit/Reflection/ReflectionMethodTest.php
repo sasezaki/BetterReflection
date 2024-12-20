@@ -821,6 +821,8 @@ PHP;
         self::assertTrue($hookProperty->hasHook(ReflectionPropertyHookType::Set));
 
         $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
+        self::assertTrue($hookReflection->isHook());
+        self::assertSame($hookProperty, $hookReflection->getHookProperty());
         self::assertInstanceOf(ReflectionType::class, $hookReflection->getReturnType());
         self::assertSame('void', $hookReflection->getReturnType()->getName());
 
@@ -843,6 +845,8 @@ PHP;
         self::assertTrue($hookProperty->hasHook(ReflectionPropertyHookType::Set));
 
         $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
+        self::assertTrue($hookReflection->isHook());
+        self::assertSame($hookProperty, $hookReflection->getHookProperty());
         self::assertInstanceOf(ReflectionType::class, $hookReflection->getReturnType());
         self::assertSame('void', $hookReflection->getReturnType()->getName());
 

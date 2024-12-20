@@ -48,6 +48,7 @@ class ReflectionMethod
         private ReflectionClass $implementingClass,
         private ReflectionClass $currentClass,
         private string|null $aliasName,
+        private ReflectionProperty|null $hookProperty = null,
     ) {
         assert($node instanceof MethodNode || $node instanceof Node\PropertyHook);
 
@@ -100,6 +101,7 @@ class ReflectionMethod
         ReflectionClass $declaringClass,
         ReflectionClass $implementingClass,
         ReflectionClass $currentClass,
+        ReflectionProperty $hookProperty,
     ): self {
         $method = new self(
             $reflector,
@@ -111,6 +113,7 @@ class ReflectionMethod
             $implementingClass,
             $currentClass,
             null,
+            $hookProperty,
         );
 
         if ($node->name->name === 'set') {
@@ -444,6 +447,17 @@ class ReflectionMethod
         $instance = $this->assertObject($object);
 
         return fn (mixed ...$args): mixed => $this->callObjectMethod($instance, $args);
+    }
+
+    /** @psalm-assert-if-true !null $this->getHookProperty() */
+    public function isHook(): bool
+    {
+        return $this->hookProperty !== null;
+    }
+
+    public function getHookProperty(): ReflectionProperty|null
+    {
+        return $this->hookProperty;
     }
 
     /**

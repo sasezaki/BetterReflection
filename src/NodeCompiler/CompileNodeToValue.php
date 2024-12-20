@@ -9,6 +9,7 @@ use PhpParser\Node;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionClassConstant;
 use Roave\BetterReflection\Reflection\ReflectionEnum;
+use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use Roave\BetterReflection\Util\FileHelper;
 
@@ -80,6 +81,16 @@ class CompileNodeToValue
 
             if ($node instanceof Node\Scalar\MagicConst\Namespace_) {
                 return $context->getNamespace() ?? '';
+            }
+
+            if ($node instanceof Node\Scalar\MagicConst\Property) {
+                $method = $context->getFunction();
+
+                if ($method !== null && $method instanceof ReflectionMethod && $method->isHook()) {
+                    return $method->getHookProperty()->getName();
+                }
+
+                return '';
             }
 
             if ($node instanceof Node\Scalar\MagicConst\Method) {

@@ -10,6 +10,7 @@ namespace {
     define('_TRAIT', __TRAIT__);
     define('_METHOD', __METHOD__);
     define('_FUNCTION', __FUNCTION__);
+    define('_PROPERTY', __PROPERTY__);
 
 }
 
@@ -23,6 +24,7 @@ namespace Roave\BetterReflectionTest\Fixture {
     const _TRAIT = __TRAIT__;
     const _METHOD = __METHOD__;
     const _FUNCTION = __FUNCTION__;
+    const _PROPERTY = __PROPERTY__;
 
     trait MagicConstantsTrait
     {
@@ -34,6 +36,7 @@ namespace Roave\BetterReflectionTest\Fixture {
         protected $trait = __TRAIT__;
         protected $method = __METHOD__;
         protected $function = __FUNCTION__;
+        protected $property = __PROPERTY__;
     }
 
     class MagicConstantsClass
@@ -46,6 +49,7 @@ namespace Roave\BetterReflectionTest\Fixture {
         private $trait = __TRAIT__;
         private $method = __METHOD__;
         private $function = __FUNCTION__;
+        private $property = __PROPERTY__;
 
         public function magicConstantsMethod(
             $dir = __DIR__,
@@ -56,6 +60,7 @@ namespace Roave\BetterReflectionTest\Fixture {
             $trait = __TRAIT__,
             $method = __METHOD__,
             $function = __FUNCTION__,
+            $property = __PROPERTY__,
         )
         {
         }
@@ -70,6 +75,7 @@ namespace Roave\BetterReflectionTest\Fixture {
         $trait = __TRAIT__,
         $method = __METHOD__,
         $function = __FUNCTION__,
+        $property = __PROPERTY__,
     )
     {
     }
