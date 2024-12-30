@@ -148,6 +148,24 @@ class ReflectionPropertyTest extends TestCase
         self::assertFalse($onlyPublicProp->isReadOnly());
     }
 
+    public function isImplicitPublic(): void
+    {
+        $php = <<<'PHP'
+            <?php
+
+            class Foo
+            {
+                $boo = 'boo';
+            }
+        PHP;
+
+        $classReflection    = (new DefaultReflector(new StringSourceLocator($php, $this->astLocator)))->reflectClass('Foo');
+        $propertyReflection = $classReflection->getProperty('boo');
+
+        self::assertTrue($propertyReflection->isPublic());
+        self::assertSame(CoreReflectionProperty::IS_PUBLIC, $propertyReflection->getModifiers());
+    }
+
     public function testIsStatic(): void
     {
         $classInfo = $this->reflector->reflectClass(ExampleClass::class);
