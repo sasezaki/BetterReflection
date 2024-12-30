@@ -902,15 +902,15 @@ PHP;
         return [
             ['publicPublicSet', CoreReflectionProperty::IS_PUBLIC],
             ['publicProtectedSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY],
-            ['publicPrivateSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
+            ['publicPrivateSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY | ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY],
             ['protectedProtectedSet', CoreReflectionProperty::IS_PROTECTED],
-            ['protectedPrivateSet', CoreReflectionProperty::IS_PROTECTED | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
+            ['protectedPrivateSet', CoreReflectionProperty::IS_PROTECTED | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY | ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY],
             ['privatePrivateSet', CoreReflectionProperty::IS_PRIVATE],
             ['promotedPublicPublicSet', CoreReflectionProperty::IS_PUBLIC],
             ['promotedPublicProtectedSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY],
-            ['promotedPublicPrivateSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
+            ['promotedPublicPrivateSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY | ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY],
             ['promotedProtectedProtectedSet', CoreReflectionProperty::IS_PROTECTED],
-            ['promotedProtectedPrivateSet', CoreReflectionProperty::IS_PROTECTED | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
+            ['promotedProtectedPrivateSet', CoreReflectionProperty::IS_PROTECTED | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY | ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY],
             ['promotedPrivatePrivateSet', CoreReflectionProperty::IS_PRIVATE],
         ];
     }
@@ -948,6 +948,27 @@ PHP;
 
         self::assertFalse($protectedProtectedSet->isPrivateSet());
         self::assertTrue($protectedPrivateSet->isPrivateSet());
+    }
+
+    /** @return list<array{0: non-empty-string, 1: bool}> */
+    public static function asymmetricVisibilityImplicitFinalProvider(): array
+    {
+        return [
+            ['publicPrivateSetIsFinal', true],
+            ['protectedPrivateSetIsFinal', true],
+            ['privatePrivateSetIsNotFinal', false],
+        ];
+    }
+
+    /** @param non-empty-string $propertyName */
+    #[DataProvider('asymmetricVisibilityImplicitFinalProvider')]
+    public function testAsymmetricVisibilityImplicitFinal(string $propertyName, bool $isFinal): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymmetricVisibilityImplicitFinal.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityImplicitFinal');
+        $property  = $classInfo->getProperty($propertyName);
+
+        self::assertSame($isFinal, $property->isFinal());
     }
 
     public function testIsAbstract(): void

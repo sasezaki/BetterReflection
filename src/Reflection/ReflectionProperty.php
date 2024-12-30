@@ -676,6 +676,13 @@ class ReflectionProperty
         $modifiers += $node->isFinal() ? ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY : 0;
         $modifiers += $node->isAbstract() ? ReflectionPropertyAdapter::IS_ABSTRACT_COMPATIBILITY : 0;
 
+        if (
+            ! ($modifiers & ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY)
+            && ($modifiers & ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY)
+        ) {
+            $modifiers += ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY;
+        }
+
         /** @phpstan-ignore return.type */
         return $modifiers;
     }
