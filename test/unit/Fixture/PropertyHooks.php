@@ -153,3 +153,14 @@ class GetPropertyHooksReturnTypes
     public $hookWithoutType { get => 'string'; }
 
 }
+
+class FinalPropertyHooks
+{
+    public string $notFinalHook {
+        set => strtolower($value);
+    }
+
+    public string $finalHook {
+        final set => strtolower($value);
+    }
+}

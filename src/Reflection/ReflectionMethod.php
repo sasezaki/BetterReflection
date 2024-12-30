@@ -53,7 +53,7 @@ class ReflectionMethod
         assert($node instanceof MethodNode || $node instanceof Node\PropertyHook);
 
         $this->name      = $name;
-        $this->modifiers = $node instanceof MethodNode ? $this->computeModifiers($node) : 0;
+        $this->modifiers = $this->computeModifiers($node);
 
         $this->fillFromNode($node);
     }
@@ -305,13 +305,18 @@ class ReflectionMethod
     }
 
     /** @return int-mask-of<ReflectionMethodAdapter::IS_*> */
-    private function computeModifiers(MethodNode $node): int
+    private function computeModifiers(MethodNode|Node\PropertyHook $node): int
     {
-        $modifiers  = $node->isStatic() ? CoreReflectionMethod::IS_STATIC : 0;
-        $modifiers += $node->isPublic() ? CoreReflectionMethod::IS_PUBLIC : 0;
-        $modifiers += $node->isProtected() ? CoreReflectionMethod::IS_PROTECTED : 0;
-        $modifiers += $node->isPrivate() ? CoreReflectionMethod::IS_PRIVATE : 0;
-        $modifiers += $node->isAbstract() ? CoreReflectionMethod::IS_ABSTRACT : 0;
+        $modifiers = 0;
+
+        if ($node instanceof MethodNode) {
+            $modifiers += $node->isStatic() ? CoreReflectionMethod::IS_STATIC : 0;
+            $modifiers += $node->isPublic() ? CoreReflectionMethod::IS_PUBLIC : 0;
+            $modifiers += $node->isProtected() ? CoreReflectionMethod::IS_PROTECTED : 0;
+            $modifiers += $node->isPrivate() ? CoreReflectionMethod::IS_PRIVATE : 0;
+            $modifiers += $node->isAbstract() ? CoreReflectionMethod::IS_ABSTRACT : 0;
+        }
+
         $modifiers += $node->isFinal() ? CoreReflectionMethod::IS_FINAL : 0;
 
         return $modifiers;

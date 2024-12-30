@@ -166,6 +166,7 @@
       <code><![CDATA[classExists]]></code>
       <code><![CDATA[isAbstract]]></code>
       <code><![CDATA[isFinal]]></code>
+      <code><![CDATA[isFinal]]></code>
       <code><![CDATA[isPrivate]]></code>
       <code><![CDATA[isProtected]]></code>
       <code><![CDATA[isPublic]]></code>
