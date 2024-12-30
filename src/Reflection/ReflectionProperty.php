@@ -7,7 +7,6 @@ namespace Roave\BetterReflection\Reflection;
 use Closure;
 use Error;
 use OutOfBoundsException;
-use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property as PropertyNode;
 use PhpParser\NodeTraverser;
@@ -35,7 +34,6 @@ use Roave\BetterReflection\Util\GetLastDocComment;
 
 use function array_map;
 use function assert;
-use function count;
 use function func_num_args;
 use function is_object;
 use function sprintf;
@@ -675,8 +673,8 @@ class ReflectionProperty
         $modifiers += $node->isProtected() ? CoreReflectionProperty::IS_PROTECTED : 0;
         $modifiers += $node->isProtectedSet() ? ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY : 0;
         $modifiers += $node->isPublic() ? CoreReflectionProperty::IS_PUBLIC : 0;
-        $modifiers += ($node->flags & ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY) === ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY ? ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY : 0;
-        $modifiers += ($node->flags & Modifiers::ABSTRACT) === Modifiers::ABSTRACT ? ReflectionPropertyAdapter::IS_ABSTRACT_COMPATIBILITY : 0;
+        $modifiers += $node->isFinal() ? ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY : 0;
+        $modifiers += $node->isAbstract() ? ReflectionPropertyAdapter::IS_ABSTRACT_COMPATIBILITY : 0;
 
         /** @phpstan-ignore return.type */
         return $modifiers;
@@ -699,7 +697,7 @@ class ReflectionProperty
             }
         }
 
-        if ($setHook !== null && ! $this->computeImmediateVirtualBasedOnSetHook($setHook)) {
+        if ($setHook !== null && ! $this->computeImmediateVirtualBasedOnHook($setHook)) {
             return false;
         }
 
@@ -707,43 +705,21 @@ class ReflectionProperty
             return true;
         }
 
-        return $this->computeImmediateVirtualBasedOnGetHook($getHook);
+        return $this->computeImmediateVirtualBasedOnHook($getHook);
     }
 
-    private function computeImmediateVirtualBasedOnGetHook(Node\PropertyHook $getHook): bool
+    private function computeImmediateVirtualBasedOnHook(Node\PropertyHook $hook): bool
     {
-        $getHookBody = $getHook->getStmts();
+        $hookBody = $hook->getStmts();
 
         // Abstract property or property in interface
-        if ($getHookBody === null) {
+        if ($hookBody === null) {
             return true;
         }
 
-        return ! $this->isHookUsingThisProperty($getHook);
-    }
-
-    private function computeImmediateVirtualBasedOnSetHook(Node\PropertyHook $setHook): bool
-    {
-        $setHookBody = $setHook->getStmts();
-
-        // Abstract property or property in interface
-        if ($setHookBody === null) {
-            return true;
-        }
-
-        // Short syntax
-        if (count($setHookBody) === 1 && $setHookBody[0] instanceof Node\Stmt\Return_) {
-            return false;
-        }
-
-        return ! $this->isHookUsingThisProperty($setHook);
-    }
-
-    private function isHookUsingThisProperty(Node\PropertyHook $hook): bool
-    {
         $visitor   = new FindingVisitor(static fn (Node $node): bool => $node instanceof Node\Expr\PropertyFetch);
         $traverser = new NodeTraverser($visitor);
-        $traverser->traverse([$hook]);
+        $traverser->traverse($hookBody);
 
         foreach ($visitor->getFoundNodes() as $propertyFetchNode) {
             assert($propertyFetchNode instanceof Node\Expr\PropertyFetch);
@@ -754,11 +730,11 @@ class ReflectionProperty
                 && $propertyFetchNode->name instanceof Node\Identifier
                 && $propertyFetchNode->name->name === $this->name
             ) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /** @return array{get?: ReflectionMethod, set?: ReflectionMethod} */

@@ -209,7 +209,8 @@
       <code><![CDATA[getEndLine]]></code>
       <code><![CDATA[getStartLine]]></code>
       <code><![CDATA[getStmts]]></code>
-      <code><![CDATA[getStmts]]></code>
+      <code><![CDATA[isAbstract]]></code>
+      <code><![CDATA[isFinal]]></code>
       <code><![CDATA[isPrivate]]></code>
       <code><![CDATA[isPrivateSet]]></code>
       <code><![CDATA[isProtected]]></code>
