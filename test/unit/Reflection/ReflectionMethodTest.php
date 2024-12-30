@@ -882,4 +882,25 @@ PHP;
         self::assertNotNull($getHookReflection);
         self::assertSame($returnType, $getHookReflection->getReturnType()?->__toString());
     }
+
+    /** @return list<array{0: non-empty-string, 1: bool}> */
+    public static function finalPropertyHookProvider(): array
+    {
+        return [
+            ['notFinalHook', false],
+            ['finalHook', true],
+        ];
+    }
+
+    #[DataProvider('finalPropertyHookProvider')]
+    public function testFinalPropertyHook(string $propertyName, bool $isFinal): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/PropertyHooks.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\FinalPropertyHooks');
+
+        $hookProperty   = $classInfo->getProperty($propertyName);
+        $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
+        self::assertNotNull($hookReflection);
+        self::assertSame($isFinal, $hookReflection->isFinal());
+    }
 }
