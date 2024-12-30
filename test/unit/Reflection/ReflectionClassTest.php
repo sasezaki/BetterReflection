@@ -767,12 +767,12 @@ PHP;
             [CoreReflectionProperty::IS_PUBLIC, 6],
             [CoreReflectionProperty::IS_PROTECTED, 4],
             [CoreReflectionProperty::IS_PRIVATE, 2],
-            [ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY, 4],
-            [ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY, 6],
+            [ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY, 2],
+            [ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY, 4],
             [
                 CoreReflectionProperty::IS_PUBLIC |
                 ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY,
-                10,
+                8,
             ],
         ];
     }

@@ -903,15 +903,15 @@ PHP;
             ['publicPublicSet', CoreReflectionProperty::IS_PUBLIC],
             ['publicProtectedSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY],
             ['publicPrivateSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
-            ['protectedProtectedSet', CoreReflectionProperty::IS_PROTECTED | ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY],
+            ['protectedProtectedSet', CoreReflectionProperty::IS_PROTECTED],
             ['protectedPrivateSet', CoreReflectionProperty::IS_PROTECTED | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
-            ['privatePrivateSet', CoreReflectionProperty::IS_PRIVATE | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
+            ['privatePrivateSet', CoreReflectionProperty::IS_PRIVATE],
             ['promotedPublicPublicSet', CoreReflectionProperty::IS_PUBLIC],
             ['promotedPublicProtectedSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY],
             ['promotedPublicPrivateSet', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
-            ['promotedProtectedProtectedSet', CoreReflectionProperty::IS_PROTECTED | ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY],
+            ['promotedProtectedProtectedSet', CoreReflectionProperty::IS_PROTECTED],
             ['promotedProtectedPrivateSet', CoreReflectionProperty::IS_PROTECTED | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
-            ['promotedPrivatePrivateSet', CoreReflectionProperty::IS_PRIVATE | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY],
+            ['promotedPrivatePrivateSet', CoreReflectionProperty::IS_PRIVATE],
         ];
     }
 

@@ -213,7 +213,9 @@
       <code><![CDATA[isAbstract]]></code>
       <code><![CDATA[isFinal]]></code>
       <code><![CDATA[isPrivate]]></code>
+      <code><![CDATA[isPrivate]]></code>
       <code><![CDATA[isPrivateSet]]></code>
+      <code><![CDATA[isProtected]]></code>
       <code><![CDATA[isProtected]]></code>
       <code><![CDATA[isProtectedSet]]></code>
       <code><![CDATA[isPublic]]></code>
