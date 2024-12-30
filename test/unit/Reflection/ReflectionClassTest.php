@@ -761,7 +761,7 @@ PHP;
     }
 
     /** @return list<array{0: int-mask-of<ReflectionPropertyAdapter::IS_*>, 1: int}> */
-    public static function getPropertiesWithAsymetricVisibilityFilterDataProvider(): array
+    public static function getPropertiesWithAsymmetricVisibilityFilterDataProvider(): array
     {
         return [
             [CoreReflectionProperty::IS_PUBLIC, 6],
@@ -778,11 +778,11 @@ PHP;
     }
 
     /** @param int-mask-of<CoreReflectionProperty::IS_*> $filter */
-    #[DataProvider('getPropertiesWithAsymetricVisibilityFilterDataProvider')]
-    public function testGetPropertiesWithAsymetricVisibilityFilter(int $filter, int $count): void
+    #[DataProvider('getPropertiesWithAsymmetricVisibilityFilterDataProvider')]
+    public function testGetPropertiesWithAsymmetricVisibilityFilter(int $filter, int $count): void
     {
-        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
-        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymmetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityClass');
 
         self::assertCount($count, $classInfo->getProperties($filter));
         self::assertCount($count, $classInfo->getImmediateProperties($filter));
@@ -2308,13 +2308,13 @@ PHP;
         );
     }
 
-    public function testToStringWithAsymetricVisibility(): void
+    public function testToStringWithAsymmetricVisibility(): void
     {
-        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
-        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymmetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityClass');
 
         self::assertStringMatchesFormat(
-            file_get_contents(__DIR__ . '/../Fixture/AsymetricVisibilityClassExport.txt'),
+            file_get_contents(__DIR__ . '/../Fixture/AsymmetricVisibilityClassExport.txt'),
             $classInfo->__toString(),
         );
     }

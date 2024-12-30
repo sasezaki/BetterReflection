@@ -2,7 +2,7 @@
 
 namespace Roave\BetterReflectionTest\Fixture;
 
-class AsymetricVisibilityClass
+class AsymmetricVisibilityClass
 {
     public public(set) string $publicPublicSet = 'string';
     public protected(set) string $publicProtectedSet = 'string';
@@ -22,4 +22,3 @@ class AsymetricVisibilityClass
     {
     }
 }
-

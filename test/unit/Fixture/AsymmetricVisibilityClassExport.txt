@@ -1,5 +1,5 @@
-Class [ <user> class Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass ] {
-  @@ %s/Fixture/AsymetricVisibilityClass.php 5-24
+Class [ <user> class Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityClass ] {
+  @@ %s/Fixture/AsymmetricVisibilityClass.php 5-24
 
   - Constants [0] {
   }
@@ -27,7 +27,7 @@ Class [ <user> class Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass
 
   - Methods [1] {
     Method [ <user, ctor> public method __construct ] {
-      @@ %s/Fixture/AsymetricVisibilityClass.php 14 - 23
+      @@ %s/Fixture/AsymmetricVisibilityClass.php 14 - 23
 
       - Parameters [6] {
         Parameter #0 [ <required> string $promotedPublicPublicSet ]

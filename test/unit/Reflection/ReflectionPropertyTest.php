@@ -897,7 +897,7 @@ PHP;
     }
 
     /** @return list<array{0: non-empty-string, 1: int-mask-of<ReflectionPropertyAdapter::IS_*>}> */
-    public static function asymetricVisibilityModifierProvider(): array
+    public static function asymmetricVisibilityModifierProvider(): array
     {
         return [
             ['publicPublicSet', CoreReflectionProperty::IS_PUBLIC],
@@ -916,11 +916,11 @@ PHP;
     }
 
     /** @param non-empty-string $propertyName */
-    #[DataProvider('asymetricVisibilityModifierProvider')]
-    public function testGetAsymetricVisibilityMethods(string $propertyName, int $expectedModifier): void
+    #[DataProvider('asymmetricVisibilityModifierProvider')]
+    public function testGetAsymmetricVisibilityMethods(string $propertyName, int $expectedModifier): void
     {
-        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
-        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymmetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityClass');
         $property  = $classInfo->getProperty($propertyName);
 
         self::assertSame($expectedModifier, $property->getModifiers());
@@ -928,8 +928,8 @@ PHP;
 
     public function testIsProtectedSet(): void
     {
-        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
-        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymmetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityClass');
 
         $publicPublicSetProperty    = $classInfo->getProperty('publicPublicSet');
         $publicProtectedSetProperty = $classInfo->getProperty('publicProtectedSet');
@@ -940,8 +940,8 @@ PHP;
 
     public function testIsPrivateSet(): void
     {
-        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymetricVisibilityClass.php', $this->astLocator));
-        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymetricVisibilityClass');
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymmetricVisibilityClass.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityClass');
 
         $protectedProtectedSet = $classInfo->getProperty('protectedProtectedSet');
         $protectedPrivateSet   = $classInfo->getProperty('protectedPrivateSet');
