@@ -272,7 +272,7 @@ class ReflectionPropertyTest extends TestCase
             ['protectedProperty', CoreReflectionProperty::IS_PROTECTED],
             ['privateProperty', CoreReflectionProperty::IS_PRIVATE],
             ['publicStaticProperty', CoreReflectionProperty::IS_PUBLIC | CoreReflectionProperty::IS_STATIC],
-            ['readOnlyProperty', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_READONLY],
+            ['readOnlyProperty', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_READONLY | ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY],
             ['finalPublicProperty', CoreReflectionProperty::IS_PUBLIC | ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY],
         ];
     }
@@ -987,6 +987,29 @@ PHP;
         $property  = $classInfo->getProperty($propertyName);
 
         self::assertSame($isFinal, $property->isFinal());
+    }
+
+    /** @return list<array{0: non-empty-string, 1: bool}> */
+    public static function asymmetricVisibilityImplicitProtectedSetProvider(): array
+    {
+        return [
+            ['publicPublicSet', false],
+            ['publicProtectedSet', true],
+            ['publicPrivateSet', false],
+            ['protected', false],
+            ['publicImplicitProtectedSet', true],
+        ];
+    }
+
+    /** @param non-empty-string $propertyName */
+    #[DataProvider('asymmetricVisibilityImplicitProtectedSetProvider')]
+    public function testAsymmetricVisibilityImplicitProtectedSet(string $propertyName, bool $isProtectedSet): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymmetricVisibilityImplicitProtectedSet.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityImplicitProtectedSet');
+        $property  = $classInfo->getProperty($propertyName);
+
+        self::assertSame($isProtectedSet, $property->isProtectedSet());
     }
 
     public function testIsAbstract(): void

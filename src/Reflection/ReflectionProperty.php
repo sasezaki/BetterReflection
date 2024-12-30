@@ -666,7 +666,7 @@ class ReflectionProperty
     /** @return int-mask-of<ReflectionPropertyAdapter::IS_*> */
     private function computeModifiers(PropertyNode $node): int
     {
-        $modifiers  = $node->isReadonly() ? ReflectionPropertyAdapter::IS_READONLY : 0;
+        $modifiers  = $node->isReadonly() ? CoreReflectionProperty::IS_READONLY : 0;
         $modifiers += $node->isStatic() ? CoreReflectionProperty::IS_STATIC : 0;
         $modifiers += $node->isPrivate() ? CoreReflectionProperty::IS_PRIVATE : 0;
         $modifiers += ! $node->isPrivate() && $node->isPrivateSet() ? ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY : 0;
@@ -681,6 +681,15 @@ class ReflectionProperty
             && ($modifiers & ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY)
         ) {
             $modifiers += ReflectionPropertyAdapter::IS_FINAL_COMPATIBILITY;
+        }
+
+        if (
+            ! ($modifiers & (ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY | ReflectionPropertyAdapter::IS_PRIVATE_SET_COMPATIBILITY))
+            && ! $node->isPublicSet()
+            && $node->isPublic()
+            && ($modifiers & CoreReflectionProperty::IS_READONLY)
+        ) {
+            $modifiers += ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY;
         }
 
         /** @phpstan-ignore return.type */
