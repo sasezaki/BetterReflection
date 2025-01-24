@@ -1021,6 +1021,15 @@ PHP;
         self::assertTrue($hookProperty->isAbstract());
     }
 
+    public function testIsAbstractInInterface(): void
+    {
+        $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/PropertyHooks.php', $this->astLocator));
+        $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\InterfaceWithProperty');
+
+        $abstractProperty = $classInfo->getProperty('abstractPropertyFromInterface');
+        self::assertTrue($abstractProperty->isAbstract());
+    }
+
     public function testNoHooks(): void
     {
         $classInfo = $this->reflector->reflectClass(ExampleClass::class);

@@ -164,3 +164,8 @@ class FinalPropertyHooks
         final set => strtolower($value);
     }
 }
+
+interface InterfaceWithProperty
+{
+    public int $abstractPropertyFromInterface { get; set; }
+}
