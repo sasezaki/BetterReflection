@@ -309,7 +309,8 @@ class ReflectionProperty
 
     public function isAbstract(): bool
     {
-        return (bool) ($this->modifiers & ReflectionPropertyAdapter::IS_ABSTRACT_COMPATIBILITY);
+        return (bool) ($this->modifiers & ReflectionPropertyAdapter::IS_ABSTRACT_COMPATIBILITY)
+            || $this->declaringClass->isInterface();
     }
 
     public function isPromoted(): bool
