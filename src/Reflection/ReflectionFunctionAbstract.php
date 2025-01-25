@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Throw_ as NodeThrow;
 use PhpParser\Node\Expr\Yield_ as YieldNode;
 use PhpParser\Node\Expr\YieldFrom as YieldFromNode;
+use PhpParser\Node\FunctionLike as FunctionLikeNode;
+use PhpParser\Node\Stmt\Class_ as ClassNode;
 use PhpParser\Node\Stmt\ClassMethod as MethodNode;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\FindingVisitor;
@@ -360,7 +362,12 @@ trait ReflectionFunctionAbstract
         foreach ($node->getSubNodeNames() as $nodeName) {
             $nodeProperty = $node->$nodeName;
 
-            if ($nodeProperty instanceof Node && $this->nodeIsOrContainsYield($nodeProperty)) {
+            if (
+                $nodeProperty instanceof Node &&
+                ! ($nodeProperty instanceof ClassNode) &&
+                ! ($nodeProperty instanceof FunctionLikeNode) &&
+                $this->nodeIsOrContainsYield($nodeProperty)
+            ) {
                 return true;
             }
 

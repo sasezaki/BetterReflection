@@ -236,6 +236,9 @@ class ReflectionFunctionAbstractTest extends TestCase
             ['<?php function foo() { $foo->func(yield $foo); }', true],
             ['<?php function foo() { new Foo(yield $foo); }', true],
             ['<?php function foo() { yield from []; }', true],
+            ['<?php function foo() { return fn () => yield $foo; }', false],
+            ['<?php function foo() { return function () { yield $foo; }; }', false],
+            ['<?php function foo() { return new class () { function bar() { yield $foo; } }; }', false],
         ];
     }
 
