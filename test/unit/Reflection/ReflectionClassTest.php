@@ -2646,8 +2646,8 @@ PHP;
         self::assertTrue($protectedMethodFromTrait->isProtected());
 
         $privateMethodFromClass = $classReflection->getMethod('privateMethod');
-        self::assertTrue($privateMethodFromClass->isProtected());
-        self::assertFalse($privateMethodFromClass->isPrivate());
+        self::assertFalse($privateMethodFromClass->isProtected());
+        self::assertTrue($privateMethodFromClass->isPrivate());
 
         $privateMethodFromTrait = $traitReflection->getMethod('privateMethod');
         self::assertFalse($privateMethodFromTrait->isProtected());
@@ -3104,5 +3104,69 @@ PHP;
         ];
 
         self::assertSame($expectedInterfaceNames, $classReflection->getInterfaceNames());
+    }
+
+    public function testTraitAliasCopiesMethod(): void
+    {
+        // runtime proof https://3v4l.org/7R74v
+
+        $php = <<<'PHP'
+<?php
+trait Foo {
+    public function hello(): string
+    {
+        return "Hello from Foo!";
+    }
+}
+
+class Bar {
+    use Foo {
+        hello as private somethingElse;
+    }
+}
+PHP;
+
+        $classInfo = (new DefaultReflector(new StringSourceLocator($php, $this->astLocator)))->reflectClass('Bar');
+
+        self::assertTrue($classInfo->hasMethod('hello'));
+        $hello = $classInfo->getMethod('hello');
+        self::assertTrue($hello->isPublic());
+
+        self::assertTrue($classInfo->hasMethod('somethingElse'));
+        $somethingElse = $classInfo->getMethod('somethingElse');
+        self::assertTrue($somethingElse->isPrivate());
+    }
+
+    public function testTraitAliasCopiesMethodUnlessMethodWithSameNameAlreadyInClass(): void
+    {
+        // runtime proof https://3v4l.org/WbpSi
+        $php = <<<'PHP'
+<?php
+trait Foo {
+    public function hello(): string
+    {
+        return "Hello from Foo!";
+    }
+}
+
+class Bar {
+    use Foo {
+        hello as private somethingElse;
+    }
+
+    protected function hello(int $i): void
+    {
+    }
+}
+PHP;
+
+        $classInfo = (new DefaultReflector(new StringSourceLocator($php, $this->astLocator)))->reflectClass('Bar');
+
+        self::assertTrue($classInfo->hasMethod('hello'));
+        self::assertTrue($classInfo->hasMethod('somethingElse'));
+
+        $hello = $classInfo->getMethod('hello');
+        self::assertTrue($hello->isProtected());
+        self::assertCount(1, $hello->getParameters());
     }
 }
