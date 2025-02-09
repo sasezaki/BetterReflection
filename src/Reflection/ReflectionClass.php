@@ -360,8 +360,12 @@ class ReflectionClass implements Reflection
         return $this->locatedSource->getExtensionName();
     }
 
-    /** @return list<ReflectionMethod> */
-    private function createMethodsFromTrait(ReflectionMethod $method): array
+    /**
+     * @param array<lowercase-string, ReflectionMethod> $currentMethods
+     *
+     * @return list<ReflectionMethod>
+     */
+    private function createMethodsFromTrait(ReflectionMethod $method, array $currentMethods): array
     {
         $methodModifiers      = $method->getModifiers();
         $lowerCasedMethodHash = $this->lowerCasedMethodHash($method->getImplementingClass()->getName(), $method->getName());
@@ -377,17 +381,35 @@ class ReflectionClass implements Reflection
             }
         }
 
-        $createMethod = function (string|null $aliasMethodName) use ($method, $methodModifiers): ReflectionMethod {
+        $createMethod = function (string|null $aliasMethodName, int $methodModifiers) use ($method): ReflectionMethod {
             assert($aliasMethodName === null || $aliasMethodName !== '');
 
-            /** @phpstan-ignore argument.type */
+            /** @var int-mask-of<ReflectionMethodAdapter::IS_*> $methodModifiers */
+            $methodModifiers = $methodModifiers;
+
             return $method->withImplementingClass($this, $aliasMethodName, $methodModifiers);
         };
 
         $methods = [];
 
-        if (! array_key_exists($lowerCasedMethodHash, $this->traitsData['precedences'])) {
-            $methods[] = $createMethod($method->getAliasName());
+        if (
+            ! array_key_exists($lowerCasedMethodHash, $this->traitsData['precedences'])
+            && ! array_key_exists($lowerCasedMethodHash, $currentMethods)
+        ) {
+            $modifiersUsedWithAlias = false;
+
+            foreach ($this->traitsData['aliases'] as $traitAliasDefinitions) {
+                foreach ($traitAliasDefinitions as $traitAliasDefinition) {
+                    if ($lowerCasedMethodHash === $traitAliasDefinition['hash']) {
+                        $modifiersUsedWithAlias = true;
+                        break;
+                    }
+                }
+            }
+
+            // Modifiers used with alias -> copy method with original modifiers (will be added later with the alias name and new modifiers)
+            // Modifiers not used with alias -> add method with new modifiers
+            $methods[] = $createMethod($method->getAliasName(), $modifiersUsedWithAlias ? $method->getModifiers() : $methodModifiers);
         }
 
         if ($this->traitsData['aliases'] !== []) {
@@ -403,7 +425,7 @@ class ReflectionClass implements Reflection
                         continue;
                     }
 
-                    $methods[] = $createMethod($traitAliasDefinition['alias']);
+                    $methods[] = $createMethod($traitAliasDefinition['alias'], $methodModifiers);
                 }
             }
         }
@@ -455,7 +477,7 @@ class ReflectionClass implements Reflection
         foreach ($this->getTraits() as $trait) {
             $alreadyVisitedClassesCopy = clone $alreadyVisitedClasses;
             foreach ($trait->getMethodsIndexedByLowercasedName($alreadyVisitedClassesCopy) as $method) {
-                foreach ($this->createMethodsFromTrait($method) as $traitMethod) {
+                foreach ($this->createMethodsFromTrait($method, $methods) as $traitMethod) {
                     $lowercasedMethodName = strtolower($traitMethod->getName());
 
                     if (! array_key_exists($lowercasedMethodName, $methods)) {
