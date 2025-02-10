@@ -3169,4 +3169,46 @@ PHP;
         self::assertTrue($hello->isProtected());
         self::assertCount(1, $hello->getParameters());
     }
+
+    public function testInterfacePropertyImplementedInTrait(): void
+    {
+        $php = <<<'PHP'
+<?php
+
+interface TimestampsInterface
+{
+    public \DateTimeImmutable $createdAt { get; }
+}
+
+trait Timestamps
+{
+    public private(set) \DateTimeImmutable $createdAt {
+        get {
+            return $this->createdAt ??= new \DateTimeImmutable();
+        }
+    }
+}
+
+class Example implements TimestampsInterface
+{
+    use Timestamps;
+}
+PHP;
+
+        $classInfo = (new DefaultReflector(new StringSourceLocator($php, $this->astLocator)))->reflectClass('Example');
+
+        self::assertTrue($classInfo->hasProperty('createdAt'));
+
+        /** @var trait-string $traitClassName */
+        $traitClassName = 'Timestamps';
+        /** @var class-string $className */
+        $className = 'Example';
+
+        $propertyInfo = $classInfo->getProperty('createdAt');
+        self::assertSame($traitClassName, $propertyInfo->getDeclaringClass()->getName());
+        self::assertSame($className, $propertyInfo->getImplementingClass()->getName());
+        self::assertFalse($propertyInfo->isVirtual());
+        self::assertTrue($propertyInfo->isPublic());
+        self::assertTrue($propertyInfo->isPrivateSet());
+    }
 }
