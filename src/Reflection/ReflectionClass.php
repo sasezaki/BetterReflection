@@ -1024,10 +1024,9 @@ class ReflectionClass implements Reflection
             foreach ($trait->getPropertiesConsideringAlreadyVisitedClasses($alreadyVisitedClasses) as $traitProperty) {
                 $traitPropertyName = $traitProperty->getName();
 
-                if (
-                    array_key_exists($traitPropertyName, $properties)
-                    || array_key_exists($traitPropertyName, $immediateProperties)
-                ) {
+                $existingProperty = $immediateProperties[$traitPropertyName] ?? $properties[$traitPropertyName] ?? null;
+
+                if ($existingProperty !== null && ! $existingProperty->isAbstract()) {
                     continue;
                 }
 
