@@ -903,7 +903,7 @@ PHP;
             }
         };
 
-        $reflector = (new DefaultReflector(new StringSourceLocator(
+        $reflector = new DefaultReflector(new StringSourceLocator(
             <<<'PHP'
 <?php
 
@@ -912,7 +912,7 @@ const CURRENT_FILE = __FILE__;
 PHP
             ,
             $astLocatorProducingLocatedSourcesWithFakeFilePath,
-        )));
+        ));
 
         self::assertSame(
             '/non/existing/path/to',
