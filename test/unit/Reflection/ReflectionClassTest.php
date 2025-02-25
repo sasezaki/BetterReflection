@@ -587,10 +587,10 @@ class ReflectionClassTest extends TestCase
 
     public function testGetConstructorThatIsNotFirstMethod(): void
     {
-        $reflector   = (new DefaultReflector(new SingleFileSourceLocator(
+        $reflector   = new DefaultReflector(new SingleFileSourceLocator(
             __DIR__ . '/../Fixture/ExampleClass.php',
             $this->astLocator,
-        )));
+        ));
         $classInfo   = $reflector->reflectClass(ExampleClassWhereConstructorIsNotFirstMethod::class);
         $constructor = $classInfo->getConstructor();
 
