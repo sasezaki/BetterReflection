@@ -187,6 +187,7 @@ class ReflectionEnumTest extends TestCase
             ->method('getParentClassNames')
             ->willReturn(['Foo']);
         $betterReflectionEnum
+            ->expects($this->any())
             ->method('isSubclassOf')
             ->with('Foo')
             ->willReturn(true);
@@ -205,6 +206,7 @@ class ReflectionEnumTest extends TestCase
             ->method('getParentClassNames')
             ->willReturn([]);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('isSubclassOf')
             ->with('Foo')
             ->willReturn(false);
@@ -212,6 +214,7 @@ class ReflectionEnumTest extends TestCase
             ->method('getInterfaceNames')
             ->willReturn(['Foo']);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('implementsInterface')
             ->with('Foo')
             ->willReturn(true);
@@ -228,6 +231,7 @@ class ReflectionEnumTest extends TestCase
             ->method('getInterfaceNames')
             ->willReturn(['Foo']);
         $betterReflectionEnum
+            ->expects($this->any())
             ->method('implementsInterface')
             ->with('Foo')
             ->willReturn(true);
@@ -289,6 +293,7 @@ class ReflectionEnumTest extends TestCase
     {
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getProperty')
             ->with('something')
             ->willReturn($this->createMock(BetterReflectionProperty::class));
@@ -319,6 +324,7 @@ class ReflectionEnumTest extends TestCase
             ->method('getName')
             ->willReturn('Boo');
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getProperty')
             ->with('foo')
             ->willReturn(null);
@@ -413,6 +419,7 @@ class ReflectionEnumTest extends TestCase
     {
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getConstant')
             ->with('FOO')
             ->willReturn($this->createMock(BetterReflectionClassConstant::class));
@@ -426,6 +433,7 @@ class ReflectionEnumTest extends TestCase
     {
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getConstant')
             ->with('FOO')
             ->willReturn(null);
@@ -663,6 +671,7 @@ class ReflectionEnumTest extends TestCase
     {
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getCase')
             ->with('SOMETHING')
             ->willReturn($this->createMock(BetterReflectionEnumCase::class));
@@ -802,6 +811,7 @@ class ReflectionEnumTest extends TestCase
     {
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('hasCase')
             ->with('ENUM_CASE')
             ->willReturn(true);
@@ -828,6 +838,7 @@ class ReflectionEnumTest extends TestCase
 
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getConstant')
             ->with('FOO')
             ->willReturn($betterReflectionClassConstant);
@@ -849,6 +860,7 @@ class ReflectionEnumTest extends TestCase
     {
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getConstant')
             ->with('FOO')
             ->willReturn(null);
@@ -871,10 +883,12 @@ class ReflectionEnumTest extends TestCase
             ->method('getName')
             ->willReturn(AutoloadableEnum::class);
         $betterReflectionEnum
+            ->expects($this->any())
             ->method('hasCase')
             ->with('ENUM_CASE')
             ->willReturn(true);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getCase')
             ->with('ENUM_CASE')
             ->willReturn($betterReflectionEnumCase);
@@ -902,10 +916,12 @@ class ReflectionEnumTest extends TestCase
 
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->any())
             ->method('hasCase')
             ->with('ENUM_CASE')
             ->willReturn(true);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getCase')
             ->with('ENUM_CASE')
             ->willReturn($betterReflectionEnumCase);
@@ -1006,6 +1022,7 @@ class ReflectionEnumTest extends TestCase
     {
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
         $betterReflectionEnum
+            ->expects($this->once())
             ->method('getMethod')
             ->with('doSomething')
             ->willReturn($this->createMock(BetterReflectionMethod::class));

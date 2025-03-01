@@ -242,6 +242,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getMethods')
             ->willReturn([$betterReflectionMethod]);
         $betterReflectionObject
+            ->expects($this->any())
             ->method('hasMethod')
             ->with('fooBoo')
             ->willReturn(true);
@@ -257,6 +258,7 @@ class ReflectionObjectTest extends TestCase
     {
         $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getMethod')
             ->with('doSomething')
             ->willReturn($this->createMock(BetterReflectionMethod::class));
@@ -278,6 +280,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getMethods')
             ->willReturn([$betterReflectionMethod]);
         $betterReflectionObject
+            ->expects($this->any())
             ->method('getMethod')
             ->with('fooBoo')
             ->willReturn($betterReflectionMethod);
@@ -309,6 +312,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getParentClassNames')
             ->willReturn(['Foo']);
         $betterReflectionObject
+            ->expects($this->once())
             ->method('isSubclassOf')
             ->with('Foo')
             ->willReturn(true);
@@ -330,6 +334,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getParentClassNames')
             ->willReturn(['Foo']);
         $betterReflectionObject
+            ->expects($this->any())
             ->method('isSubclassOf')
             ->with('Foo')
             ->willReturn(true);
@@ -348,6 +353,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getInterfaceNames')
             ->willReturn(['Foo']);
         $betterReflectionObject
+            ->expects($this->once())
             ->method('implementsInterface')
             ->with('Foo')
             ->willReturn(true);
@@ -369,6 +375,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getInterfaceNames')
             ->willReturn(['Foo']);
         $betterReflectionObject
+            ->expects($this->any())
             ->method('implementsInterface')
             ->with('Foo')
             ->willReturn(true);
@@ -392,6 +399,7 @@ class ReflectionObjectTest extends TestCase
     {
         $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getProperty')
             ->with('something')
             ->willReturn($this->createMock(BetterReflectionProperty::class));
@@ -422,6 +430,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getName')
             ->willReturn('Boo');
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getProperty')
             ->with('foo')
             ->willReturn(null);
@@ -461,6 +470,7 @@ class ReflectionObjectTest extends TestCase
 
         $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getProperty')
             ->with('foo')
             ->willReturn($betterReflectionProperty);
@@ -500,6 +510,7 @@ class ReflectionObjectTest extends TestCase
 
         $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getProperty')
             ->with('foo')
             ->willReturn($betterReflectionProperty);
@@ -584,6 +595,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getName')
             ->willReturn('Boo');
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getProperty')
             ->with('foo')
             ->willReturn($betterReflectionProperty);
@@ -610,6 +622,7 @@ class ReflectionObjectTest extends TestCase
             ->method('getName')
             ->willReturn('Boo');
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getProperty')
             ->with('foo')
             ->willReturn($betterReflectionProperty);
@@ -740,6 +753,7 @@ class ReflectionObjectTest extends TestCase
 
         $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getConstant')
             ->with('FOO')
             ->willReturn($betterReflectionClassConstant);
@@ -761,6 +775,7 @@ class ReflectionObjectTest extends TestCase
     {
         $betterReflectionObject = $this->createMock(BetterReflectionObject::class);
         $betterReflectionObject
+            ->expects($this->once())
             ->method('getConstant')
             ->with('FOO')
             ->willReturn(null);

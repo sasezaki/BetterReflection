@@ -20,6 +20,7 @@ class CalculateReflectionColumnTest extends TestCase
 
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('startFilePos')
             ->willReturn(true);
@@ -36,6 +37,7 @@ class CalculateReflectionColumnTest extends TestCase
 
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('startFilePos')
             ->willReturn(true);
@@ -52,6 +54,7 @@ class CalculateReflectionColumnTest extends TestCase
 
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('startFilePos')
             ->willReturn(true);
@@ -66,6 +69,7 @@ class CalculateReflectionColumnTest extends TestCase
     {
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('startFilePos')
             ->willReturn(true);
@@ -82,6 +86,7 @@ class CalculateReflectionColumnTest extends TestCase
     {
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('startFilePos')
             ->willReturn(false);
@@ -97,6 +102,7 @@ class CalculateReflectionColumnTest extends TestCase
 
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('endFilePos')
             ->willReturn(true);
@@ -113,6 +119,7 @@ class CalculateReflectionColumnTest extends TestCase
 
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('endFilePos')
             ->willReturn(true);
@@ -129,6 +136,7 @@ class CalculateReflectionColumnTest extends TestCase
 
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('endFilePos')
             ->willReturn(true);
@@ -143,6 +151,7 @@ class CalculateReflectionColumnTest extends TestCase
     {
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('endFilePos')
             ->willReturn(true);
@@ -159,6 +168,7 @@ class CalculateReflectionColumnTest extends TestCase
     {
         $node = $this->createMock(Node::class);
         $node
+            ->expects($this->once())
             ->method('hasAttribute')
             ->with('endFilePos')
             ->willReturn(false);
