@@ -176,6 +176,7 @@ class EvaledCodeSourceLocatorTest extends TestCase
     {
         $sourceStubber = $this->createMock(SourceStubber::class);
         $sourceStubber
+            ->expects($this->once())
             ->method('generateClassStub')
             ->with(CoreReflectionClass::class)
             ->willReturn(null);

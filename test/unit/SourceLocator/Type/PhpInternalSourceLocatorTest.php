@@ -217,6 +217,7 @@ class PhpInternalSourceLocatorTest extends TestCase
     {
         $sourceStubber = $this->createMock(SourceStubber::class);
         $sourceStubber
+            ->expects($this->once())
             ->method('generateClassStub')
             ->with('Foo')
             ->willReturn(new StubData('stub', null));

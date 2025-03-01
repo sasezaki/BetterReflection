@@ -314,6 +314,7 @@ class ReflectionMethodTest extends TestCase
             ->method('isPublic')
             ->willReturn(true);
         $betterReflectionMethod
+            ->expects($this->once())
             ->method('invoke')
             ->with(null, 100, 23)
             ->willReturn(123);
@@ -330,6 +331,7 @@ class ReflectionMethodTest extends TestCase
             ->method('isPublic')
             ->willReturn(true);
         $betterReflectionMethod
+            ->expects($this->once())
             ->method('invokeArgs')
             ->with(null, [100, 23])
             ->willReturn(123);
