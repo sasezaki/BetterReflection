@@ -35,6 +35,7 @@ final class ReflectionEnum extends CoreReflectionEnum
 {
     public function __construct(private BetterReflectionEnum $betterReflectionEnum)
     {
+        /** @phpstan-ignore unset.readOnlyPropertyByPhpDoc */
         unset($this->name);
     }
 

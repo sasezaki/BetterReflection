@@ -49,6 +49,7 @@ final class ReflectionClass extends CoreReflectionClass
 
     public function __construct(private BetterReflectionClass|BetterReflectionEnum $betterReflectionClass)
     {
+        /** @phpstan-ignore unset.readOnlyPropertyByPhpDoc */
         unset($this->name);
     }
 

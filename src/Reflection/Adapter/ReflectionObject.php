@@ -30,6 +30,7 @@ final class ReflectionObject extends CoreReflectionObject
 {
     public function __construct(private BetterReflectionObject $betterReflectionObject)
     {
+        /** @phpstan-ignore unset.readOnlyPropertyByPhpDoc */
         unset($this->name);
     }
 
