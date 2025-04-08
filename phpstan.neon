@@ -32,6 +32,8 @@ parameters:
         -
             identifier: missingType.generics
         -
+            identifier: impure.functionCall
+        -
             identifier: possiblyImpure.functionCall
         -
             identifier: possiblyImpure.methodCall
