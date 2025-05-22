@@ -693,7 +693,6 @@ class ReflectionProperty
             $modifiers += ReflectionPropertyAdapter::IS_PROTECTED_SET_COMPATIBILITY;
         }
 
-        /** @phpstan-ignore return.type */
         return $modifiers;
     }
 
