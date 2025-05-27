@@ -3,7 +3,7 @@ includes:
     - tools/vendor/phpstan/phpstan-phpunit/rules.neon
 
 parameters:
-    level: 7
+    level: 8
 
     paths:
         - src
@@ -46,4 +46,7 @@ parameters:
             path: test/unit/
         -
             identifier: varTag.nativeType
+            path: test/unit/
+        -
+            identifier: method.nonObject
             path: test/unit/

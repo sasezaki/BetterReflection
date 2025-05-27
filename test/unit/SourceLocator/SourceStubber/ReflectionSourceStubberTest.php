@@ -323,7 +323,10 @@ class ReflectionSourceStubberTest extends TestCase
         $this->assertSameInterfaces($original, $stubbed);
 
         foreach ($original->getMethods() as $method) {
-            $this->assertSameMethodAttributes($method, $stubbed->getMethod($method->getName()));
+            $stubbedMethod = $stubbed->getMethod($method->getName());
+            self::assertNotNull($stubbedMethod);
+
+            $this->assertSameMethodAttributes($method, $stubbedMethod);
         }
 
         $this->assertSameClassConstants($original, $stubbed);
@@ -402,10 +405,13 @@ class ReflectionSourceStubberTest extends TestCase
         self::assertSame($originalParameterNames, $stubParameterNames);
 
         foreach ($original->getParameters() as $parameter) {
+            $stubbedParameter = $stubbed->getParameter($parameter->getName());
+            self::assertNotNull($stubbedParameter);
+
             $this->assertSameParameterAttributes(
                 $original,
                 $parameter,
-                $stubbed->getParameter($parameter->getName()),
+                $stubbedParameter,
             );
         }
 

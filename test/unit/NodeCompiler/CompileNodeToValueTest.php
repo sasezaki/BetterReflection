@@ -70,7 +70,10 @@ class CompileNodeToValueTest extends TestCase
     /** @return Node\Stmt\Expression */
     private function parseCode(string $phpCode): Node\Stmt
     {
-        $node = $this->parser->parse('<?php ' . $phpCode . ';')[0];
+        $nodes = $this->parser->parse('<?php ' . $phpCode . ';');
+        assert(isset($nodes[0]));
+
+        $node = $nodes[0];
         assert($node instanceof Node\Stmt\Expression);
 
         return $node;

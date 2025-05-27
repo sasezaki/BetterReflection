@@ -21,6 +21,7 @@ use Roave\BetterReflection\SourceLocator\Ast\Strategy\NodeToReflection;
 use Roave\BetterReflection\SourceLocator\Located\LocatedSource;
 use Roave\BetterReflectionTest\BetterReflectionSingleton;
 
+use function assert;
 use function sprintf;
 
 #[CoversClass(FindReflectionsInTree::class)]
@@ -29,7 +30,10 @@ class FindReflectionsInTreeTest extends TestCase
     /** @return Node[] */
     private function getAstForSource(LocatedSource $source): array
     {
-        return BetterReflectionSingleton::instance()->phpParser()->parse($source->getSource());
+        $nodes = BetterReflectionSingleton::instance()->phpParser()->parse($source->getSource());
+        assert($nodes !== null);
+
+        return $nodes;
     }
 
     public function testInvokeDoesNotCallReflectNodesWhenNoNodesFoundInEmptyAst(): void

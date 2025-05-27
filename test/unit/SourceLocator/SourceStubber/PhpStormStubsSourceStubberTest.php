@@ -188,7 +188,10 @@ class PhpStormStubsSourceStubberTest extends TestCase
         $this->assertSameInterfaces($original, $stubbed);
 
         foreach ($original->getMethods() as $method) {
-            $this->assertSameMethodAttributes($method, $stubbed->getMethod($method->getName()));
+            $stubbedMethod = $stubbed->getMethod($method->getName());
+            self::assertNotNull($stubbedMethod);
+
+            $this->assertSameMethodAttributes($method, $stubbedMethod);
         }
 
         // We don't check getConstants() method because native reflection returns constants and enum cases together
@@ -239,6 +242,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
 
         foreach ($original->getParameters() as $parameter) {
             $stubbedParameter = $stubbed->getParameter($parameter->getName());
+            self::assertNotNull($stubbedParameter);
 
             $this->assertSameParameterAttributes(
                 $original,
@@ -864,7 +868,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
         string $className,
         string $methodName,
         string $parameterName,
-        int|null $phpVersion,
+        int $phpVersion,
         bool $isSupported,
         string|null $type = null,
         bool|null $allowsNull = null,
@@ -994,7 +998,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
     public function testFunctionParameterInPhpVersion(
         string $functionName,
         string $parameterName,
-        int|null $phpVersion,
+        int $phpVersion,
         bool $isSupported,
         string|null $type = null,
         bool|null $allowsNull = null,

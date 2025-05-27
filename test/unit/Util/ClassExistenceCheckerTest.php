@@ -41,6 +41,10 @@ class ClassExistenceCheckerTest extends TestCase
     {
         parent::tearDown();
 
+        if ($this->loader === null) {
+            return;
+        }
+
         spl_autoload_unregister($this->loader);
     }
 

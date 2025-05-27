@@ -69,6 +69,8 @@ PHP;
         $class     = $reflector->reflectClass('Foo\Boo');
         $property  = $class->getProperty('baz');
 
+        self::assertNotNull($property);
+
         $context = new CompilerContext($reflector, $property);
 
         self::assertSame($reflector, $context->getReflector());
@@ -94,6 +96,8 @@ PHP;
         $reflector     = new DefaultReflector(new StringSourceLocator($phpCode, $this->astLocator));
         $class         = $reflector->reflectClass('Foo\Boo');
         $classConstant = $class->getConstant('BAZ');
+
+        self::assertNotNull($classConstant);
 
         $context = new CompilerContext($reflector, $classConstant);
 
@@ -124,6 +128,8 @@ PHP;
 
         $enumCase = $enum->getCase('BAZ');
 
+        self::assertNotNull($enumCase);
+
         $context = new CompilerContext($reflector, $enumCase);
 
         self::assertSame($reflector, $context->getReflector());
@@ -151,6 +157,8 @@ PHP;
         $reflector = new DefaultReflector(new StringSourceLocator($phpCode, $this->astLocator));
         $class     = $reflector->reflectClass('Foo\Boo');
         $method    = $class->getMethod('baz');
+
+        self::assertNotNull($method);
 
         $context = new CompilerContext($reflector, $method);
 
@@ -200,6 +208,8 @@ PHP;
         $reflector = new DefaultReflector(new StringSourceLocator($phpCode, $this->astLocator));
         $function  = $reflector->reflectFunction('Foo\baz');
         $parameter = $function->getParameter('parameter');
+
+        self::assertNotNull($parameter);
 
         $context = new CompilerContext($reflector, $parameter);
 

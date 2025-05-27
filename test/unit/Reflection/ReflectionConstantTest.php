@@ -207,6 +207,7 @@ class ReflectionConstantTest extends TestCase
         $reflector  = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/Constants.php', $this->astLocator));
         $reflection = $reflector->reflectConstant('Roave\BetterReflectionTest\Fixture\BY_CONST');
 
+        self::assertNotNull($reflection->getFileName());
         self::assertStringContainsString('Fixture/Constants.php', $reflection->getFileName());
     }
 
@@ -244,6 +245,7 @@ class ReflectionConstantTest extends TestCase
         $reflector  = new DefaultReflector(new StringSourceLocator($php, $this->astLocator));
         $reflection = $reflector->reflectConstant('FOO');
 
+        self::assertNotNull($reflection->getDocComment());
         self::assertStringContainsString('This constant comment should be used.', $reflection->getDocComment());
     }
 
@@ -259,6 +261,7 @@ class ReflectionConstantTest extends TestCase
         $reflector  = new DefaultReflector(new StringSourceLocator($php, $this->astLocator));
         $reflection = $reflector->reflectConstant('FOO');
 
+        self::assertNotNull($reflection->getDocComment());
         self::assertStringContainsString('This constant comment should be used.', $reflection->getDocComment());
     }
 
