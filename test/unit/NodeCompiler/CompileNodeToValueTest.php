@@ -1125,7 +1125,7 @@ PHP
     }
 
     /** @return non-empty-string */
-    private static function realPath(string|false $path): string
+    private static function realPath(string $path): string
     {
         $realPath = realpath($path);
 

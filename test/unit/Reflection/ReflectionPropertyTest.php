@@ -25,10 +25,10 @@ use Roave\BetterReflection\Reflection\Exception\NotAnObject;
 use Roave\BetterReflection\Reflection\Exception\ObjectNotInstanceOfClass;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
+use Roave\BetterReflection\Reflection\ReflectionNamedType;
 use Roave\BetterReflection\Reflection\ReflectionParameter;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
 use Roave\BetterReflection\Reflection\ReflectionPropertyHookType;
-use Roave\BetterReflection\Reflection\ReflectionType;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\Reflector\Reflector;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
@@ -359,7 +359,10 @@ class ReflectionPropertyTest extends TestCase
         ];
     }
 
-    /** @param non-empty-string $propertyName */
+    /**
+     * @param non-empty-string  $propertyName
+     * @param class-string|null $defaultValueExpression
+     */
     #[DataProvider('propertyDefaultValueProvider')]
     public function testPropertyDefaultValue(string $propertyName, bool $hasDefaultValue, mixed $defaultValue, string|null $defaultValueExpression): void
     {
@@ -1175,6 +1178,7 @@ PHP;
         ];
     }
 
+    /** @param non-empty-string $propertyName */
     #[DataProvider('virtualProvider')]
     public function testVirtual(string $propertyName, bool $isVirtual): void
     {
@@ -1182,6 +1186,7 @@ PHP;
         $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\ToBeVirtualOrNotToBeVirtualThatIsTheQuestion');
 
         $hookProperty = $classInfo->getProperty($propertyName);
+        self::assertNotNull($hookProperty);
         self::assertSame($isVirtual, $hookProperty->isVirtual());
     }
 
@@ -1238,9 +1243,10 @@ PHP;
         $hookProperty = $getClassInfo->getProperty('hookWithImplicitParameter');
         self::assertTrue($hookProperty->hasHook(ReflectionPropertyHookType::Set));
 
-        $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
-        self::assertInstanceOf(ReflectionType::class, $hookReflection->getReturnType());
-        self::assertSame('void', $hookReflection->getReturnType()->getName());
+        $hookReflection           = $hookProperty->getHook(ReflectionPropertyHookType::Set);
+        $hookReturnTypeReflection = $hookReflection->getReturnType();
+        self::assertInstanceOf(ReflectionNamedType::class, $hookReturnTypeReflection);
+        self::assertSame('void', $hookReturnTypeReflection->getName());
 
         self::assertSame(1, $hookReflection->getNumberOfParameters());
         self::assertInstanceOf(ReflectionParameter::class, $hookReflection->getParameter('value'));
@@ -1248,8 +1254,10 @@ PHP;
         $hookParameterReflection = $hookReflection->getParameter('value');
         self::assertSame(0, $hookParameterReflection->getPosition());
         self::assertFalse($hookParameterReflection->isOptional());
-        self::assertInstanceOf(ReflectionType::class, $hookParameterReflection->getType());
-        self::assertSame('string', $hookParameterReflection->getType()->getName());
+
+        $hookParameterTypeReflection = $hookParameterReflection->getType();
+        self::assertInstanceOf(ReflectionNamedType::class, $hookParameterTypeReflection);
+        self::assertSame('string', $hookParameterTypeReflection->getName());
     }
 
     public function testSetPropertyHookHasExplicitParameter(): void
@@ -1260,9 +1268,10 @@ PHP;
         $hookProperty = $getClassInfo->getProperty('hookWithExplicitParameter');
         self::assertTrue($hookProperty->hasHook(ReflectionPropertyHookType::Set));
 
-        $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
-        self::assertInstanceOf(ReflectionType::class, $hookReflection->getReturnType());
-        self::assertSame('void', $hookReflection->getReturnType()->getName());
+        $hookReflection           = $hookProperty->getHook(ReflectionPropertyHookType::Set);
+        $hookReturnTypeReflection = $hookReflection->getReturnType();
+        self::assertInstanceOf(ReflectionNamedType::class, $hookReturnTypeReflection);
+        self::assertSame('void', $hookReturnTypeReflection->getName());
 
         self::assertSame(1, $hookReflection->getNumberOfParameters());
         self::assertInstanceOf(ReflectionParameter::class, $hookReflection->getParameter('value'));
@@ -1270,8 +1279,10 @@ PHP;
         $hookParameterReflection = $hookReflection->getParameter('value');
         self::assertSame(0, $hookParameterReflection->getPosition());
         self::assertFalse($hookParameterReflection->isOptional());
-        self::assertInstanceOf(ReflectionType::class, $hookParameterReflection->getType());
-        self::assertSame('int', $hookParameterReflection->getType()->getName());
+
+        $hookParameterTypeReflection = $hookParameterReflection->getType();
+        self::assertInstanceOf(ReflectionNamedType::class, $hookParameterTypeReflection);
+        self::assertSame('int', $hookParameterTypeReflection->getName());
     }
 
     /** @return list<array{0: non-empty-string, 1: string|null}> */
@@ -1285,13 +1296,16 @@ PHP;
         ];
     }
 
+    /** @param non-empty-string $propertyName */
     #[DataProvider('getPropertyHookReturnTypeProvider')]
     public function testGetPropertyHookReturnType(string $propertyName, string|null $returnType): void
     {
         $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/PropertyHooks.php', $this->astLocator));
         $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\GetPropertyHooksReturnTypes');
 
-        $hookProperty      = $classInfo->getProperty($propertyName);
+        $hookProperty = $classInfo->getProperty($propertyName);
+        self::assertNotNull($hookProperty);
+
         $getHookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Get);
         self::assertNotNull($getHookReflection);
         self::assertSame($returnType, $getHookReflection->getReturnType()?->__toString());

@@ -20,7 +20,7 @@ class FileHelperTest extends TestCase
         self::assertSame('directory/foo/boo/file.php', FileHelper::normalizeWindowsPath('directory/foo/boo/file.php'));
     }
 
-    /** @return list<array{0: string, 1: string}> */
+    /** @return list<array{0: non-empty-string, 1: non-empty-string}> */
     public static function dataNormalizeSystemPath(): array
     {
         return [
@@ -31,6 +31,10 @@ class FileHelperTest extends TestCase
         ];
     }
 
+    /**
+     * @param non-empty-string $path
+     * @param non-empty-string $expectedPath
+     */
     #[DataProvider('dataNormalizeSystemPath')]
     #[RequiresOperatingSystem('Linux')]
     public function testSystemWindowsPath(string $path, string $expectedPath): void

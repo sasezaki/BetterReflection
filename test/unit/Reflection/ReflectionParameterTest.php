@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Roave\BetterReflection\Reflection\Exception\CodeLocationMissing;
 use Roave\BetterReflection\Reflection\ReflectionFunction;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
+use Roave\BetterReflection\Reflection\ReflectionNamedType;
 use Roave\BetterReflection\Reflection\ReflectionParameter;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\Reflector\Reflector;
@@ -279,6 +280,7 @@ class ReflectionParameterTest extends TestCase
         $method    = $classInfo->getMethod('foo');
 
         $intParamType = $method->getParameter('intParam')->getType();
+        self::assertInstanceOf(ReflectionNamedType::class, $intParamType);
         self::assertSame('int', (string) $intParamType);
         self::assertTrue($intParamType->isBuiltin());
         self::assertFalse($intParamType->allowsNull());
@@ -290,6 +292,7 @@ class ReflectionParameterTest extends TestCase
         $method    = $classInfo->getMethod('foo');
 
         $classParamType = $method->getParameter('classParam')->getType();
+        self::assertInstanceOf(ReflectionNamedType::class, $classParamType);
         self::assertSame(stdClass::class, (string) $classParamType);
         self::assertFalse($classParamType->isBuiltin());
         self::assertFalse($classParamType->allowsNull());

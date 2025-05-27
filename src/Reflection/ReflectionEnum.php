@@ -47,10 +47,7 @@ class ReflectionEnum extends ReflectionClass
     /**
      * @internal
      *
-     * @param EnumNode              $node
      * @param non-empty-string|null $namespace
-     *
-     * @psalm-suppress MoreSpecificImplementedParamType
      */
     public static function createFromNode(
         Reflector $reflector,
@@ -58,6 +55,8 @@ class ReflectionEnum extends ReflectionClass
         LocatedSource $locatedSource,
         string|null $namespace = null,
     ): self {
+        assert($node instanceof EnumNode);
+
         return new self($reflector, $node, $locatedSource, $namespace);
     }
 

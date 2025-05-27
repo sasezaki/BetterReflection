@@ -43,9 +43,7 @@ class ReflectionUnionType extends ReflectionType
     {
         $clone = clone $this;
 
-        foreach ($clone->types as $typeNo => $innerType) {
-            $clone->types[$typeNo] = $innerType->withOwner($owner);
-        }
+        $clone->types = array_map(static fn (ReflectionNamedType|ReflectionIntersectionType $type): ReflectionNamedType|ReflectionIntersectionType => $type->withOwner($owner), $clone->types);
 
         return $clone;
     }

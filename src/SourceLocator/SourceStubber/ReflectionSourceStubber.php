@@ -598,15 +598,21 @@ final class ReflectionSourceStubber implements SourceStubber
     private function formatType(CoreReflectionType $type): Name|NullableType|UnionType|IntersectionType
     {
         if ($type instanceof CoreReflectionIntersectionType) {
+            /** @phpstan-var list<CoreReflectionNamedType> $intersectionTypes */
+            $intersectionTypes = $type->getTypes();
+
             /** @var list<Name> $types */
-            $types = $this->formatTypes($type->getTypes());
+            $types = $this->formatTypes($intersectionTypes);
 
             return new IntersectionType($types);
         }
 
         if ($type instanceof CoreReflectionUnionType) {
+            /** @phpstan-var list<CoreReflectionIntersectionType|CoreReflectionNamedType> $unionTypes */
+            $unionTypes = $type->getTypes();
+
             /** @var list<Name|IntersectionType> $types */
-            $types = $this->formatTypes($type->getTypes());
+            $types = $this->formatTypes($unionTypes);
 
             return new UnionType($types);
         }

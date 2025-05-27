@@ -29,6 +29,7 @@ use Roave\BetterReflection\Reflection\ReflectionNamedType as BetterReflectionNam
 use Roave\BetterReflection\Reflection\ReflectionParameter as BetterReflectionParameter;
 use Roave\BetterReflection\Reflection\ReflectionProperty as BetterReflectionProperty;
 use stdClass;
+use Throwable;
 use TypeError;
 use ValueError;
 
@@ -86,7 +87,11 @@ class ReflectionPropertyTest extends TestCase
         ];
     }
 
-    /** @param list<mixed> $args */
+    /**
+     * @param list<mixed>                  $args
+     * @param class-string<Throwable>|null $expectedException
+     * @param class-string|null            $expectedReturnValueInstance
+     */
     #[DataProvider('methodExpectationProvider')]
     public function testAdapterMethods(
         string $methodName,

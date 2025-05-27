@@ -22,6 +22,7 @@ use Roave\BetterReflectionTest\BetterReflectionSingleton;
 
 use function array_column;
 use function array_combine;
+use function assert;
 use function realpath;
 
 #[CoversClass(MakeLocatorForComposerJson::class)]
@@ -42,9 +43,12 @@ class MakeLocatorForComposerJsonTest extends TestCase
     {
         $astLocator = BetterReflectionSingleton::instance()->astLocator();
 
-        $projectA                 = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-a');
+        $projectA = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-a');
+        assert($projectA !== false);
         $projectWithPsrCollisions = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-with-psr-collisions');
-        $projectALocator          = new AggregateSourceLocator([
+        assert($projectWithPsrCollisions !== false);
+
+        $projectALocator = new AggregateSourceLocator([
             new PsrAutoloaderLocator(
                 Psr4Mapping::fromArrayMappings([
                     'ProjectA\\'    => [

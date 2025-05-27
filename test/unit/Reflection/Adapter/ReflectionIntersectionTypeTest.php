@@ -13,6 +13,7 @@ use Roave\BetterReflection\Reflection\Adapter\ReflectionIntersectionType as Refl
 use Roave\BetterReflection\Reflection\Adapter\ReflectionNamedType as ReflectionNamedTypeAdapter;
 use Roave\BetterReflection\Reflection\ReflectionIntersectionType as BetterReflectionIntersectionType;
 use Roave\BetterReflection\Reflection\ReflectionNamedType as BetterReflectionNamedType;
+use Throwable;
 
 use function array_combine;
 use function array_map;
@@ -48,7 +49,10 @@ class ReflectionIntersectionTypeTest extends TestCase
         ];
     }
 
-    /** @param list<mixed> $args */
+    /**
+     * @param list<mixed>                  $args
+     * @param class-string<Throwable>|null $expectedException
+     */
     #[DataProvider('methodExpectationProvider')]
     public function testAdapterMethods(string $methodName, string|null $expectedException, mixed $returnValue, array $args): void
     {

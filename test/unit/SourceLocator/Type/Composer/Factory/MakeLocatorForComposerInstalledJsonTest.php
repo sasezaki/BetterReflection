@@ -23,6 +23,7 @@ use Roave\BetterReflectionTest\BetterReflectionSingleton;
 
 use function array_column;
 use function array_combine;
+use function assert;
 use function realpath;
 
 #[CoversClass(MakeLocatorForInstalledJson::class)]
@@ -43,10 +44,13 @@ class MakeLocatorForComposerInstalledJsonTest extends TestCase
     {
         $astLocator = BetterReflectionSingleton::instance()->astLocator();
 
-        $projectA                         = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-a');
-        $projectComposerV2                = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-using-composer-v2');
-        $projectWithPsrCollisions         = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-with-psr-collisions');
-        $projectALocator                  = new AggregateSourceLocator([
+        $projectA = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-a');
+        assert($projectA !== false);
+        $projectComposerV2 = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-using-composer-v2');
+        assert($projectComposerV2 !== false);
+        $projectWithPsrCollisions = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-with-psr-collisions');
+        assert($projectWithPsrCollisions !== false);
+        $projectALocator        = new AggregateSourceLocator([
             new PsrAutoloaderLocator(
                 Psr4Mapping::fromArrayMappings([
                     'A\\B\\' => [
@@ -107,7 +111,8 @@ class MakeLocatorForComposerInstalledJsonTest extends TestCase
                 $astLocator,
             ),
         ]);
-        $projectCustomVendorDir           = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-with-custom-vendor-dir');
+        $projectCustomVendorDir = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-with-custom-vendor-dir');
+        assert($projectCustomVendorDir !== false);
         $projectCustomVendorDirLocator    = new AggregateSourceLocator([
             new PsrAutoloaderLocator(
                 Psr4Mapping::fromArrayMappings([
@@ -170,6 +175,7 @@ class MakeLocatorForComposerInstalledJsonTest extends TestCase
             ),
         ]);
         $projectCustomVendorDirComposerV2 = realpath(__DIR__ . '/../../../../Assets/ComposerLocators/project-with-custom-vendor-dir-using-composer-v2');
+        assert($projectCustomVendorDirComposerV2 !== false);
 
         $expectedLocators = [
             [

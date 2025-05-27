@@ -16,7 +16,7 @@ use function array_map;
 /** @psalm-immutable */
 class ReflectionAttribute
 {
-    /** @var non-empty-string */
+    /** @var class-string */
     private string $name;
 
     /** @var array<int|string, Node\Expr> */
@@ -29,7 +29,10 @@ class ReflectionAttribute
         private ReflectionClass|ReflectionMethod|ReflectionFunction|ReflectionClassConstant|ReflectionEnumCase|ReflectionProperty|ReflectionParameter $owner,
         private bool $isRepeated,
     ) {
-        $this->name = $node->name->toString();
+        /** @var class-string $name */
+        $name = $node->name->toString();
+
+        $this->name = $name;
 
         $arguments = [];
         foreach ($node->args as $argNo => $arg) {
@@ -48,7 +51,7 @@ class ReflectionAttribute
         return $clone;
     }
 
-    /** @return non-empty-string */
+    /** @return class-string */
     public function getName(): string
     {
         return $this->name;

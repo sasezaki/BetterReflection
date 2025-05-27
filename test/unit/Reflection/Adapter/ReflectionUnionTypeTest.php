@@ -14,6 +14,7 @@ use Roave\BetterReflection\Reflection\Adapter\ReflectionUnionType as ReflectionU
 use Roave\BetterReflection\Reflection\ReflectionIntersectionType as BetterReflectionIntersectionType;
 use Roave\BetterReflection\Reflection\ReflectionNamedType as BetterReflectionNamedType;
 use Roave\BetterReflection\Reflection\ReflectionUnionType as BetterReflectionUnionType;
+use Throwable;
 
 use function array_combine;
 use function array_map;
@@ -49,7 +50,10 @@ class ReflectionUnionTypeTest extends TestCase
         ];
     }
 
-    /** @param list<mixed> $args */
+    /**
+     * @param list<mixed>                  $args
+     * @param class-string<Throwable>|null $expectedException
+     */
     #[DataProvider('methodExpectationProvider')]
     public function testAdapterMethods(string $methodName, string|null $expectedException, mixed $returnValue, array $args): void
     {

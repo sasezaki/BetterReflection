@@ -79,9 +79,11 @@ final class AnonymousClassObjectSourceLocator implements SourceLocator
 
         FileChecker::assertReadableFile($fileName);
 
-        $fileName = FileHelper::normalizeWindowsPath($fileName);
+        $fileName  = FileHelper::normalizeWindowsPath($fileName);
+        $startLine = $this->coreClassReflection->getStartLine();
+        assert($startLine !== false);
 
-        $nodeVisitor = new class ($fileName, $this->coreClassReflection->getStartLine()) extends NodeVisitorAbstract
+        $nodeVisitor = new class ($fileName, $startLine) extends NodeVisitorAbstract
         {
             /** @var list<Class_> */
             private array $anonymousClassNodes = [];

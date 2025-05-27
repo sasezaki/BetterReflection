@@ -6,6 +6,7 @@ namespace Roave\BetterReflectionTest\Reflector;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PhpParser\Token;
@@ -45,6 +46,7 @@ class MemoizingParserTest extends TestCase
 
         $parser = new MemoizingParser($wrappedParser);
 
+        /** @var list<array<Stmt>> $producedNodes */
         $producedNodes = array_map([$parser, 'parse'], $randomCodeStrings);
 
         self::assertCount($randomCodeStringsCount, $producedNodes);

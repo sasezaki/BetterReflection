@@ -18,6 +18,7 @@ use Roave\BetterReflection\Reflection\ReflectionEnumCase as BetterReflectionEnum
 use Roave\BetterReflection\Reflection\ReflectionMethod as BetterReflectionMethod;
 use Roave\BetterReflection\Reflection\ReflectionProperty as BetterReflectionProperty;
 use Roave\BetterReflection\Util\FileHelper;
+use UnitEnum;
 use ValueError;
 
 use function array_combine;
@@ -56,6 +57,7 @@ final class ReflectionEnum extends CoreReflectionEnum
 
     public function getName(): string
     {
+        /** @phpstan-var class-string<UnitEnum> */
         return $this->betterReflectionEnum->getName();
     }
 

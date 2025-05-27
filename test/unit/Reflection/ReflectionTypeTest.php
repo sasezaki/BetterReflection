@@ -32,7 +32,7 @@ class ReflectionTypeTest extends TestCase
         $this->owner     = $this->createMock(ReflectionParameter::class);
     }
 
-    /** @return array<int|string, array{0: Node\Identifier|Node\Name|Node\NullableType|Node\UnionType|Node\IntersectionType, 1: bool, 2: string, 3: string, 4: bool}> */
+    /** @return array<int|string, array{0: Node\Identifier|Node\Name|Node\NullableType|Node\UnionType|Node\IntersectionType, 1: bool, 2: class-string, 3: string, 4: bool}> */
     public static function dataProvider(): array
     {
         return [
@@ -89,6 +89,7 @@ class ReflectionTypeTest extends TestCase
         ];
     }
 
+    /** @param class-string $expectedReflectionClass */
     #[DataProvider('dataProvider')]
     public function test(
         Node\Identifier|Node\Name|Node\NullableType|Node\UnionType|Node\IntersectionType $node,

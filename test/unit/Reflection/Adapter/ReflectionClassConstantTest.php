@@ -19,6 +19,7 @@ use Roave\BetterReflection\Reflection\ReflectionClassConstant as BetterReflectio
 use Roave\BetterReflection\Reflection\ReflectionEnum as BetterReflectionEnum;
 use Roave\BetterReflection\Reflection\ReflectionEnumCase as BetterReflectionEnumCase;
 use Roave\BetterReflectionTest\Fixture\PureEnum;
+use Throwable;
 use ValueError;
 
 use function array_combine;
@@ -65,7 +66,10 @@ class ReflectionClassConstantTest extends TestCase
         ];
     }
 
-    /** @param list<mixed> $args */
+    /**
+     * @param list<mixed>                  $args
+     * @param class-string<Throwable>|null $expectedException
+     */
     #[DataProvider('methodExpectationProvider')]
     public function testAdapterMethods(string $methodName, string|null $expectedException, mixed $returnValue, array $args): void
     {

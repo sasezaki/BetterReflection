@@ -57,7 +57,10 @@ class FileIteratorSourceLocator implements SourceLocator
                         return null;
                     }
 
-                    return new SingleFileSourceLocator($item->getRealPath(), $this->astLocator);
+                    /** @phpstan-var non-empty-string $itemRealPath */
+                    $itemRealPath = $item->getRealPath();
+
+                    return new SingleFileSourceLocator($itemRealPath, $this->astLocator);
                 },
                 iterator_to_array($this->fileSystemIterator),
             ))));

@@ -18,6 +18,7 @@ use function array_filter;
 use function array_map;
 use function array_merge;
 use function array_unique;
+use function array_values;
 use function count;
 use function in_array;
 use function random_int;
@@ -28,15 +29,15 @@ use function uniqid;
 #[CoversClass(MemoizingSourceLocator::class)]
 class MemoizingSourceLocatorTest extends TestCase
 {
-    private Reflector|MockObject $reflector1;
+    private Reflector&MockObject $reflector1;
 
-    private Reflector|MockObject $reflector2;
+    private Reflector&MockObject $reflector2;
 
-    private SourceLocator|MockObject $wrappedLocator;
+    private SourceLocator&MockObject $wrappedLocator;
 
     private MemoizingSourceLocator $memoizingLocator;
 
-    /** @var list<string> */
+    /** @var list<non-empty-string> */
     private array $identifierNames;
 
     private int $identifierCount;
@@ -49,10 +50,10 @@ class MemoizingSourceLocatorTest extends TestCase
         $this->reflector2       = $this->createMock(Reflector::class);
         $this->wrappedLocator   = $this->createMock(SourceLocator::class);
         $this->memoizingLocator = new MemoizingSourceLocator($this->wrappedLocator);
-        $this->identifierNames  = array_unique(array_map(
+        $this->identifierNames  = array_values(array_unique(array_map(
             static fn (): string => uniqid('identifier', true),
             range(1, 20),
-        ));
+        )));
         $this->identifierCount  = count($this->identifierNames);
     }
 

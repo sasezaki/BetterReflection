@@ -10,6 +10,7 @@ use Roave\BetterReflection\SourceLocator\Exception\InvalidFileLocation;
 use Roave\BetterReflection\SourceLocator\FileChecker;
 use Throwable;
 
+use function assert;
 use function chmod;
 use function fileperms;
 use function sprintf;
@@ -43,6 +44,7 @@ class FileCheckerTest extends TestCase
         $file = __DIR__ . '/../Fixture/NoNamespace.php';
 
         $originalPermission = fileperms($file);
+        assert($originalPermission !== false);
         chmod($file, 0000);
 
         $this->expectException(InvalidFileLocation::class);

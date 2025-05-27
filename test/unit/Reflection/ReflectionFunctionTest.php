@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplemented;
 use Roave\BetterReflection\Reflection\Exception\FunctionDoesNotExist;
 use Roave\BetterReflection\Reflection\ReflectionFunction;
+use Roave\BetterReflection\Reflection\ReflectionNamedType;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
 use Roave\BetterReflection\SourceLocator\SourceStubber\SourceStubber;
@@ -137,7 +138,7 @@ class ReflectionFunctionTest extends TestCase
 
         $theParamType = $reflection->getParameter('theParam')->getType();
 
-        self::assertNotNull($theParamType);
+        self::assertInstanceOf(ReflectionNamedType::class, $theParamType);
         self::assertSame(stdClass::class, $theParamType->getClass()->getName());
     }
 
@@ -152,7 +153,7 @@ class ReflectionFunctionTest extends TestCase
 
         $theParamType = $reflection->getParameter('theParam')->getType();
 
-        self::assertNotNull($theParamType);
+        self::assertInstanceOf(ReflectionNamedType::class, $theParamType);
         self::assertSame(ClassWithStaticMethod::class, $theParamType->getClass()->getName());
     }
 
@@ -173,7 +174,7 @@ class ReflectionFunctionTest extends TestCase
 
         $theParamType = $reflection->getParameter('theParam')->getType();
 
-        self::assertNotNull($theParamType);
+        self::assertInstanceOf(ReflectionNamedType::class, $theParamType);
         self::assertSame(stdClass::class, $theParamType->getClass()->getName());
     }
 
@@ -185,7 +186,7 @@ class ReflectionFunctionTest extends TestCase
 
         $theParamType = $reflection->getParameter('theParam')->getType();
 
-        self::assertNotNull($theParamType);
+        self::assertInstanceOf(ReflectionNamedType::class, $theParamType);
         self::assertSame(ClassWithStaticMethod::class, $theParamType->getClass()->getName());
     }
 

@@ -170,7 +170,11 @@ class ReflectionFunction implements Reflection
         }
     }
 
-    /** @throws FunctionDoesNotExist */
+    /**
+     * @throws FunctionDoesNotExist
+     *
+     * @phpstan-assert callable $functionName
+     */
     private function assertFunctionExist(string $functionName): void
     {
         if (! function_exists($functionName)) {
