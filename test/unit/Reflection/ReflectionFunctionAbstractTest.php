@@ -384,6 +384,7 @@ class ReflectionFunctionAbstractTest extends TestCase
         $reflector    = new DefaultReflector(new StringSourceLocator($php, $this->astLocator));
         $functionInfo = $reflector->reflectFunction('foo');
 
+        self::assertNotNull($functionInfo->getDocComment());
         self::assertStringContainsString('This function comment should be used.', $functionInfo->getDocComment());
     }
 
@@ -452,6 +453,7 @@ class ReflectionFunctionAbstractTest extends TestCase
             new SingleFileSourceLocator(__DIR__ . '/../Fixture/Functions.php', $this->astLocator),
         ))->reflectFunction('Roave\BetterReflectionTest\Fixture\myFunction');
 
+        self::assertNotNull($functionInfo->getFileName());
         self::assertStringContainsString('Fixture/Functions.php', $functionInfo->getFileName());
     }
 

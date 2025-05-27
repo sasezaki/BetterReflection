@@ -930,6 +930,7 @@ PHP;
 
         $detectedFilename = $classInfo->getFileName();
 
+        self::assertNotNull($detectedFilename);
         self::assertSame('ExampleClass.php', basename($detectedFilename));
     }
 
@@ -1052,20 +1053,23 @@ PHP;
         $reflector = new DefaultReflector($this->getComposerLocator());
         $classInfo = $reflector->reflectClass(ExampleClass::class);
 
+        self::assertNotNull($classInfo->getDocComment());
         self::assertStringContainsString('This class comment should be used.', $classInfo->getDocComment());
     }
 
     public function testGetDocCommentBetweenComments(): void
     {
-        $php       = '<?php
+        $php        = '<?php
             /* A comment */
             /** Class description */
             /* An another comment */
             class Bar implements Foo {}
         ';
-        $reflector = (new DefaultReflector(new StringSourceLocator($php, $this->astLocator)))->reflectClass('Bar');
+        $reflector  = new DefaultReflector(new StringSourceLocator($php, $this->astLocator));
+        $reflection = $reflector->reflectClass('Bar');
 
-        self::assertStringContainsString('Class description', $reflector->getDocComment());
+        self::assertNotNull($reflection->getDocComment());
+        self::assertStringContainsString('Class description', $reflection->getDocComment());
     }
 
     public function testGetDocCommentReturnsNullWithNoComment(): void

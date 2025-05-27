@@ -219,6 +219,7 @@ class ReflectionMethodTest extends TestCase
 
         $detectedFilename = $method->getFileName();
 
+        self::assertNotNull($detectedFilename);
         self::assertSame('Methods.php', basename($detectedFilename));
     }
 

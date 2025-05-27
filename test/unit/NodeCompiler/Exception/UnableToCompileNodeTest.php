@@ -25,6 +25,7 @@ use Roave\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\StringSourceLocator;
 use Roave\BetterReflectionTest\BetterReflectionSingleton;
 
+use function assert;
 use function sprintf;
 
 #[CoversClass(UnableToCompileNode::class)]
@@ -198,6 +199,8 @@ PHP;
         $function       = $reflector->reflectFunction('Foo\someFunction');
         $constant       = $reflector->reflectConstant('Foo\SOME_CONSTANT');
         $globalConstant = $reflector->reflectConstant('PHP_VERSION_ID');
+
+        assert($method !== null);
 
         return [
             [new CompilerContext($reflector, $globalConstant), 'global namespace'],

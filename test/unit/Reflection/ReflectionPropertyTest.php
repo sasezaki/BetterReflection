@@ -253,6 +253,7 @@ class ReflectionPropertyTest extends TestCase
         $reflector = (new DefaultReflector(new StringSourceLocator($php, $this->astLocator)))->reflectClass('Bar');
         $property  = $reflector->getProperty('prop');
 
+        self::assertNotNull($property?->getDocComment());
         self::assertStringContainsString('Property description', $property->getDocComment());
     }
 

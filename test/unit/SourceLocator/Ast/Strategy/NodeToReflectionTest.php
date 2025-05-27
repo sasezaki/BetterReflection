@@ -19,6 +19,7 @@ use Roave\BetterReflection\SourceLocator\Ast\Strategy\NodeToReflection;
 use Roave\BetterReflection\SourceLocator\Located\LocatedSource;
 use Roave\BetterReflectionTest\BetterReflectionSingleton;
 
+use function assert;
 use function reset;
 
 #[CoversClass(NodeToReflection::class)]
@@ -40,6 +41,7 @@ class NodeToReflectionTest extends TestCase
     private function getFirstAstNodeInString(string $php): Node
     {
         $nodes = $this->phpParser->parse($php);
+        assert(isset($nodes[0]));
 
         $this->nodeTraverser->traverse($nodes);
 

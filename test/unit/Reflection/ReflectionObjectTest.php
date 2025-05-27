@@ -41,7 +41,10 @@ class ReflectionObjectTest extends TestCase
     /** @return Node[] */
     private function parse(string $code): array
     {
-        return BetterReflectionSingleton::instance()->phpParser()->parse($code);
+        $nodes = BetterReflectionSingleton::instance()->phpParser()->parse($code);
+        assert($nodes !== null);
+
+        return $nodes;
     }
 
     /** @return list<array{0: object, 1: string, 2: int, 3: int}> */

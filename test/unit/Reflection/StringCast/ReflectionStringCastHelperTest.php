@@ -39,6 +39,7 @@ class ReflectionStringCastHelperTest extends TestCase
         $classReflection         = $reflector->reflectClass('Foo');
         $classConstantReflection = $classReflection->getConstant('SOME_CONSTANT');
 
+        self::assertNotNull($classConstantReflection);
         self::assertSame('', ReflectionStringCastHelper::docCommentToString($classConstantReflection, false));
         self::assertSame('', ReflectionStringCastHelper::docCommentToString($classConstantReflection, true));
     }
@@ -61,6 +62,7 @@ class ReflectionStringCastHelperTest extends TestCase
         $classReflection         = $reflector->reflectClass('Foo');
         $classConstantReflection = $classReflection->getConstant('SOME_CONSTANT');
 
+        self::assertNotNull($classConstantReflection);
         self::assertSame("/**\n * @var int\n */\n", ReflectionStringCastHelper::docCommentToString($classConstantReflection, false));
     }
 
@@ -82,6 +84,7 @@ class ReflectionStringCastHelperTest extends TestCase
         $classReflection         = $reflector->reflectClass('Foo');
         $classConstantReflection = $classReflection->getConstant('SOME_CONSTANT');
 
+        self::assertNotNull($classConstantReflection);
         self::assertSame("/**\n     * @var int\n     */\n", ReflectionStringCastHelper::docCommentToString($classConstantReflection, true));
     }
 }
