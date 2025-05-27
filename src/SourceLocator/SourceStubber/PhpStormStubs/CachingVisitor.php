@@ -201,7 +201,7 @@ class CachingVisitor extends NodeVisitorAbstract
         // prevent autoloading while discovering class constants
         $parts = explode('::', $constantName, 2);
         if (count($parts) === 2) {
-            [$className, $classConstName] = $parts;
+            [$className] = $parts;
 
             if (! class_exists($className, false)) {
                 return;
@@ -217,6 +217,7 @@ class CachingVisitor extends NodeVisitorAbstract
         $constantValue           = @constant($constantName);
         $normalizedConstantValue = is_resource($constantValue)
             ? $this->builderFactory->funcCall('constant', [$constantName])
+            /** @phpstan-ignore argument.type */
             : $this->builderFactory->val($constantValue);
 
         if ($node instanceof Node\Expr\FuncCall) {

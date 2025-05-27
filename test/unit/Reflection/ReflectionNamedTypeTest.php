@@ -153,7 +153,10 @@ class ReflectionNamedTypeTest extends TestCase
         $classReflection    = $reflector->reflectClass('Foo');
         $propertyReflection = $classReflection->getProperty('property');
         $typeReflection     = $propertyReflection->getType();
-        $class              = $typeReflection->getClass();
+
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
+
+        $class = $typeReflection->getClass();
 
         self::assertSame('Foo', $class->getName());
     }
@@ -169,7 +172,10 @@ class ReflectionNamedTypeTest extends TestCase
 
         $functionReflection = $reflector->reflectFunction('getFoo');
         $typeReflection     = $functionReflection->getReturnType();
-        $class              = $typeReflection->getClass();
+
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
+
+        $class = $typeReflection->getClass();
 
         self::assertSame('Foo', $class->getName());
     }
@@ -187,7 +193,10 @@ class ReflectionNamedTypeTest extends TestCase
         $classReflection  = $reflector->reflectClass('Foo');
         $methodReflection = $classReflection->getMethod('method');
         $typeReflection   = $methodReflection->getReturnType();
-        $class            = $typeReflection->getClass();
+
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
+
+        $class = $typeReflection->getClass();
 
         self::assertSame('Foo', $class->getName());
     }
@@ -206,7 +215,10 @@ class ReflectionNamedTypeTest extends TestCase
         $methodReflection    = $classReflection->getMethod('method');
         $parameterReflection = $methodReflection->getParameter('parameter');
         $typeReflection      = $parameterReflection->getType();
-        $class               = $typeReflection->getClass();
+
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
+
+        $class = $typeReflection->getClass();
 
         self::assertSame('Foo', $class->getName());
     }
@@ -225,6 +237,8 @@ class ReflectionNamedTypeTest extends TestCase
 
         $typeReflection = $enumReflection->getBackingType();
 
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
+
         $this->expectException(LogicException::class);
         $typeReflection->getClass();
     }
@@ -239,6 +253,8 @@ class ReflectionNamedTypeTest extends TestCase
 
         $functionReflection = $reflector->reflectFunction('getSelf');
         $typeReflection     = $functionReflection->getReturnType();
+
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
 
         $this->expectException(LogicException::class);
         $typeReflection->getClass();
@@ -255,6 +271,8 @@ class ReflectionNamedTypeTest extends TestCase
         $functionReflection  = $reflector->reflectFunction('withSelf');
         $parameterReflection = $functionReflection->getParameter('parameter');
         $typeReflection      = $parameterReflection->getType();
+
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
 
         $this->expectException(LogicException::class);
         $typeReflection->getClass();
@@ -290,9 +308,11 @@ class ReflectionNamedTypeTest extends TestCase
 
         $classReflection  = $reflector->reflectClass($classNameToReflect);
         $methodReflection = $classReflection->getMethod('method');
+        $typeReflection   = $methodReflection->getReturnType();
 
-        $typeReflection = $methodReflection->getReturnType();
-        $class          = $typeReflection->getClass();
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
+
+        $class = $typeReflection->getClass();
 
         self::assertSame($typeClassName, $class->getName());
     }
@@ -319,9 +339,11 @@ class ReflectionNamedTypeTest extends TestCase
 
         $classReflection  = $reflector->reflectClass($className);
         $methodReflection = $classReflection->getMethod('method');
+        $typeReflection   = $methodReflection->getReturnType();
 
-        $typeReflection = $methodReflection->getReturnType();
-        $class          = $typeReflection->getClass();
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
+
+        $class = $typeReflection->getClass();
 
         self::assertSame($className, $class->getName());
     }
@@ -352,7 +374,10 @@ class ReflectionNamedTypeTest extends TestCase
         $classReflection  = $reflector->reflectClass('Boo');
         $methodReflection = $classReflection->getMethod('method');
         $typeReflection   = $methodReflection->getReturnType();
-        $class            = $typeReflection->getClass();
+
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
+
+        $class = $typeReflection->getClass();
 
         self::assertSame('Foo', $class->getName());
     }
@@ -370,6 +395,8 @@ class ReflectionNamedTypeTest extends TestCase
         $classReflection  = $reflector->reflectClass('Foo');
         $methodReflection = $classReflection->getMethod('method');
         $typeReflection   = $methodReflection->getReturnType();
+
+        self::assertInstanceOf(ReflectionNamedType::class, $typeReflection);
 
         $this->expectException(LogicException::class);
         $typeReflection->getClass();

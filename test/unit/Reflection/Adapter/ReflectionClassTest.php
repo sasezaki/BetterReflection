@@ -31,6 +31,7 @@ use Roave\BetterReflection\Reflection\ReflectionProperty as BetterReflectionProp
 use Roave\BetterReflection\Util\FileHelper;
 use Roave\BetterReflectionTest\Fixture\AutoloadableEnum;
 use stdClass;
+use Throwable;
 use ValueError;
 
 use function array_combine;
@@ -111,7 +112,10 @@ class ReflectionClassTest extends TestCase
         ];
     }
 
-    /** @param list<mixed> $args */
+    /**
+     * @param list<mixed>                  $args
+     * @param class-string<Throwable>|null $expectedException
+     */
     #[DataProvider('methodExpectationProvider')]
     public function testAdapterMethods(
         string $methodName,

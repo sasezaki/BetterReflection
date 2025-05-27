@@ -76,9 +76,11 @@ final class ClosureSourceLocator implements SourceLocator
 
         FileChecker::assertReadableFile($fileName);
 
-        $fileName = FileHelper::normalizeWindowsPath($fileName);
+        $fileName  = FileHelper::normalizeWindowsPath($fileName);
+        $startLine = $this->coreFunctionReflection->getStartLine();
+        assert($startLine !== false);
 
-        $nodeVisitor = new class ($fileName, $this->coreFunctionReflection->getStartLine()) extends NodeVisitorAbstract
+        $nodeVisitor = new class ($fileName, $startLine) extends NodeVisitorAbstract
         {
             /** @var list<array{node: Node\Expr\Closure|Node\Expr\ArrowFunction, namespace: Namespace_|null}> */
             private array $closureNodes = [];

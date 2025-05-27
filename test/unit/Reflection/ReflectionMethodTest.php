@@ -20,9 +20,9 @@ use Roave\BetterReflection\Reflection\Exception\NoObjectProvided;
 use Roave\BetterReflection\Reflection\Exception\ObjectNotInstanceOfClass;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
+use Roave\BetterReflection\Reflection\ReflectionNamedType;
 use Roave\BetterReflection\Reflection\ReflectionParameter;
 use Roave\BetterReflection\Reflection\ReflectionPropertyHookType;
-use Roave\BetterReflection\Reflection\ReflectionType;
 use Roave\BetterReflection\Reflection\ReflectionUnionType;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\Reflector\Reflector;
@@ -259,7 +259,7 @@ class ReflectionMethodTest extends TestCase
             ->getMethod('someMethod')
             ->getReturnType();
 
-        self::assertInstanceOf(ReflectionType::class, $returnType);
+        self::assertInstanceOf(ReflectionNamedType::class, $returnType);
         self::assertTrue($returnType->isBuiltin());
         self::assertSame('object', (string) $returnType);
     }
@@ -823,7 +823,7 @@ PHP;
         $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
         self::assertTrue($hookReflection->isHook());
         self::assertSame($hookProperty, $hookReflection->getHookProperty());
-        self::assertInstanceOf(ReflectionType::class, $hookReflection->getReturnType());
+        self::assertInstanceOf(ReflectionNamedType::class, $hookReflection->getReturnType());
         self::assertSame('void', $hookReflection->getReturnType()->getName());
 
         self::assertSame(1, $hookReflection->getNumberOfParameters());
@@ -832,7 +832,7 @@ PHP;
         $hookParameterReflection = $hookReflection->getParameter('value');
         self::assertSame(0, $hookParameterReflection->getPosition());
         self::assertFalse($hookParameterReflection->isOptional());
-        self::assertInstanceOf(ReflectionType::class, $hookParameterReflection->getType());
+        self::assertInstanceOf(ReflectionNamedType::class, $hookParameterReflection->getType());
         self::assertSame('string', $hookParameterReflection->getType()->getName());
     }
 
@@ -847,7 +847,7 @@ PHP;
         $hookReflection = $hookProperty->getHook(ReflectionPropertyHookType::Set);
         self::assertTrue($hookReflection->isHook());
         self::assertSame($hookProperty, $hookReflection->getHookProperty());
-        self::assertInstanceOf(ReflectionType::class, $hookReflection->getReturnType());
+        self::assertInstanceOf(ReflectionNamedType::class, $hookReflection->getReturnType());
         self::assertSame('void', $hookReflection->getReturnType()->getName());
 
         self::assertSame(1, $hookReflection->getNumberOfParameters());
@@ -856,7 +856,7 @@ PHP;
         $hookParameterReflection = $hookReflection->getParameter('value');
         self::assertSame(0, $hookParameterReflection->getPosition());
         self::assertFalse($hookParameterReflection->isOptional());
-        self::assertInstanceOf(ReflectionType::class, $hookParameterReflection->getType());
+        self::assertInstanceOf(ReflectionNamedType::class, $hookParameterReflection->getType());
         self::assertSame('int', $hookParameterReflection->getType()->getName());
     }
 
@@ -871,6 +871,7 @@ PHP;
         ];
     }
 
+    /** @param non-empty-string $propertyName */
     #[DataProvider('getPropertyHookReturnTypeProvider')]
     public function testGetPropertyHookReturnType(string $propertyName, string|null $returnType): void
     {
@@ -892,6 +893,7 @@ PHP;
         ];
     }
 
+    /** @param non-empty-string $propertyName */
     #[DataProvider('finalPropertyHookProvider')]
     public function testFinalPropertyHook(string $propertyName, bool $isFinal): void
     {

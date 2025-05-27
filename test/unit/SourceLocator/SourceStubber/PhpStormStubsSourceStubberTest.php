@@ -30,6 +30,7 @@ use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionConstant;
 use Roave\BetterReflection\Reflection\ReflectionFunction;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
+use Roave\BetterReflection\Reflection\ReflectionNamedType;
 use Roave\BetterReflection\Reflection\ReflectionParameter;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
 use Roave\BetterReflection\Reflector\DefaultReflector;
@@ -54,6 +55,8 @@ use function array_key_exists;
 use function array_keys;
 use function array_map;
 use function array_merge;
+use function array_values;
+use function assert;
 use function get_declared_classes;
 use function get_declared_interfaces;
 use function get_declared_traits;
@@ -121,7 +124,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
 
         return array_map(
             static fn (string $className): array => [$className],
-            array_filter(
+            array_values(array_filter(
                 $classNames,
                 static function (string $className): bool {
                     $reflection = new CoreReflectionClass($className);
@@ -133,7 +136,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
                     // Check only always enabled extensions
                     return in_array($reflection->getExtensionName(), self::EXTENSIONS, true);
                 },
-            ),
+            )),
         );
     }
 
@@ -195,7 +198,10 @@ class PhpStormStubsSourceStubberTest extends TestCase
                 continue;
             }
 
-            $stubbedConstant = $stubbed->getConstant($originalConstant->getName());
+            $originalConstantName = $originalConstant->getName();
+            assert($originalConstantName !== '');
+
+            $stubbedConstant = $stubbed->getConstant($originalConstantName);
 
             self::assertNotNull($stubbedConstant);
             self::assertSame($originalConstant->getValue(), $stubbedConstant->getValue());
@@ -286,7 +292,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
 
         return array_map(
             static fn (string $functionName): array => [$functionName],
-            array_filter(
+            array_values(array_filter(
                 $functionNames,
                 static function (string $functionName): bool {
                     $reflection = new CoreReflectionFunction($functionName);
@@ -294,7 +300,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
                     // Check only always enabled extensions
                     return in_array($reflection->getExtensionName(), self::EXTENSIONS, true);
                 },
-            ),
+            )),
         );
     }
 
@@ -436,11 +442,13 @@ class PhpStormStubsSourceStubberTest extends TestCase
 
     public function testNameResolverForClassInNamespace(): void
     {
-        $classReflection     = $this->reflector->reflectClass('http\Client');
-        $methodReflection    = $classReflection->getMethod('enqueue');
-        $parameterReflection = $methodReflection->getParameter('request');
+        $classReflection         = $this->reflector->reflectClass('http\Client');
+        $methodReflection        = $classReflection->getMethod('enqueue');
+        $parameterReflection     = $methodReflection->getParameter('request');
+        $parameterTypeReflection = $parameterReflection->getType();
 
-        self::assertSame('http\Client\Request', $parameterReflection->getType()->getName());
+        self::assertInstanceOf(ReflectionNamedType::class, $parameterTypeReflection);
+        self::assertSame('http\Client\Request', $parameterTypeReflection->getName());
     }
 
     public function testStubForClassInNamespaceWithUses(): void
@@ -731,6 +739,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
         ];
     }
 
+    /** @param class-string $className */
     #[DataProvider('dataClassInPhpVersion')]
     public function testClassInPhpVersion(string $className, int $phpVersion, bool $isSupported): void
     {
@@ -1306,6 +1315,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
         ];
     }
 
+    /** @param class-string $className */
     #[DataProvider('dataIterable')]
     public function testIterableInterfaceDoesNotExist(string $className): void
     {

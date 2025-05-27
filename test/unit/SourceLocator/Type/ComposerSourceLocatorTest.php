@@ -28,7 +28,7 @@ class ComposerSourceLocatorTest extends TestCase
         $this->astLocator = BetterReflectionSingleton::instance()->astLocator();
     }
 
-    private function getMockReflector(): Reflector|MockObject
+    private function getMockReflector(): Reflector&MockObject
     {
         return $this->createMock(Reflector::class);
     }

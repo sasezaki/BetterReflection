@@ -23,6 +23,7 @@ use Roave\BetterReflectionTest\Fixture\StringCastClass;
 use Roave\BetterReflectionTest\Fixture\StringCastClassObject;
 use Roave\BetterReflectionTest\Fixture\StringCastPureEnum;
 
+use function assert;
 use function file_get_contents;
 
 #[CoversClass(ReflectionClassStringCast::class)]
@@ -50,8 +51,11 @@ class ReflectionClassStringCastTest extends TestCase
         $reflector       = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../../Fixture/StringCastClass.php', $this->astLocator));
         $classReflection = $reflector->reflectClass(StringCastClass::class);
 
+        $expectedString = file_get_contents(__DIR__ . '/../../Fixture/StringCastClassExpected.txt');
+        assert($expectedString !== false);
+
         self::assertStringMatchesFormat(
-            file_get_contents(__DIR__ . '/../../Fixture/StringCastClassExpected.txt'),
+            $expectedString,
             $classReflection->__toString(),
         );
     }
@@ -64,8 +68,11 @@ class ReflectionClassStringCastTest extends TestCase
         ]));
         $classReflection = $reflector->reflectClass(StringCastPureEnum::class);
 
+        $expectedString = file_get_contents(__DIR__ . '/../../Fixture/StringCastPureEnumExpected.txt');
+        assert($expectedString !== false);
+
         self::assertStringMatchesFormat(
-            file_get_contents(__DIR__ . '/../../Fixture/StringCastPureEnumExpected.txt'),
+            $expectedString,
             $classReflection->__toString(),
         );
     }
@@ -78,8 +85,11 @@ class ReflectionClassStringCastTest extends TestCase
         ]));
         $classReflection = $reflector->reflectClass(StringCastBackedEnum::class);
 
+        $expectedString = file_get_contents(__DIR__ . '/../../Fixture/StringCastBackedEnumExpected.txt');
+        assert($expectedString !== false);
+
         self::assertStringMatchesFormat(
-            file_get_contents(__DIR__ . '/../../Fixture/StringCastBackedEnumExpected.txt'),
+            $expectedString,
             $classReflection->__toString(),
         );
     }
@@ -137,8 +147,11 @@ class ReflectionClassStringCastTest extends TestCase
 
         $objectReflection = ReflectionObject::createFromInstance($object);
 
+        $expectedString = file_get_contents(__DIR__ . '/../../Fixture/StringCastClassObjectExpected.txt');
+        assert($expectedString !== false);
+
         self::assertStringMatchesFormat(
-            file_get_contents(__DIR__ . '/../../Fixture/StringCastClassObjectExpected.txt'),
+            $expectedString,
             $objectReflection->__toString(),
         );
     }

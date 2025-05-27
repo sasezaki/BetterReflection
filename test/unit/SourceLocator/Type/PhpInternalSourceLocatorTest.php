@@ -53,7 +53,7 @@ class PhpInternalSourceLocatorTest extends TestCase
         );
     }
 
-    private function getMockReflector(): Reflector|MockObject
+    private function getMockReflector(): Reflector&MockObject
     {
         return $this->createMock(Reflector::class);
     }
@@ -82,7 +82,7 @@ class PhpInternalSourceLocatorTest extends TestCase
         }
     }
 
-    /** @return list<array{0: string}> */
+    /** @return list<array{0: class-string}> */
     public static function internalClassesProvider(): array
     {
         $allSymbols = array_merge(
@@ -93,14 +93,14 @@ class PhpInternalSourceLocatorTest extends TestCase
 
         return array_map(
             static fn (string $symbol): array => [$symbol],
-            array_filter(
+            array_values(array_filter(
                 $allSymbols,
                 static function (string $symbol): bool {
                     $reflection = new CoreReflectionClass($symbol);
 
                     return $reflection->isInternal();
                 },
-            ),
+            )),
         );
     }
 

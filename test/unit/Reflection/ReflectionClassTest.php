@@ -98,6 +98,7 @@ use UnitEnum;
 use function array_keys;
 use function array_map;
 use function array_walk;
+use function assert;
 use function basename;
 use function class_exists;
 use function count;
@@ -264,6 +265,7 @@ class ReflectionClassTest extends TestCase
     /**
      * @param non-empty-string                                           $methodName
      * @param array<non-empty-string, array{0: class-string, 1: string}> $parameters
+     * @param class-string                                               $returnTypeClass
      */
     #[DataProvider('dataMethodsOfBackedEnum')]
     public function testMethodsOfBackedEnum(string $methodName, array $parameters, string $returnTypeClass, string $returnType): void
@@ -453,7 +455,10 @@ class ReflectionClassTest extends TestCase
         self::assertNotNull($classInfo->getInterfaces());
     }
 
-    /** @param list<class-string> $expectedInterfaces */
+    /**
+     * @param non-empty-string   $sourcePath
+     * @param list<class-string> $expectedInterfaces
+     */
     #[DataProvider('getInterfaceClassNamesDataProvider')]
     public function testGetInterfaceClassNames(string $sourcePath, string $className, array $expectedInterfaces): void
     {
@@ -468,7 +473,7 @@ class ReflectionClassTest extends TestCase
         );
     }
 
-    /** @return list<array{string, class-string, list<string>}> */
+    /** @return list<array{non-empty-string, class-string, list<string>}> */
     public static function getInterfaceClassNamesDataProvider(): array
     {
         return [
@@ -892,6 +897,7 @@ PHP;
 
         self::assertInstanceOf(ReflectionProperty::class, $property);
         self::assertSame('publicProperty', $property->getName());
+        self::assertIsString($property->getDefaultValue());
         self::assertStringEndsWith('test/unit/Fixture', $property->getDefaultValue());
     }
 
@@ -1636,7 +1642,10 @@ PHP;
         );
     }
 
-    /** @param list<class-string> $expectedTraits */
+    /**
+     * @param non-empty-string   $sourcePath
+     * @param list<class-string> $expectedTraits
+     */
     #[DataProvider('getTraitClassNamesDataProvider')]
     public function testGetTraitClassNames(string $sourcePath, string $className, array $expectedTraits): void
     {
@@ -1651,7 +1660,7 @@ PHP;
         );
     }
 
-    /** @return list<array{string, class-string, list<string>}> */
+    /** @return list<array{non-empty-string, class-string, list<string>}> */
     public static function getTraitClassNamesDataProvider(): array
     {
         return [
@@ -2302,8 +2311,12 @@ PHP;
     public function testToString(): void
     {
         $reflection = ReflectionClass::createFromName(ExampleClass::class);
+
+        $expectedString = file_get_contents(__DIR__ . '/../Fixture/ExampleClassExport.txt');
+        assert($expectedString !== false);
+
         self::assertStringMatchesFormat(
-            file_get_contents(__DIR__ . '/../Fixture/ExampleClassExport.txt'),
+            $expectedString,
             $reflection->__toString(),
         );
     }
@@ -2313,8 +2326,11 @@ PHP;
         $reflector = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/AsymmetricVisibilityClass.php', $this->astLocator));
         $classInfo = $reflector->reflectClass('Roave\BetterReflectionTest\Fixture\AsymmetricVisibilityClass');
 
+        $expectedString = file_get_contents(__DIR__ . '/../Fixture/AsymmetricVisibilityClassExport.txt');
+        assert($expectedString !== false);
+
         self::assertStringMatchesFormat(
-            file_get_contents(__DIR__ . '/../Fixture/AsymmetricVisibilityClassExport.txt'),
+            $expectedString,
             $classInfo->__toString(),
         );
     }

@@ -13,6 +13,7 @@ use ReflectionClass as CoreReflectionClass;
 use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplementedBecauseItTriggersAutoloading;
 use Roave\BetterReflection\Reflection\Adapter\ReflectionAttribute as ReflectionAttributeAdapter;
 use Roave\BetterReflection\Reflection\ReflectionAttribute as BetterReflectionAttribute;
+use Throwable;
 
 use function array_combine;
 use function array_map;
@@ -51,7 +52,10 @@ class ReflectionAttributeTest extends TestCase
         ];
     }
 
-    /** @param list<mixed> $args */
+    /**
+     * @param list<mixed>                  $args
+     * @param class-string<Throwable>|null $expectedException
+     */
     #[DataProvider('methodExpectationProvider')]
     public function testAdapterMethods(string $methodName, string|null $expectedException, mixed $returnValue, array $args): void
     {

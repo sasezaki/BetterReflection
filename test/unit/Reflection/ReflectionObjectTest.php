@@ -221,7 +221,7 @@ class ReflectionObjectTest extends TestCase
      * This data provider gets all the public methods from ReflectionClass, but
      * filters out a few methods we want to test manually
      *
-     * @return array<string, array{0: string}>
+     * @return array<string, array{0: non-empty-string}>
      */
     public static function reflectionClassMethodProvider(): array
     {
@@ -253,6 +253,8 @@ class ReflectionObjectTest extends TestCase
      * methods from ReflectionClass), ensures the method exists in ReflectionObject
      * and that when the method is called on ReflectionObject, the method of the
      * same name on ReflectionClass is also called.
+     *
+     * @param non-empty-string $methodName
      */
     #[DataProvider('reflectionClassMethodProvider')]
     public function testReflectionObjectOverridesAllMethodsInReflectionClass(string $methodName): void

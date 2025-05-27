@@ -43,6 +43,8 @@ use Traversable;
 use function array_filter;
 use function array_map;
 use function array_merge;
+use function array_values;
+use function assert;
 use function enum_exists;
 use function get_declared_classes;
 use function get_declared_interfaces;
@@ -254,7 +256,7 @@ class ReflectionSourceStubberTest extends TestCase
 
         return array_map(
             static fn (string $symbol): array => [$symbol],
-            array_filter(
+            array_values(array_filter(
                 $allSymbols,
                 static function (string $symbol): bool {
                     $reflection = new CoreReflectionClass($symbol);
@@ -266,7 +268,7 @@ class ReflectionSourceStubberTest extends TestCase
                     // Check only always enabled extensions
                     return in_array($reflection->getExtensionName(), self::EXTENSIONS, true);
                 },
-            ),
+            )),
         );
     }
 
@@ -349,7 +351,10 @@ class ReflectionSourceStubberTest extends TestCase
                 continue;
             }
 
-            $stubbedConstant = $stubbed->getConstant($originalConstant->getName());
+            $originalConstantName = $originalConstant->getName();
+            assert($originalConstantName !== '');
+
+            $stubbedConstant = $stubbed->getConstant($originalConstantName);
 
             self::assertNotNull($stubbedConstant);
             self::assertSame($originalConstant->hasType(), $stubbedConstant->hasType());
@@ -364,7 +369,10 @@ class ReflectionSourceStubberTest extends TestCase
     private function assertSameEnumCases(CoreReflectionEnum $original, ReflectionEnum $stubbed): void
     {
         foreach ($original->getCases() as $originalEnumCase) {
-            $stubbedEnumCase = $stubbed->getCase($originalEnumCase->getName());
+            $originalEnumCaseName = $originalEnumCase->getName();
+            assert($originalEnumCaseName !== '');
+
+            $stubbedEnumCase = $stubbed->getCase($originalEnumCaseName);
 
             self::assertNotNull($stubbedEnumCase);
 
@@ -450,14 +458,14 @@ class ReflectionSourceStubberTest extends TestCase
 
         return array_map(
             static fn (string $functionName): array => [$functionName],
-            array_filter(
+            array_values(array_filter(
                 $functionNames,
                 static function (string $functionName): bool {
                     $reflection = new CoreReflectionFunction($functionName);
 
                     return $reflection->isInternal() && ! $reflection->isDeprecated();
                 },
-            ),
+            )),
         );
     }
 

@@ -14,6 +14,7 @@ use Roave\BetterReflection\Reflection\Adapter\ReflectionNamedType as ReflectionN
 use Roave\BetterReflection\Reflection\ReflectionMethod as BetterReflectionMethod;
 use Roave\BetterReflection\Reflection\ReflectionNamedType as BetterReflectionNamedType;
 use Roave\BetterReflection\Reflector\Reflector;
+use Throwable;
 
 use function array_combine;
 use function array_map;
@@ -89,7 +90,10 @@ class ReflectionNamedTypeTest extends TestCase
         ];
     }
 
-    /** @param list<mixed> $args */
+    /**
+     * @param list<mixed>                  $args
+     * @param class-string<Throwable>|null $expectedException
+     */
     #[DataProvider('methodExpectationProvider')]
     public function testAdapterMethods(string $methodName, string|null $expectedException, mixed $returnValue, array $args): void
     {
