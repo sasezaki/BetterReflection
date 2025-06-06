@@ -6,7 +6,7 @@
         "php": "~8.2.0 || ~8.3.2 || ~8.4.1",
         "ext-json": "*",
         "jetbrains/phpstorm-stubs": "2024.3",
-        "nikic/php-parser": "^5.4.0"
+        "nikic/php-parser": "^5.5.0"
     },
     "authors": [
         {
@@ -33,7 +33,7 @@
     ],
     "require-dev": {
         "phpbench/phpbench": "^1.4.1",
-        "phpunit/phpunit": "^11.5.21"
+        "phpunit/phpunit": "^11.5.22"
     },
     "autoload": {
         "psr-4": {
