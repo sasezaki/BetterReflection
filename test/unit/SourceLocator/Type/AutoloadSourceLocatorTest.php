@@ -457,6 +457,7 @@ class AutoloadSourceLocatorTest extends TestCase
 
         spl_autoload_register($brokenAutoloader);
 
+        /** @phpstan-ignore deadCode.unreachable */
         try {
             (new AutoloadSourceLocator($this->astLocator))
                 ->locateIdentifier(
