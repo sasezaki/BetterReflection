@@ -1779,16 +1779,16 @@
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/composer-installer.git",
-                "reference": "6e0fa428497bf560152ee73ffbb8af5c6a56b0dd"
+                "reference": "e9cf5e4bbf7eeaf9ef5db34938942602838fc2b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/composer-installer/zipball/6e0fa428497bf560152ee73ffbb8af5c6a56b0dd",
-                "reference": "6e0fa428497bf560152ee73ffbb8af5c6a56b0dd",
+                "url": "https://api.github.com/repos/PHPCSStandards/composer-installer/zipball/e9cf5e4bbf7eeaf9ef5db34938942602838fc2b1",
+                "reference": "e9cf5e4bbf7eeaf9ef5db34938942602838fc2b1",
                 "shasum": ""
             },
             "require": {
@@ -1871,7 +1871,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-06-27T17:24:01+00:00"
+            "time": "2025-07-17T20:45:56+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -4180,16 +4180,16 @@
         },
         {
             "name": "sanmai/pipeline",
-            "version": "6.21",
+            "version": "6.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sanmai/pipeline.git",
-                "reference": "6d729c0b0c662010d84cdea9b99f90a65ae4cf5e"
+                "reference": "fb8d0c23b4ef085315a36d397fafa052203020ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/6d729c0b0c662010d84cdea9b99f90a65ae4cf5e",
-                "reference": "6d729c0b0c662010d84cdea9b99f90a65ae4cf5e",
+                "url": "https://api.github.com/repos/sanmai/pipeline/zipball/fb8d0c23b4ef085315a36d397fafa052203020ce",
+                "reference": "fb8d0c23b4ef085315a36d397fafa052203020ce",
                 "shasum": ""
             },
             "require": {
@@ -4197,6 +4197,7 @@
             },
             "require-dev": {
                 "ergebnis/composer-normalize": "^2.8",
+                "esi/phpunit-coverage-check": ">2",
                 "friendsofphp/php-cs-fixer": "^3.17",
                 "infection/infection": ">=0.30.3",
                 "league/pipeline": "^0.3 || ^1.0",
@@ -4205,6 +4206,7 @@
                 "phpstan/phpstan": "^2",
                 "phpunit/phpunit": ">=9.4 <12",
                 "sanmai/phpstan-rules": "^0.3.0",
+                "sanmai/phpunit-double-colon-syntax": "^0.1.1",
                 "vimeo/psalm": ">=2"
             },
             "type": "library",
@@ -4234,7 +4236,7 @@
             "description": "General-purpose collections pipeline",
             "support": {
                 "issues": "https://github.com/sanmai/pipeline/issues",
-                "source": "https://github.com/sanmai/pipeline/tree/6.21"
+                "source": "https://github.com/sanmai/pipeline/tree/6.22"
             },
             "funding": [
                 {
@@ -4242,7 +4244,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-07-16T04:06:56+00:00"
+            "time": "2025-07-22T09:07:07+00:00"
         },
         {
             "name": "sebastian/diff",
