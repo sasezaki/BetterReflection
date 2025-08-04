@@ -10,6 +10,7 @@ use PropertyHookType;
 use ReflectionException as CoreReflectionException;
 use ReflectionMethod as CoreReflectionMethod;
 use ReflectionProperty as CoreReflectionProperty;
+use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplemented;
 use Roave\BetterReflection\Reflection\Exception\NoObjectProvided;
 use Roave\BetterReflection\Reflection\Exception\NotAnObject;
 use Roave\BetterReflection\Reflection\ReflectionAttribute as BetterReflectionAttribute;
@@ -354,5 +355,10 @@ final class ReflectionProperty extends CoreReflectionProperty
         }
 
         throw new OutOfBoundsException(sprintf('Property %s::$%s does not exist.', self::class, $name));
+    }
+
+    public function getMangledName(): string
+    {
+        throw new NotImplemented('Not implemented');
     }
 }

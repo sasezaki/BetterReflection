@@ -25,6 +25,7 @@ jobs:
           - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
         operating-system:
           - "ubuntu-latest"
           - "windows-latest"
@@ -69,6 +70,7 @@ jobs:
           - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
         operating-system:
           - "ubuntu-latest"
 
@@ -110,6 +112,8 @@ jobs:
           - "locked"
         php-version:
           - "8.4"
+          # Psalm currently fails
+          # - "8.5"
         operating-system:
           - "ubuntu-latest"
 

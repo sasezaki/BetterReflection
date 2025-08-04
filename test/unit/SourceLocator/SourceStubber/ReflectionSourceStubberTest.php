@@ -35,6 +35,7 @@ use Roave\BetterReflectionTest\Fixture\EnumPureForSourceStubber;
 use Roave\BetterReflectionTest\Fixture\InterfaceForSourceStubber;
 use Roave\BetterReflectionTest\Fixture\PHP81ClassForSourceStubber;
 use Roave\BetterReflectionTest\Fixture\PHP83ClassForSourceStubber;
+use Roave\BetterReflectionTest\Fixture\PHP85ClassForSourceStubber;
 use Roave\BetterReflectionTest\Fixture\PHP8ClassForSourceStubber;
 use Roave\BetterReflectionTest\Fixture\TraitForSourceStubber;
 use stdClass;
@@ -116,6 +117,7 @@ class ReflectionSourceStubberTest extends TestCase
         self::assertNull($stubData->getExtensionName());
     }
 
+    #[RequiresPhp('< 8.5')]
     public function testClassStub(): void
     {
         require_once __DIR__ . '/../../Fixture/ClassForSourceStubber.php';
@@ -187,6 +189,17 @@ class ReflectionSourceStubberTest extends TestCase
 
         self::assertNotNull($stubData);
         self::assertStringEqualsFile(__DIR__ . '/../../Fixture/PHP83ClassForSourceStubberExpected.php', $stubData->getStub());
+    }
+
+    #[RequiresPhp('8.5')]
+    public function testClassStubWithPHP85Changes(): void
+    {
+        require_once __DIR__ . '/../../Fixture/PHP85ClassForSourceStubber.php';
+
+        $stubData = $this->stubber->generateClassStub(PHP85ClassForSourceStubber::class);
+
+        self::assertNotNull($stubData);
+        self::assertStringEqualsFile(__DIR__ . '/../../Fixture/PHP85ClassForSourceStubberExpected.php', $stubData->getStub());
     }
 
     public function testClassWithoutNamespaceStub(): void
