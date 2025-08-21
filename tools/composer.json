@@ -3,9 +3,9 @@
         "doctrine/coding-standard": "^13.0.1",
         "phpstan/phpstan": "^2.1.22",
         "phpstan/phpstan-phpunit": "^2.0.7",
-        "vimeo/psalm": "^6.13.0",
+        "vimeo/psalm": "^6.13.1",
         "roave/backward-compatibility-check": "^8.14.0",
-        "roave/infection-static-analysis-plugin": "^1.38.0"
+        "roave/infection-static-analysis-plugin": "^1.39.0"
     },
     "config": {
         "allow-plugins": {

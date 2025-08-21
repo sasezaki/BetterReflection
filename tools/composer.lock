@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f4f10a4a350ce477f45fd40181923e9",
+    "content-hash": "02fa4d6469cb425139af2b7b936f42c9",
     "packages": [
         {
             "name": "amphp/amp",
@@ -4060,16 +4060,16 @@
         },
         {
             "name": "roave/infection-static-analysis-plugin",
-            "version": "1.38.0",
+            "version": "1.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/infection-static-analysis-plugin.git",
-                "reference": "431c7bba21df58bf11186ec03501e2b47d321b2f"
+                "reference": "8f4b2c20f55c51d6d1af53daccc5ee03bf2198de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/infection-static-analysis-plugin/zipball/431c7bba21df58bf11186ec03501e2b47d321b2f",
-                "reference": "431c7bba21df58bf11186ec03501e2b47d321b2f",
+                "url": "https://api.github.com/repos/Roave/infection-static-analysis-plugin/zipball/8f4b2c20f55c51d6d1af53daccc5ee03bf2198de",
+                "reference": "8f4b2c20f55c51d6d1af53daccc5ee03bf2198de",
                 "shasum": ""
             },
             "require": {
@@ -4077,7 +4077,7 @@
                 "infection/infection": "0.29.14",
                 "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
                 "sanmai/later": "^0.1.7",
-                "vimeo/psalm": "^6.12.0"
+                "vimeo/psalm": "^6.13.1"
             },
             "conflict": {
                 "symfony/polyfill-php84": "<1.30.0"
@@ -4085,7 +4085,7 @@
             "require-dev": {
                 "azjezz/psl": "^3.3.0",
                 "doctrine/coding-standard": "^13.0.1",
-                "phpunit/phpunit": "^11.5.21",
+                "phpunit/phpunit": "^11.5.34",
                 "psalm/plugin-phpunit": "^0.19.5"
             },
             "bin": [
@@ -4110,9 +4110,9 @@
             "description": "Static analysis on top of mutation testing - prevents escaped mutants from being invalid according to static analysis",
             "support": {
                 "issues": "https://github.com/Roave/infection-static-analysis-plugin/issues",
-                "source": "https://github.com/Roave/infection-static-analysis-plugin/tree/1.38.0"
+                "source": "https://github.com/Roave/infection-static-analysis-plugin/tree/1.39.0"
             },
-            "time": "2025-06-04T01:32:53+00:00"
+            "time": "2025-08-21T11:27:22+00:00"
         },
         {
             "name": "sanmai/later",
@@ -6009,16 +6009,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.13.0",
+            "version": "6.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "70cdf647255a1362b426bb0f522a85817b8c791c"
+                "reference": "1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/70cdf647255a1362b426bb0f522a85817b8c791c",
-                "reference": "70cdf647255a1362b426bb0f522a85817b8c791c",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51",
+                "reference": "1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51",
                 "shasum": ""
             },
             "require": {
@@ -6123,7 +6123,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-07-14T09:59:17+00:00"
+            "time": "2025-08-06T10:10:28+00:00"
         },
         {
             "name": "webmozart/assert",
