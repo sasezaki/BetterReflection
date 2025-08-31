@@ -21,6 +21,7 @@ use Roave\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\StringSourceLocator;
 use Roave\BetterReflectionTest\BetterReflectionSingleton;
+use Roave\BetterReflectionTest\Fixture\Attr;
 
 use function sprintf;
 
@@ -349,5 +350,48 @@ class ReflectionConstantTest extends TestCase
         $constantReflection = $reflector->reflectConstant('CURLOPT_FTP_SSL');
 
         self::assertTrue($constantReflection->isDeprecated());
+    }
+
+    public function testGetAttributesWithoutAttributes(): void
+    {
+        $phpCode = <<<'PHP'
+        <?php
+
+        const SOME_CONSTANT = 123;
+
+        PHP;
+
+        $reflector          = new DefaultReflector(new StringSourceLocator($phpCode, $this->astLocator));
+        $constantReflection = $reflector->reflectConstant('SOME_CONSTANT');
+        $attributes         = $constantReflection->getAttributes();
+
+        self::assertCount(0, $attributes);
+    }
+
+    public function testGetAttributesWithAttributes(): void
+    {
+        $reflector          = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/Attributes.php', $this->astLocator));
+        $constantReflection = $reflector->reflectConstant('Roave\BetterReflectionTest\Fixture\SOME_CONSTANT');
+        $attributes         = $constantReflection->getAttributes();
+
+        self::assertCount(2, $attributes);
+    }
+
+    public function testGetAttributesByName(): void
+    {
+        $reflector          = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/Attributes.php', $this->astLocator));
+        $constantReflection = $reflector->reflectConstant('Roave\BetterReflectionTest\Fixture\SOME_CONSTANT');
+        $attributes         = $constantReflection->getAttributesByName(Attr::class);
+
+        self::assertCount(1, $attributes);
+    }
+
+    public function testGetAttributesByInstance(): void
+    {
+        $reflector          = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/Attributes.php', $this->astLocator));
+        $constantReflection = $reflector->reflectConstant('Roave\BetterReflectionTest\Fixture\SOME_CONSTANT');
+        $attributes         = $constantReflection->getAttributesByInstance(Attr::class);
+
+        self::assertCount(2, $attributes);
     }
 }

@@ -4,8 +4,6 @@ namespace Roave\BetterReflectionTest\Fixture;
 
 use Attribute;
 
-const SOME_CONSTANT = 'some-constant';
-
 #[Attribute]
 class Attr
 {
@@ -15,6 +13,10 @@ class Attr
 class AnotherAttr extends Attr
 {
 }
+
+#[Attr]
+#[AnotherAttr]
+const SOME_CONSTANT = 'some-constant';
 
 #[Attr]
 #[AnotherAttr]
