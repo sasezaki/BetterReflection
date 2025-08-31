@@ -640,4 +640,79 @@ class ReflectionPropertyTest extends TestCase
         $reflectionPropertyAdapter = new ReflectionPropertyAdapter($betterReflectionProperty);
         $reflectionPropertyAdapter->getRawValue(new stdClass());
     }
+
+    public function testGetMangledNameForPublicProperty(): void
+    {
+        $betterReflectionClass = $this->createMock(BetterReflectionClass::class);
+        $betterReflectionClass
+            ->method('getName')
+            ->willReturn('Foo');
+
+        $betterReflectionProperty = $this->createMock(BetterReflectionProperty::class);
+        $betterReflectionProperty
+            ->method('getDeclaringClass')
+            ->willReturn($betterReflectionClass);
+        $betterReflectionProperty
+            ->method('getName')
+            ->willReturn('publicProperty');
+        $betterReflectionProperty
+            ->method('isPrivate')
+            ->willReturn(false);
+        $betterReflectionProperty
+            ->method('isProtected')
+            ->willReturn(false);
+
+        $reflectionPropertyAdapter = new ReflectionPropertyAdapter($betterReflectionProperty);
+        self::assertSame('publicProperty', $reflectionPropertyAdapter->getMangledName());
+    }
+
+    public function testGetMangledNameForProtectedProperty(): void
+    {
+        $betterReflectionClass = $this->createMock(BetterReflectionClass::class);
+        $betterReflectionClass
+            ->method('getName')
+            ->willReturn('Foo');
+
+        $betterReflectionProperty = $this->createMock(BetterReflectionProperty::class);
+        $betterReflectionProperty
+            ->method('getDeclaringClass')
+            ->willReturn($betterReflectionClass);
+        $betterReflectionProperty
+            ->method('getName')
+            ->willReturn('protectedProperty');
+        $betterReflectionProperty
+            ->method('isPrivate')
+            ->willReturn(false);
+        $betterReflectionProperty
+            ->method('isProtected')
+            ->willReturn(true);
+
+        $reflectionPropertyAdapter = new ReflectionPropertyAdapter($betterReflectionProperty);
+        self::assertSame("\0*\0protectedProperty", $reflectionPropertyAdapter->getMangledName());
+    }
+
+    public function testGetMangledNameForPrivateProperty(): void
+    {
+        $betterReflectionClass = $this->createMock(BetterReflectionClass::class);
+        $betterReflectionClass
+            ->method('getName')
+            ->willReturn('Foo');
+
+        $betterReflectionProperty = $this->createMock(BetterReflectionProperty::class);
+        $betterReflectionProperty
+            ->method('getDeclaringClass')
+            ->willReturn($betterReflectionClass);
+        $betterReflectionProperty
+            ->method('getName')
+            ->willReturn('privateProperty');
+        $betterReflectionProperty
+            ->method('isPrivate')
+            ->willReturn(true);
+        $betterReflectionProperty
+            ->method('isProtected')
+            ->willReturn(false);
+
+        $reflectionPropertyAdapter = new ReflectionPropertyAdapter($betterReflectionProperty);
+        self::assertSame("\0Foo\0privateProperty", $reflectionPropertyAdapter->getMangledName());
+    }
 }
