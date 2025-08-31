@@ -413,6 +413,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
                         'IMAGETYPE_SVG',
                         'IMAGETYPE_HEIF',
                         'PHP_BUILD_DATE',
+                        'ZEND_VM_KIND',
                     ], true)
                 ) {
                     continue;
