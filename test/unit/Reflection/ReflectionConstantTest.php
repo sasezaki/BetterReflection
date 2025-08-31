@@ -343,6 +343,22 @@ class ReflectionConstantTest extends TestCase
         self::assertSame($isDeprecated, $constantReflection->isDeprecated());
     }
 
+    public function testIsDeprecatedByAttribute(): void
+    {
+        $phpCode = <<<'PHP'
+        <?php
+
+        #[Deprecated]
+        const SOME_CONSTANT = 123;
+
+        PHP;
+
+        $reflector          = new DefaultReflector(new StringSourceLocator($phpCode, $this->astLocator));
+        $constantReflection = $reflector->reflectConstant('SOME_CONSTANT');
+
+        self::assertTrue($constantReflection->isDeprecated());
+    }
+
     public function testIsCurloptFtpSslConstantDeprecated(): void
     {
         $betterReflection   = BetterReflectionSingleton::instance();
