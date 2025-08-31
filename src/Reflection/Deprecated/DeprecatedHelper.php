@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Roave\BetterReflection\Reflection\Deprecated;
 
+use Deprecated;
 use Roave\BetterReflection\Reflection\Annotation\AnnotationHelper;
 use Roave\BetterReflection\Reflection\Attribute\ReflectionAttributeHelper;
 use Roave\BetterReflection\Reflection\ReflectionClass;
@@ -20,8 +21,7 @@ final class DeprecatedHelper
     /** @psalm-pure */
     public static function isDeprecated(ReflectionClass|ReflectionMethod|ReflectionFunction|ReflectionConstant|ReflectionClassConstant|ReflectionEnumCase|ReflectionProperty $reflection): bool
     {
-        // We don't use Deprecated::class because the class is currently missing in stubs
-        if (ReflectionAttributeHelper::filterAttributesByName($reflection->getAttributes(), 'Deprecated') !== []) {
+        if (ReflectionAttributeHelper::filterAttributesByName($reflection->getAttributes(), Deprecated::class) !== []) {
             return true;
         }
 
