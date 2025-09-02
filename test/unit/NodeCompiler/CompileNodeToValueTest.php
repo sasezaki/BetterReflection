@@ -36,6 +36,7 @@ use Roave\BetterReflectionTest\Fixture\ClassWithNewInInitializers;
 use Roave\BetterReflectionTest\Fixture\MagicConstantsClass;
 use Roave\BetterReflectionTest\Fixture\MagicConstantsInPropertyHooks;
 use Roave\BetterReflectionTest\Fixture\MagicConstantsTrait;
+use stdClass;
 
 use function assert;
 use function define;
@@ -200,6 +201,11 @@ class CompileNodeToValueTest extends TestCase
             ['4 <=> 1', 1],
             ['1 <=> 1', 0],
             ['5 ?? 4', 5],
+            ['(int) true', 1],
+            ['(float) true', 1.0],
+            ['(string) true', '1'],
+            ['(bool) 1', true],
+            ['(array) 1', [1]],
         ];
     }
 
@@ -1125,6 +1131,15 @@ PHP
         $getHookParameterAttribute = $getHookParameter->getAttributes()[0];
 
         self::assertSame($expectedValue, $getHookParameterAttribute->getArguments()[0]);
+    }
+
+    public function testObjectCast(): void
+    {
+        $node = $this->parseCode('(object) []');
+
+        $compiledValue = (new CompileNodeToValue())->__invoke($node, $this->getDummyContext());
+
+        self::assertInstanceOf(stdClass::class, $compiledValue->value);
     }
 
     /** @return non-empty-string */

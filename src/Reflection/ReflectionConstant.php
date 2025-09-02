@@ -9,7 +9,8 @@ use Roave\BetterReflection\BetterReflection;
 use Roave\BetterReflection\NodeCompiler\CompiledValue;
 use Roave\BetterReflection\NodeCompiler\CompileNodeToValue;
 use Roave\BetterReflection\NodeCompiler\CompilerContext;
-use Roave\BetterReflection\Reflection\Annotation\AnnotationHelper;
+use Roave\BetterReflection\Reflection\Attribute\ReflectionAttributeHelper;
+use Roave\BetterReflection\Reflection\Deprecated\DeprecatedHelper;
 use Roave\BetterReflection\Reflection\Exception\InvalidConstantNode;
 use Roave\BetterReflection\Reflection\StringCast\ReflectionConstantStringCast;
 use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
@@ -58,6 +59,9 @@ class ReflectionConstant implements Reflection
     /** @var positive-int */
     private int $endColumn;
 
+    /** @var list<ReflectionAttribute> */
+    private array $attributes;
+
     /** @psalm-allow-private-mutation */
     private CompiledValue|null $compiledValue = null;
 
@@ -82,6 +86,9 @@ class ReflectionConstant implements Reflection
         }
 
         $this->docComment = GetLastDocComment::forNode($node);
+        $this->attributes = $node instanceof Node\Stmt\Const_
+            ? ReflectionAttributeHelper::createAttributes($reflector, $this, $node->attrGroups)
+            : [];
 
         $startLine = $node->getStartLine();
         assert($startLine > 0);
@@ -227,7 +234,7 @@ class ReflectionConstant implements Reflection
 
     public function isDeprecated(): bool
     {
-        return AnnotationHelper::isDeprecated($this->getDocComment());
+        return DeprecatedHelper::isDeprecated($this);
     }
 
     public function getValueExpression(): Node\Expr
@@ -303,6 +310,28 @@ class ReflectionConstant implements Reflection
     public function __toString(): string
     {
         return ReflectionConstantStringCast::toString($this);
+    }
+
+    /** @return list<ReflectionAttribute> */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /** @return list<ReflectionAttribute> */
+    public function getAttributesByName(string $name): array
+    {
+        return ReflectionAttributeHelper::filterAttributesByName($this->getAttributes(), $name);
+    }
+
+    /**
+     * @param class-string $className
+     *
+     * @return list<ReflectionAttribute>
+     */
+    public function getAttributesByInstance(string $className): array
+    {
+        return ReflectionAttributeHelper::filterAttributesByInstance($this->getAttributes(), $className);
     }
 
     private function setNamesFromNode(Node\Stmt\Const_|Node\Expr\FuncCall $node, int|null $positionInNode): void

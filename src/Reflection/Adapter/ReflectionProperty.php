@@ -10,7 +10,6 @@ use PropertyHookType;
 use ReflectionException as CoreReflectionException;
 use ReflectionMethod as CoreReflectionMethod;
 use ReflectionProperty as CoreReflectionProperty;
-use Roave\BetterReflection\Reflection\Adapter\Exception\NotImplemented;
 use Roave\BetterReflection\Reflection\Exception\NoObjectProvided;
 use Roave\BetterReflection\Reflection\Exception\NotAnObject;
 use Roave\BetterReflection\Reflection\ReflectionAttribute as BetterReflectionAttribute;
@@ -359,6 +358,21 @@ final class ReflectionProperty extends CoreReflectionProperty
 
     public function getMangledName(): string
     {
-        throw new NotImplemented('Not implemented');
+        if ($this->betterReflectionProperty->isPrivate()) {
+            return sprintf(
+                "\0%s\0%s",
+                $this->betterReflectionProperty->getDeclaringClass()->getName(),
+                $this->betterReflectionProperty->getName(),
+            );
+        }
+
+        if ($this->betterReflectionProperty->isProtected()) {
+            return sprintf(
+                "\0*\0%s",
+                $this->betterReflectionProperty->getName(),
+            );
+        }
+
+        return $this->betterReflectionProperty->getName();
     }
 }

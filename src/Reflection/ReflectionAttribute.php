@@ -8,6 +8,7 @@ use Attribute;
 use PhpParser\Node;
 use Roave\BetterReflection\NodeCompiler\CompileNodeToValue;
 use Roave\BetterReflection\NodeCompiler\CompilerContext;
+use Roave\BetterReflection\Reflection\Adapter\ReflectionAttribute as ReflectionAttributeAdapter;
 use Roave\BetterReflection\Reflection\StringCast\ReflectionAttributeStringCast;
 use Roave\BetterReflection\Reflector\Reflector;
 
@@ -26,7 +27,7 @@ class ReflectionAttribute
     public function __construct(
         private Reflector $reflector,
         Node\Attribute $node,
-        private ReflectionClass|ReflectionMethod|ReflectionFunction|ReflectionClassConstant|ReflectionEnumCase|ReflectionProperty|ReflectionParameter $owner,
+        private ReflectionClass|ReflectionMethod|ReflectionFunction|ReflectionConstant|ReflectionClassConstant|ReflectionEnumCase|ReflectionProperty|ReflectionParameter $owner,
         private bool $isRepeated,
     ) {
         /** @var class-string $name */
@@ -43,7 +44,7 @@ class ReflectionAttribute
     }
 
     /** @internal */
-    public function withOwner(ReflectionClass|ReflectionMethod|ReflectionFunction|ReflectionClassConstant|ReflectionEnumCase|ReflectionProperty|ReflectionParameter $owner): self
+    public function withOwner(ReflectionClass|ReflectionMethod|ReflectionFunction|ReflectionConstant|ReflectionClassConstant|ReflectionEnumCase|ReflectionProperty|ReflectionParameter $owner): self
     {
         $clone        = clone $this;
         $clone->owner = $owner;
@@ -77,12 +78,13 @@ class ReflectionAttribute
         return array_map(static fn (Node\Expr $value): mixed => $compiler->__invoke($value, $context)->value, $this->arguments);
     }
 
-    /** @return int-mask-of<Attribute::TARGET_*> */
+    /** @return int-mask-of<Attribute::TARGET_*>|ReflectionAttributeAdapter::TARGET_CONSTANT_COMPATIBILITY */
     public function getTarget(): int
     {
         return match (true) {
             $this->owner instanceof ReflectionClass => Attribute::TARGET_CLASS,
             $this->owner instanceof ReflectionFunction => Attribute::TARGET_FUNCTION,
+            $this->owner instanceof ReflectionConstant => ReflectionAttributeAdapter::TARGET_CONSTANT_COMPATIBILITY,
             $this->owner instanceof ReflectionMethod => Attribute::TARGET_METHOD,
             $this->owner instanceof ReflectionProperty => Attribute::TARGET_PROPERTY,
             $this->owner instanceof ReflectionClassConstant => Attribute::TARGET_CLASS_CONSTANT,

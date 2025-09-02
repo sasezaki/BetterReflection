@@ -140,6 +140,30 @@ class CompileNodeToValue
                 return $this->getEnumPropertyValue($node, $context);
             }
 
+            if ($node instanceof Node\Expr\Cast\Int_) {
+                return (int) $this($node->expr, $context)->value;
+            }
+
+            if ($node instanceof Node\Expr\Cast\Double) {
+                return (float) $this($node->expr, $context)->value;
+            }
+
+            if ($node instanceof Node\Expr\Cast\Bool_) {
+                return (bool) $this($node->expr, $context)->value;
+            }
+
+            if ($node instanceof Node\Expr\Cast\String_) {
+                return (string) $this($node->expr, $context)->value;
+            }
+
+            if ($node instanceof Node\Expr\Cast\Array_) {
+                return (array) $this($node->expr, $context)->value;
+            }
+
+            if ($node instanceof Node\Expr\Cast\Object_) {
+                return (object) $this($node->expr, $context)->value;
+            }
+
             throw Exception\UnableToCompileNode::forUnRecognizedExpressionInContext($node, $context);
         });
 

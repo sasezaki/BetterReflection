@@ -14,6 +14,8 @@ use function sprintf;
 /** @template-extends CoreReflectionAttribute<object> */
 final class ReflectionAttribute extends CoreReflectionAttribute
 {
+    public const TARGET_CONSTANT_COMPATIBILITY = 64;
+
     public function __construct(private BetterReflectionAttribute $betterReflectionAttribute)
     {
         unset($this->name);
@@ -26,7 +28,7 @@ final class ReflectionAttribute extends CoreReflectionAttribute
     }
 
     /**
-     * @return int-mask-of<Attribute::TARGET_*>
+     * @return int-mask-of<Attribute::TARGET_*>|self::TARGET_CONSTANT_COMPATIBILITY
      *
      * @psalm-mutation-free
      * @psalm-suppress ImplementedReturnTypeMismatch
