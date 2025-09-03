@@ -3975,22 +3975,22 @@
         },
         {
             "name": "roave/better-reflection",
-            "version": "6.60.0",
+            "version": "6.61.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/BetterReflection.git",
-                "reference": "53dd01710b5c705b1b570a1820bd65e70529ebc7"
+                "reference": "d0c9955a6cce8dfefe379b6ea53a26488dc1feb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/53dd01710b5c705b1b570a1820bd65e70529ebc7",
-                "reference": "53dd01710b5c705b1b570a1820bd65e70529ebc7",
+                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/d0c9955a6cce8dfefe379b6ea53a26488dc1feb6",
+                "reference": "d0c9955a6cce8dfefe379b6ea53a26488dc1feb6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "jetbrains/phpstorm-stubs": "2024.3",
-                "nikic/php-parser": "^5.6.0",
+                "nikic/php-parser": "^5.6.1",
                 "php": "~8.2.0 || ~8.3.2 || ~8.4.1 || ~8.5.0"
             },
             "conflict": {
@@ -3998,7 +3998,7 @@
             },
             "require-dev": {
                 "phpbench/phpbench": "^1.4.1",
-                "phpunit/phpunit": "^11.5.28"
+                "phpunit/phpunit": "^11.5.35"
             },
             "suggest": {
                 "composer/composer": "Required to use the ComposerSourceLocator"
@@ -4038,9 +4038,9 @@
             "description": "Better Reflection - an improved code reflection API",
             "support": {
                 "issues": "https://github.com/Roave/BetterReflection/issues",
-                "source": "https://github.com/Roave/BetterReflection/tree/6.60.0"
+                "source": "https://github.com/Roave/BetterReflection/tree/6.61.0"
             },
-            "time": "2025-08-21T11:08:59+00:00"
+            "time": "2025-09-02T20:05:51+00:00"
         },
         {
             "name": "roave/infection-static-analysis-plugin",
