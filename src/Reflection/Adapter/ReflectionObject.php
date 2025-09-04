@@ -316,14 +316,14 @@ final class ReflectionObject extends CoreReflectionObject
     {
         $traits = $this->betterReflectionObject->getTraits();
 
-        /** @var list<trait-string> $traitNames */
-        $traitNames = array_map(static fn (BetterReflectionClass $trait): string => $trait->getName(), $traits);
+        $traitsByName = [];
+        foreach ($traits as $trait) {
+            /** @var trait-string $traitName */
+            $traitName                = $trait->getName();
+            $traitsByName[$traitName] = new ReflectionClass($trait);
+        }
 
-        /** @psalm-suppress ImpureFunctionCall */
-        return array_combine(
-            $traitNames,
-            array_map(static fn (BetterReflectionClass $trait): ReflectionClass => new ReflectionClass($trait), $traits),
-        );
+        return $traitsByName;
     }
 
     /**
