@@ -3975,16 +3975,16 @@
         },
         {
             "name": "roave/better-reflection",
-            "version": "6.61.0",
+            "version": "6.62.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/BetterReflection.git",
-                "reference": "d0c9955a6cce8dfefe379b6ea53a26488dc1feb6"
+                "reference": "46a39461696c5ac228355e3b1781f23029c8347c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/d0c9955a6cce8dfefe379b6ea53a26488dc1feb6",
-                "reference": "d0c9955a6cce8dfefe379b6ea53a26488dc1feb6",
+                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/46a39461696c5ac228355e3b1781f23029c8347c",
+                "reference": "46a39461696c5ac228355e3b1781f23029c8347c",
                 "shasum": ""
             },
             "require": {
@@ -3998,7 +3998,7 @@
             },
             "require-dev": {
                 "phpbench/phpbench": "^1.4.1",
-                "phpunit/phpunit": "^11.5.35"
+                "phpunit/phpunit": "^11.5.36"
             },
             "suggest": {
                 "composer/composer": "Required to use the ComposerSourceLocator"
@@ -4038,9 +4038,9 @@
             "description": "Better Reflection - an improved code reflection API",
             "support": {
                 "issues": "https://github.com/Roave/BetterReflection/issues",
-                "source": "https://github.com/Roave/BetterReflection/tree/6.61.0"
+                "source": "https://github.com/Roave/BetterReflection/tree/6.62.0"
             },
-            "time": "2025-09-02T20:05:51+00:00"
+            "time": "2025-09-04T22:43:09+00:00"
         },
         {
             "name": "roave/infection-static-analysis-plugin",
@@ -4605,16 +4605,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.13.2",
+            "version": "3.13.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "5b5e3821314f947dd040c70f7992a64eac89025c"
+                "reference": "5be16e10d07a2b0c629a8fc52c653fd57458bdf8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/5b5e3821314f947dd040c70f7992a64eac89025c",
-                "reference": "5b5e3821314f947dd040c70f7992a64eac89025c",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/5be16e10d07a2b0c629a8fc52c653fd57458bdf8",
+                "reference": "5be16e10d07a2b0c629a8fc52c653fd57458bdf8",
                 "shasum": ""
             },
             "require": {
@@ -4685,7 +4685,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-06-17T22:17:01+00:00"
+            "time": "2025-09-04T19:19:52+00:00"
         },
         {
             "name": "symfony/console",
