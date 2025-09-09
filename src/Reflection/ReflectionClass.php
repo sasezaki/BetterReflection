@@ -1315,31 +1315,35 @@ class ReflectionClass implements Reflection
             return $interfaces;
         }
 
-        $addStringable = function(string $stringableClassName) use (&$interfaces) :void {
-            try {
-                $stringableInterfaceReflection = $this->reflector->reflectClass($stringableClassName);
-
-                if ($stringableInterfaceReflection->isInternal()) {
-                    $interfaces[$stringableClassName] = $stringableInterfaceReflection;
-                }
-            } catch (IdentifierNotFound) {
-                // Stringable interface does not exist on target PHP version
-            }
-        };
-
         foreach (array_keys($this->immediateMethods) as $immediateMethodName) {
             if (strtolower($immediateMethodName) === '__tostring') {
-                $addStringable($stringableClassName);
+                try {
+                    $stringableInterfaceReflection = $this->reflector->reflectClass($stringableClassName);
+
+                    if ($stringableInterfaceReflection->isInternal()) {
+                        $interfaces[$stringableClassName] = $stringableInterfaceReflection;
+                    }
+                } catch (IdentifierNotFound) {
+                    // Stringable interface does not exist on target PHP version
+                }
 
                 // @infection-ignore-all Break_: There's no difference between break and continue - break is just optimization
                 break;
             }
         }
 
-        foreach($this->getTraits() as $trait) {
+        foreach ($this->getTraits() as $trait) {
             foreach (array_keys($trait->immediateMethods) as $immediateMethodName) {
                 if (strtolower($immediateMethodName) === '__tostring') {
-                    $addStringable($stringableClassName);
+                    try {
+                        $stringableInterfaceReflection = $this->reflector->reflectClass($stringableClassName);
+
+                        if ($stringableInterfaceReflection->isInternal()) {
+                            $interfaces[$stringableClassName] = $stringableInterfaceReflection;
+                        }
+                    } catch (IdentifierNotFound) {
+                        // Stringable interface does not exist on target PHP version
+                    }
 
                     // @infection-ignore-all Break_: There's no difference between break and continue - break is just optimization
                     break 2;
