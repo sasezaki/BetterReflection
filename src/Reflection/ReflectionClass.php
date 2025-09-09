@@ -1315,7 +1315,12 @@ class ReflectionClass implements Reflection
             return $interfaces;
         }
 
-        foreach (array_keys($this->immediateMethods) as $immediateMethodName) {
+        $methods = $this->immediateMethods;
+        foreach ($this->getTraits() as $trait) {
+            $methods += $trait->immediateMethods;
+        }
+
+        foreach (array_keys($methods) as $immediateMethodName) {
             if (strtolower($immediateMethodName) === '__tostring') {
                 try {
                     $stringableInterfaceReflection = $this->reflector->reflectClass($stringableClassName);
