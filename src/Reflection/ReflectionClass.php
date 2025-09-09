@@ -1315,7 +1315,12 @@ class ReflectionClass implements Reflection
             return $interfaces;
         }
 
-        foreach (array_keys($this->immediateMethods) as $immediateMethodName) {
+        $methods = $this->immediateMethods;
+        foreach ($this->getTraits() as $trait) {
+            $methods += $trait->immediateMethods;
+        }
+
+        foreach (array_keys($methods) as $immediateMethodName) {
             if (strtolower($immediateMethodName) === '__tostring') {
                 try {
                     $stringableInterfaceReflection = $this->reflector->reflectClass($stringableClassName);
@@ -1329,25 +1334,6 @@ class ReflectionClass implements Reflection
 
                 // @infection-ignore-all Break_: There's no difference between break and continue - break is just optimization
                 break;
-            }
-        }
-
-        foreach ($this->getTraits() as $trait) {
-            foreach (array_keys($trait->immediateMethods) as $immediateMethodName) {
-                if (strtolower($immediateMethodName) === '__tostring') {
-                    try {
-                        $stringableInterfaceReflection = $this->reflector->reflectClass($stringableClassName);
-
-                        if ($stringableInterfaceReflection->isInternal()) {
-                            $interfaces[$stringableClassName] = $stringableInterfaceReflection;
-                        }
-                    } catch (IdentifierNotFound) {
-                        // Stringable interface does not exist on target PHP version
-                    }
-
-                    // @infection-ignore-all Break_: There's no difference between break and continue - break is just optimization
-                    break 2;
-                }
             }
         }
 
