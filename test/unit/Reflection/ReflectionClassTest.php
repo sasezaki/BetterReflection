@@ -2878,6 +2878,30 @@ PHP;
         self::assertSame(['Iterator', 'Traversable', 'Stringable'], $class->getInterfaceNames());
     }
 
+    public function testStringableViaTrait(): void
+    {
+        $php = <<<'PHP'
+            <?php
+
+            trait HasStringableTrait {
+                public function __toString(): string { return 'foo'; }
+            }
+
+            class ClassHasStringableTrait {
+            	use HasStringableTrait;
+            }
+        PHP;
+
+        $reflector = new DefaultReflector(new AggregateSourceLocator([
+            new StringSourceLocator($php, $this->astLocator),
+            BetterReflectionSingleton::instance()->sourceLocator(),
+        ]));
+
+        $class = $reflector->reflectClass('ClassHasStringableTrait');
+
+        self::assertSame(['Stringable'], $class->getInterfaceNames());
+    }
+
     /** @return list<array{0: string, 1: bool}> */
     public static function deprecatedProvider(): array
     {
