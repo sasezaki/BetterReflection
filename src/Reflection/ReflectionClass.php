@@ -1253,11 +1253,7 @@ class ReflectionClass implements Reflection
         return $this->modifiers;
     }
 
-    /**
-     * @return int-mask-of<ReflectionClassAdapter::IS_*>
-     *
-     * @phpstan-ignore-next-line return.unusedType
-     */
+    /** @return int-mask-of<ReflectionClassAdapter::IS_*> */
     private function computeModifiers(ClassNode|InterfaceNode|TraitNode|EnumNode $node): int
     {
         if (! $node instanceof ClassNode) {

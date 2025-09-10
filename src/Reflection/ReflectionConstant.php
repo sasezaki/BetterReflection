@@ -339,7 +339,8 @@ class ReflectionConstant implements Reflection
         if ($node instanceof Node\Expr\FuncCall) {
             $name = $this->getNameFromDefineFunctionCall($node);
 
-            $nameParts       = explode('\\', $name);
+            $nameParts = explode('\\', $name);
+            /** @phpstan-ignore assign.readOnlyPropertyByPhpDoc */
             $this->namespace = implode('\\', array_slice($nameParts, 0, -1)) ?: null;
 
             $shortName = $nameParts[count($nameParts) - 1];
