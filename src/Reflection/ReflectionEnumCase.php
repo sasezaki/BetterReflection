@@ -87,8 +87,13 @@ class ReflectionEnumCase
         return $this->name;
     }
 
+    public function hasValueExpression(): bool
+    {
+        return $this->value !== null;
+    }
+
     /**
-     * Check ReflectionEnum::isBacked() being true first to avoid throwing exception.
+     * Check self::hasValueExpression() being true first to avoid throwing exception.
      *
      * @throws LogicException
      */
@@ -110,7 +115,7 @@ class ReflectionEnumCase
     }
 
     /**
-     * Check ReflectionEnum::isBacked() being true first to avoid throwing exception.
+     * Check self::hasValueExpression() being true first to avoid throwing exception.
      *
      * @throws LogicException
      */
