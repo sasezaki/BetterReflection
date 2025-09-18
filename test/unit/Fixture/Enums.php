@@ -71,8 +71,3 @@ enum IsDeprecated
 interface InterfaceForEnum
 {
 }
-
-enum InvalidEnum: int
-{
-    case INVALID;
-}

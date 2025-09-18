@@ -14,6 +14,7 @@ use Roave\BetterReflection\Reflection\ReflectionEnumCase;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\Reflector\Reflector;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
+use Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 use Roave\BetterReflectionTest\BetterReflectionSingleton;
 use Roave\BetterReflectionTest\Fixture\Attr;
@@ -36,7 +37,12 @@ class ReflectionEnumCaseTest extends TestCase
         parent::setUp();
 
         $this->astLocator = BetterReflectionSingleton::instance()->astLocator();
-        $this->reflector  = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/Enums.php', $this->astLocator));
+        $this->reflector  = new DefaultReflector(
+            new AggregateSourceLocator([
+                new SingleFileSourceLocator(__DIR__ . '/../Fixture/Enums.php', $this->astLocator),
+                new SingleFileSourceLocator(__DIR__ . '/../Fixture/InvalidEnums.php', $this->astLocator),
+            ]),
+        );
     }
 
     /** @return list<array{0: class-string, 1: non-empty-string}> */

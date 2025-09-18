@@ -87,6 +87,10 @@ class ReflectionEnumCase
         return $this->name;
     }
 
+    /**
+     * While ReflectionEnum::isBacked() is a sufficient check when working with valid PHP code,
+     * with an invalid enum declaration we can still encounter a back enum case with a missing value.
+     */
     public function hasValueExpression(): bool
     {
         return $this->value !== null;
