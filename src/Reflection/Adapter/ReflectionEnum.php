@@ -594,7 +594,7 @@ final class ReflectionEnum extends CoreReflectionEnum
     public function getCases(): array
     {
         /** @psalm-suppress ImpureFunctionCall */
-        return array_map(function (BetterReflectionEnumCase $case): ReflectionEnumUnitCase|ReflectionEnumBackedCase {
+        return array_map(static function (BetterReflectionEnumCase $case): ReflectionEnumUnitCase|ReflectionEnumBackedCase {
             if ($case->hasValueExpression()) {
                 return new ReflectionEnumBackedCase($case);
             }
