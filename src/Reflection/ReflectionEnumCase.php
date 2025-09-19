@@ -88,7 +88,16 @@ class ReflectionEnumCase
     }
 
     /**
-     * Check ReflectionEnum::isBacked() being true first to avoid throwing exception.
+     * While ReflectionEnum::isBacked() is a sufficient check when working with valid PHP code,
+     * with an invalid enum declaration we can still encounter a back enum case with a missing value.
+     */
+    public function hasValueExpression(): bool
+    {
+        return $this->value !== null;
+    }
+
+    /**
+     * Check self::hasValueExpression() being true first to avoid throwing exception.
      *
      * @throws LogicException
      */
@@ -110,7 +119,7 @@ class ReflectionEnumCase
     }
 
     /**
-     * Check ReflectionEnum::isBacked() being true first to avoid throwing exception.
+     * Check self::hasValueExpression() being true first to avoid throwing exception.
      *
      * @throws LogicException
      */

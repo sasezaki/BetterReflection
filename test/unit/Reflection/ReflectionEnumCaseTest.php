@@ -14,11 +14,13 @@ use Roave\BetterReflection\Reflection\ReflectionEnumCase;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\Reflector\Reflector;
 use Roave\BetterReflection\SourceLocator\Ast\Locator;
+use Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 use Roave\BetterReflectionTest\BetterReflectionSingleton;
 use Roave\BetterReflectionTest\Fixture\Attr;
 use Roave\BetterReflectionTest\Fixture\DocComment;
 use Roave\BetterReflectionTest\Fixture\IntEnum;
+use Roave\BetterReflectionTest\Fixture\InvalidEnum;
 use Roave\BetterReflectionTest\Fixture\IsDeprecated;
 use Roave\BetterReflectionTest\Fixture\PureEnum;
 use Roave\BetterReflectionTest\Fixture\StringEnum;
@@ -35,7 +37,12 @@ class ReflectionEnumCaseTest extends TestCase
         parent::setUp();
 
         $this->astLocator = BetterReflectionSingleton::instance()->astLocator();
-        $this->reflector  = new DefaultReflector(new SingleFileSourceLocator(__DIR__ . '/../Fixture/Enums.php', $this->astLocator));
+        $this->reflector  = new DefaultReflector(
+            new AggregateSourceLocator([
+                new SingleFileSourceLocator(__DIR__ . '/../Fixture/Enums.php', $this->astLocator),
+                new SingleFileSourceLocator(__DIR__ . '/../Fixture/InvalidEnums.php', $this->astLocator),
+            ]),
+        );
     }
 
     /** @return list<array{0: class-string, 1: non-empty-string}> */
@@ -45,6 +52,7 @@ class ReflectionEnumCaseTest extends TestCase
             [PureEnum::class, 'ONE'],
             [IntEnum::class, 'TWO'],
             [StringEnum::class, 'THREE'],
+            [InvalidEnum::class, 'INVALID'],
         ];
     }
 
@@ -60,6 +68,33 @@ class ReflectionEnumCaseTest extends TestCase
 
         self::assertInstanceOf(ReflectionEnumCase::class, $caseReflection);
         self::assertSame($caseName, $caseReflection->getName());
+    }
+
+    /** @return list<array{0: class-string, 1: non-empty-string, 2: bool}> */
+    public static function dataHasValueExpression(): array
+    {
+        return [
+            [PureEnum::class, 'ONE', false, false],
+            [InvalidEnum::class, 'INVALID', true, false],
+            [IntEnum::class, 'TWO', true, true],
+            [StringEnum::class, 'THREE', true, true],
+        ];
+    }
+
+    /** @param non-empty-string $caseName */
+    #[DataProvider('dataHasValueExpression')]
+    public function testHasValueExpression(string $enumName, string $caseName, bool $isBacked, bool $hasValue): void
+    {
+        $enumReflection = $this->reflector->reflectClass($enumName);
+
+        self::assertInstanceOf(ReflectionEnum::class, $enumReflection);
+
+        self::assertSame($isBacked, $enumReflection->isBacked());
+
+        $caseReflection = $enumReflection->getCase($caseName);
+
+        self::assertInstanceOf(ReflectionEnumCase::class, $caseReflection);
+        self::assertSame($hasValue, $caseReflection->hasValueExpression());
     }
 
     /** @return list<array{0: class-string, 1: non-empty-string, 2: int|string}> */
