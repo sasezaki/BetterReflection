@@ -583,7 +583,7 @@ final class ReflectionEnum extends CoreReflectionEnum
             throw new CoreReflectionException(sprintf('Case %s::%s does not exist', $this->betterReflectionEnum->getName(), $name));
         }
 
-        if ($this->betterReflectionEnum->isBacked()) {
+        if ($case->hasValueExpression()) {
             return new ReflectionEnumBackedCase($case);
         }
 
@@ -595,7 +595,7 @@ final class ReflectionEnum extends CoreReflectionEnum
     {
         /** @psalm-suppress ImpureFunctionCall */
         return array_map(function (BetterReflectionEnumCase $case): ReflectionEnumUnitCase|ReflectionEnumBackedCase {
-            if ($this->betterReflectionEnum->isBacked()) {
+            if ($case->hasValueExpression()) {
                 return new ReflectionEnumBackedCase($case);
             }
 

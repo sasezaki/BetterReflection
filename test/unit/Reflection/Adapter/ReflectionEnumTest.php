@@ -732,11 +732,11 @@ class ReflectionEnumTest extends TestCase
     public function testGetCaseForBackedEnum(): void
     {
         $betterReflectionEnumCase = $this->createMock(BetterReflectionEnumCase::class);
+        $betterReflectionEnumCase
+            ->method('hasValueExpression')
+            ->willReturn(true);
 
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
-        $betterReflectionEnum
-            ->method('isBacked')
-            ->willReturn(true);
         $betterReflectionEnum
             ->method('getCase')
             ->willReturn($betterReflectionEnumCase);
@@ -749,11 +749,11 @@ class ReflectionEnumTest extends TestCase
     public function testGetCasesForPureEnum(): void
     {
         $betterReflectionEnumCase = $this->createMock(BetterReflectionEnumCase::class);
+        $betterReflectionEnumCase
+            ->method('hasValueExpression')
+            ->willReturn(false);
 
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
-        $betterReflectionEnum
-            ->method('isBacked')
-            ->willReturn(false);
         $betterReflectionEnum
             ->method('getCases')
             ->willReturn([$betterReflectionEnumCase]);
@@ -766,11 +766,11 @@ class ReflectionEnumTest extends TestCase
     public function testGetCasesForBackedEnum(): void
     {
         $betterReflectionEnumCase = $this->createMock(BetterReflectionEnumCase::class);
+        $betterReflectionEnumCase
+            ->method('hasValueExpression')
+            ->willReturn(true);
 
         $betterReflectionEnum = $this->createMock(BetterReflectionEnum::class);
-        $betterReflectionEnum
-            ->method('isBacked')
-            ->willReturn(true);
         $betterReflectionEnum
             ->method('getCases')
             ->willReturn([$betterReflectionEnumCase]);
