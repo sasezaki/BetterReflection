@@ -205,7 +205,17 @@ class PhpStormStubsSourceStubberTest extends TestCase
 
             // https://github.com/JetBrains/phpstorm-stubs/pull/1781
             if (
-                in_array($methodName, ['Closure#getCurrent'], true)
+                in_array($methodName, [
+                    'Closure#getCurrent',
+                    'SplMinHeap#__serialize',
+                    'SplMinHeap#__unserialize',
+                    'SplMaxHeap#__serialize',
+                    'SplMaxHeap#__unserialize',
+                    'SplPriorityQueue#__serialize',
+                    'SplPriorityQueue#__unserialize',
+                    'SplHeap#__serialize',
+                    'SplHeap#__unserialize',
+                ], true)
             ) {
                 continue;
             }
