@@ -50,6 +50,3 @@ parameters:
         -
             identifier: method.nonObject
             path: test/unit/
-        -
-            identifier: method.resultUnused
-            path: test/unit/
