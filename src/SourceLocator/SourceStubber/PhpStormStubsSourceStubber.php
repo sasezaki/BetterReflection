@@ -611,10 +611,10 @@ final class PhpStormStubsSourceStubber implements SourceStubber
 
         assert($languageLevelTypeAwareAttribute->args[0]->value instanceof Node\Expr\Array_);
 
-        /** @var list<Node\Expr\ArrayItem> $types */
+        /** @var list<Node\ArrayItem> $types */
         $types = $languageLevelTypeAwareAttribute->args[0]->value->items;
 
-        usort($types, static fn (Node\Expr\ArrayItem $a, Node\Expr\ArrayItem $b): int => $b->key <=> $a->key);
+        usort($types, static fn (Node\ArrayItem $a, Node\ArrayItem $b): int => $b->key <=> $a->key);
 
         foreach ($types as $type) {
             assert($type->key instanceof Node\Scalar\String_);
