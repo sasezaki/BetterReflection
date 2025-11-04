@@ -765,17 +765,14 @@ class PhpStormStubsSourceStubberTest extends TestCase
         $stubberReflection = new CoreReflectionClass($sourceStubber);
 
         $stubDirectoryReflection = $stubberReflection->getProperty('stubsDirectory');
-        $stubDirectoryReflection->setAccessible(true);
         $stubDirectoryReflection->setValue($sourceStubber, __DIR__ . '/../../Fixture');
 
         $classMapReflection = $stubberReflection->getProperty('classMap');
-        $classMapReflection->setAccessible(true);
         $classMapValue                                                     = $classMapReflection->getValue();
         $classMapValue['roave\betterreflectiontest\fixture\fakeconstants'] = 'fakeconstants/FakeConstantsStub.php';
         $classMapReflection->setValue($classMapReflection, $classMapValue);
 
         $constantMapReflection = $stubberReflection->getProperty('constantMap');
-        $constantMapReflection->setAccessible(true);
         $constantMapValue                                                      = $constantMapReflection->getValue();
         $constantMapValue['define_constant']                                   = 'fakeconstants/FakeConstantsStub.php';
         $constantMapValue['roave\betterreflectiontest\fixture\const_constant'] = 'fakeconstants/FakeConstantsStub.php';

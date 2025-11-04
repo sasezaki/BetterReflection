@@ -958,7 +958,6 @@ class ReflectionObjectTest extends TestCase
         $betterReflectionObject           = $betterReflectionObjectReflection->newInstanceWithoutConstructor();
 
         $betterReflectionObjectClassPropertyReflection = $betterReflectionObjectReflection->getProperty('reflectionClass');
-        $betterReflectionObjectClassPropertyReflection->setAccessible(true);
         $betterReflectionObjectClassPropertyReflection->setValue($betterReflectionObject, $betterReflectionClass);
 
         $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);
@@ -1067,7 +1066,6 @@ class ReflectionObjectTest extends TestCase
         $betterReflectionObject           = $betterReflectionObjectReflection->newInstanceWithoutConstructor();
 
         $betterReflectionObjectClassPropertyReflection = $betterReflectionObjectReflection->getProperty('reflectionClass');
-        $betterReflectionObjectClassPropertyReflection->setAccessible(true);
         $betterReflectionObjectClassPropertyReflection->setValue($betterReflectionObject, $betterReflectionClass);
 
         $reflectionObjectAdapter = new ReflectionObjectAdapter($betterReflectionObject);

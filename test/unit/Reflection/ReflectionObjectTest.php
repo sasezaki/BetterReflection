@@ -151,11 +151,9 @@ class ReflectionObjectTest extends TestCase
         $reflectionObjectReflection = new CoreReflectionObject($classInfo);
 
         $reflectionObjectObjectReflection = $reflectionObjectReflection->getProperty('object');
-        $reflectionObjectObjectReflection->setAccessible(true);
         $reflectionObjectObjectReflection->setValue($classInfo, new stdClass());
 
         $reflectionObjectReflectionClassReflection = $reflectionObjectReflection->getProperty('reflectionClass');
-        $reflectionObjectReflectionClassReflection->setAccessible(true);
         $reflectionObjectReflectionClassReflection->setValue($classInfo, $mockClass);
 
         $this->expectException(InvalidArgumentException::class);
@@ -300,7 +298,6 @@ class ReflectionObjectTest extends TestCase
 
         foreach ($properties as $propertyName => $propertyValue) {
             $mockReflectionClassNodeReflection = $mockReflectionClassReflection->getProperty($propertyName);
-            $mockReflectionClassNodeReflection->setAccessible(true);
             $mockReflectionClassNodeReflection->setValue($mockReflectionClass, $propertyValue);
         }
 
@@ -311,7 +308,6 @@ class ReflectionObjectTest extends TestCase
         // the mocked reflectionclass above
         $reflectionObjectReflection                        = new CoreReflectionObject($reflectionObject);
         $reflectionObjectReflectionClassPropertyReflection = $reflectionObjectReflection->getProperty('reflectionClass');
-        $reflectionObjectReflectionClassPropertyReflection->setAccessible(true);
         $reflectionObjectReflectionClassPropertyReflection->setValue($reflectionObject, $mockReflectionClass);
 
         $reflectionObjectReflectionMethod = $reflectionObjectReflection->getMethod($methodName);
