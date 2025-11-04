@@ -6,6 +6,7 @@
     colors="true"
     executionOrder="random"
     cacheDirectory=".phpunit.cache"
+    failOnDeprecation="true"
 >
     <source>
         <include>
