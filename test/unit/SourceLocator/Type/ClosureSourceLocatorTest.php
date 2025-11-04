@@ -141,7 +141,6 @@ class ClosureSourceLocatorTest extends TestCase
             ->willReturn(0);
 
         $coreReflectionPropertyInSourceLocatatorReflection = $sourceLocatorReflection->getProperty('coreFunctionReflection');
-        $coreReflectionPropertyInSourceLocatatorReflection->setAccessible(true);
         $coreReflectionPropertyInSourceLocatatorReflection->setValue($sourceLocator, $coreReflectionPropertyMock);
 
         $this->expectException(NoClosureOnLine::class);
@@ -221,7 +220,6 @@ class ClosureSourceLocatorTest extends TestCase
 
         $sourceLocatorReflection                               = new CoreReflectionClass($sourceLocator);
         $sourceLocatorReflectionCoreFunctionReflectionProperty = $sourceLocatorReflection->getProperty('coreFunctionReflection');
-        $sourceLocatorReflectionCoreFunctionReflectionProperty->setAccessible(true);
         $sourceLocatorReflectionCoreFunctionReflectionProperty->setValue($sourceLocator, $sourceLocatorReflectionCoreFunctionReflectionPropertyValue);
 
         $this->expectException(InvalidFileLocation::class);

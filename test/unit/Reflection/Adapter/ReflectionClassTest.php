@@ -728,7 +728,7 @@ class ReflectionClassTest extends TestCase
         $betterReflectionProperty
             ->expects($this->once())
             ->method('setValue')
-            ->with(123);
+            ->with(null, 123);
 
         $betterReflectionClass = $this->createMock(BetterReflectionClass::class);
         $betterReflectionClass

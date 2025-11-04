@@ -600,7 +600,7 @@ final class ReflectionClass extends CoreReflectionClass
             throw new CoreReflectionException(sprintf('Class %s does not have a property named %s', $this->betterReflectionClass->getName(), $name));
         }
 
-        $property->setValue($value);
+        $property->setValue(null, $value);
     }
 
     /**

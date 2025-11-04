@@ -172,7 +172,6 @@ class ParseToAstFailureTest extends TestCase
         $locatedSource = new LocatedSource('<?php abc', 'Whatever');
 
         $filenameProperty = new ReflectionProperty($locatedSource, 'filename');
-        $filenameProperty->setAccessible(true);
         $filenameProperty->setValue($locatedSource, '/foo/bar');
 
         $previous = new Error('Some error message', ['startLine' => 1]);
@@ -209,7 +208,6 @@ class ParseToAstFailureTest extends TestCase
         $locatedSource = new LocatedSource('<?php abc', 'Whatever');
 
         $filenameProperty = new ReflectionProperty($locatedSource, 'filename');
-        $filenameProperty->setAccessible(true);
         $filenameProperty->setValue($locatedSource, '/foo/bar');
 
         $previous = new Exception('Unknown error');

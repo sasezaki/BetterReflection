@@ -345,7 +345,7 @@ class AutoloadSourceLocatorTest extends TestCase
         $type           = new IdentifierType();
         $typeReflection = new ReflectionObject($type);
         $prop           = $typeReflection->getProperty('name');
-        $prop->setAccessible(true);
+
         $prop->setValue($type, 'nonsense');
 
         $identifier = new Identifier('foo', $type);

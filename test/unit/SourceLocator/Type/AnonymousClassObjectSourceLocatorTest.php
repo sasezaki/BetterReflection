@@ -165,7 +165,6 @@ class AnonymousClassObjectSourceLocatorTest extends TestCase
             ->willReturn(0);
 
         $coreReflectionPropertyInSourceLocatatorReflection = $sourceLocatorReflection->getProperty('coreClassReflection');
-        $coreReflectionPropertyInSourceLocatatorReflection->setAccessible(true);
         $coreReflectionPropertyInSourceLocatatorReflection->setValue($sourceLocator, $coreReflectionPropertyMock);
 
         $this->expectException(NoAnonymousClassOnLine::class);
@@ -262,7 +261,6 @@ class AnonymousClassObjectSourceLocatorTest extends TestCase
 
         $sourceLocatorReflection                            = new CoreReflectionClass($sourceLocator);
         $sourceLocatorReflectionCoreClassReflectionProperty = $sourceLocatorReflection->getProperty('coreClassReflection');
-        $sourceLocatorReflectionCoreClassReflectionProperty->setAccessible(true);
         $sourceLocatorReflectionCoreClassReflectionProperty->setValue($sourceLocator, $sourceLocatorReflectionCoreClassReflectionPropertyValue);
 
         $this->expectException(InvalidFileLocation::class);
