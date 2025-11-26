@@ -1,11 +1,11 @@
 {
     "require": {
         "doctrine/coding-standard": "^14.0.0",
-        "phpstan/phpstan": "^2.1.31",
-        "phpstan/phpstan-phpunit": "^2.0.7",
+        "phpstan/phpstan": "^2.1.32",
+        "phpstan/phpstan-phpunit": "^2.0.8",
         "vimeo/psalm": "^6.13.1",
-        "roave/backward-compatibility-check": "^8.14.0",
-        "roave/infection-static-analysis-plugin": "^1.39.0"
+        "roave/backward-compatibility-check": "^8.15.0",
+        "roave/infection-static-analysis-plugin": "^1.41.0"
     },
     "config": {
         "allow-plugins": {
