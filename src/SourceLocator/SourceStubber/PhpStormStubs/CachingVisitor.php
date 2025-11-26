@@ -27,7 +27,7 @@ use function strtoupper;
 /** @internal */
 class CachingVisitor extends NodeVisitorAbstract
 {
-    private const TRUE_FALSE_NULL = ['true', 'false', 'null'];
+    private const array TRUE_FALSE_NULL = ['true', 'false', 'null'];
 
     private Node\Stmt\Namespace_|null $currentNamespace = null;
 

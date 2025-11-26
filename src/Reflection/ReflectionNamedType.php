@@ -17,7 +17,7 @@ use function strtolower;
 /** @psalm-immutable */
 class ReflectionNamedType extends ReflectionType
 {
-    private const BUILT_IN_TYPES = [
+    private const array BUILT_IN_TYPES = [
         'int'      => null,
         'float'    => null,
         'string'   => null,
