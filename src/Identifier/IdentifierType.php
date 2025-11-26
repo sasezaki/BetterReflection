@@ -14,11 +14,11 @@ use function sprintf;
 
 class IdentifierType
 {
-    public const IDENTIFIER_CLASS    = ReflectionClass::class;
-    public const IDENTIFIER_FUNCTION = ReflectionFunction::class;
-    public const IDENTIFIER_CONSTANT = ReflectionConstant::class;
+    public const string IDENTIFIER_CLASS    = ReflectionClass::class;
+    public const string IDENTIFIER_FUNCTION = ReflectionFunction::class;
+    public const string IDENTIFIER_CONSTANT = ReflectionConstant::class;
 
-    private const VALID_TYPES = [
+    private const array VALID_TYPES = [
         self::IDENTIFIER_CLASS    => null,
         self::IDENTIFIER_FUNCTION => null,
         self::IDENTIFIER_CONSTANT => null,

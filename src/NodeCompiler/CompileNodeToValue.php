@@ -24,7 +24,7 @@ use function sprintf;
 /** @internal */
 class CompileNodeToValue
 {
-    private const TRUE_FALSE_NULL = ['true', 'false', 'null'];
+    private const array TRUE_FALSE_NULL = ['true', 'false', 'null'];
 
     /**
      * Compile an expression from a node into a value.

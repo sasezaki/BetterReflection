@@ -14,9 +14,9 @@ use function str_starts_with;
 
 class Identifier
 {
-    public const WILDCARD = '*';
+    public const string WILDCARD = '*';
 
-    private const VALID_NAME_REGEXP = '/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*/';
+    private const string VALID_NAME_REGEXP = '/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*/';
 
     private string $name;
 
