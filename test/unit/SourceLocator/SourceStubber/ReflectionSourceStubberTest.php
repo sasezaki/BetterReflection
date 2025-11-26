@@ -53,7 +53,6 @@ use function get_declared_traits;
 use function get_defined_constants;
 use function get_defined_functions;
 use function in_array;
-use function method_exists;
 use function sort;
 
 #[CoversClass(ReflectionSourceStubber::class)]
@@ -357,13 +356,6 @@ class ReflectionSourceStubberTest extends TestCase
 
         foreach ($original->getReflectionConstants() as $originalConstant) {
             if ($originalConstant->isEnumCase()) {
-                continue;
-            }
-
-            if (
-                ! method_exists($originalConstant, 'hasType')
-                || ! method_exists($originalConstant, 'getType')
-            ) {
                 continue;
             }
 

@@ -25,7 +25,7 @@ class ReflectionFunction implements Reflection
 {
     use ReflectionFunctionAbstract;
 
-    public const CLOSURE_NAME = '{closure}';
+    public const string CLOSURE_NAME = '{closure}';
 
     private bool $isStatic;
 

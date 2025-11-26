@@ -376,7 +376,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
 
         $stubbedReflectionParameters = $stubbedReflection->getParameters();
 
-        if ($functionName === 'strrchr' && PHP_VERSION_ID >= 80300) {
+        if ($functionName === 'strrchr') {
             // New parameter in PHP 8.3.0
             return;
         }
@@ -553,11 +553,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
         $enumName = 'Random\IntervalBoundary';
         $stub     = $this->sourceStubber->generateClassStub($enumName);
 
-        if (PHP_VERSION_ID >= 80300) {
-            self::assertInstanceOf(StubData::class, $stub);
-        } else {
-            self::assertNull($stub);
-        }
+        self::assertInstanceOf(StubData::class, $stub);
     }
 
     public function testStubForFunctionThatExists(): void
@@ -591,18 +587,10 @@ class PhpStormStubsSourceStubberTest extends TestCase
             $stubData->getStub(),
         );
 
-        if (PHP_VERSION_ID >= 80300) {
-            self::assertStringContainsString(
-                '@deprecated 8.3',
-                $stubData->getStub(),
-            );
-        } else {
-            self::assertStringNotContainsString(
-                '@deprecated 8.3',
-                $stubData->getStub(),
-            );
-        }
-
+        self::assertStringContainsString(
+            '@deprecated 8.3',
+            $stubData->getStub(),
+        );
         self::assertSame('standard', $stubData->getExtensionName());
     }
 

@@ -64,9 +64,9 @@ use function strtolower;
 /** @psalm-immutable */
 class ReflectionClass implements Reflection
 {
-    public const ANONYMOUS_CLASS_NAME_PREFIX        = 'class@anonymous';
-    public const ANONYMOUS_CLASS_NAME_PREFIX_REGEXP = '~^(?:class|[\w\\\\]+)@anonymous~';
-    private const ANONYMOUS_CLASS_NAME_SUFFIX       = '@anonymous';
+    public const string ANONYMOUS_CLASS_NAME_PREFIX        = 'class@anonymous';
+    public const string ANONYMOUS_CLASS_NAME_PREFIX_REGEXP = '~^(?:class|[\w\\\\]+)@anonymous~';
+    private const string ANONYMOUS_CLASS_NAME_SUFFIX       = '@anonymous';
 
     /** @var class-string|trait-string|null */
     private string|null $name;
