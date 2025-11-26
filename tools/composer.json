@@ -4,7 +4,7 @@
         "phpstan/phpstan": "^2.1.32",
         "phpstan/phpstan-phpunit": "^2.0.8",
         "vimeo/psalm": "^6.13.1",
-        "roave/backward-compatibility-check": "^8.15.0",
+        "roave/backward-compatibility-check": "^8.16.0",
         "roave/infection-static-analysis-plugin": "^1.41.0"
     },
     "config": {
@@ -13,7 +13,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         },
         "platform": {
-            "php": "8.2.99"
+            "php": "8.3.99"
         }
     },
     "autoload": {
