@@ -53,7 +53,6 @@ use function implode;
 use function in_array;
 use function is_resource;
 use function is_string;
-use function method_exists;
 use function preg_replace;
 use function sprintf;
 
@@ -420,14 +419,11 @@ final class ReflectionSourceStubber implements SourceStubber
             }
 
             $classConstantNode = $this->builderFactory->classConst($constantReflection->getName(), $constantReflection->getValue());
+            $constantType      = $constantReflection->getType();
 
-            if (method_exists($constantReflection, 'getType')) {
-                $constantType = $constantReflection->getType();
-
-                if ($constantType !== null) {
-                    assert($constantType instanceof CoreReflectionNamedType || $constantType instanceof CoreReflectionUnionType || $constantType instanceof CoreReflectionIntersectionType);
-                    $classConstantNode->setType($this->formatType($constantType));
-                }
+            if ($constantType !== null) {
+                assert($constantType instanceof CoreReflectionNamedType || $constantType instanceof CoreReflectionUnionType || $constantType instanceof CoreReflectionIntersectionType);
+                $classConstantNode->setType($this->formatType($constantType));
             }
 
             if ($constantReflection->getDocComment() !== false) {
