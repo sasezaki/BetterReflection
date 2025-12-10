@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d89d7fe1fcd6d67f6ecd36e268627860",
+    "content-hash": "acbe0b73f0eaabedff7a4a2682d5a662",
     "packages": [
         {
             "name": "amphp/amp",
@@ -4104,24 +4104,24 @@
         },
         {
             "name": "roave/infection-static-analysis-plugin",
-            "version": "1.41.0",
+            "version": "1.42.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/infection-static-analysis-plugin.git",
-                "reference": "527cd90de7938071d93729ffdea049eeddebb918"
+                "reference": "9aa9961b2deedcf08a8167551b7d6eb32c351edd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/infection-static-analysis-plugin/zipball/527cd90de7938071d93729ffdea049eeddebb918",
-                "reference": "527cd90de7938071d93729ffdea049eeddebb918",
+                "url": "https://api.github.com/repos/Roave/infection-static-analysis-plugin/zipball/9aa9961b2deedcf08a8167551b7d6eb32c351edd",
+                "reference": "9aa9961b2deedcf08a8167551b7d6eb32c351edd",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.2",
                 "infection/infection": "0.31.9",
-                "php": "~8.3.0 || ~8.4.0",
+                "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
                 "sanmai/later": "^0.1.7",
-                "vimeo/psalm": "^6.13.1"
+                "vimeo/psalm": "^6.14.1"
             },
             "conflict": {
                 "symfony/polyfill-php84": "<1.30.0"
@@ -4154,9 +4154,9 @@
             "description": "Static analysis on top of mutation testing - prevents escaped mutants from being invalid according to static analysis",
             "support": {
                 "issues": "https://github.com/Roave/infection-static-analysis-plugin/issues",
-                "source": "https://github.com/Roave/infection-static-analysis-plugin/tree/1.41.0"
+                "source": "https://github.com/Roave/infection-static-analysis-plugin/tree/1.42.0"
             },
-            "time": "2025-11-25T16:54:20+00:00"
+            "time": "2025-12-10T10:17:12+00:00"
         },
         {
             "name": "sanmai/di-container",
@@ -6226,16 +6226,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.13.1",
+            "version": "6.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51"
+                "reference": "cf26e6debc366836754f359ece5b68629a1ee185"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51",
-                "reference": "1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/cf26e6debc366836754f359ece5b68629a1ee185",
+                "reference": "cf26e6debc366836754f359ece5b68629a1ee185",
                 "shasum": ""
             },
             "require": {
@@ -6258,7 +6258,7 @@
                 "fidry/cpu-core-counter": "^0.4.1 || ^0.5.1 || ^1.0.0",
                 "netresearch/jsonmapper": "^5.0",
                 "nikic/php-parser": "^5.0.0",
-                "php": "~8.1.31 || ~8.2.27 || ~8.3.16 || ~8.4.3",
+                "php": "~8.1.31 || ~8.2.27 || ~8.3.16 || ~8.4.3 || ~8.5.0",
                 "sebastian/diff": "^4.0 || ^5.0 || ^6.0 || ^7.0",
                 "spatie/array-to-xml": "^2.17.0 || ^3.0",
                 "symfony/console": "^6.0 || ^7.0",
@@ -6340,7 +6340,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-08-06T10:10:28+00:00"
+            "time": "2025-12-10T09:31:26+00:00"
         },
         {
             "name": "webmozart/assert",
