@@ -9,6 +9,13 @@ Better Reflection
 Better Reflection is a reflection API that aims to improve and provide more features than PHP's built-in
 [reflection API](https://php.net/manual/en/book.reflection.php).
 
+> [!TIP]
+> Are you reflecting on how to improve your application? We offer consulting on
+> this library, as well as plenty of other development work. If you need any
+> help, feel free to [get in touch](https://roave.com/contact-us/).
+>
+> \- The Roave Team
+
 ## Why is it better?
 
 * You can reflect on classes that are not already loaded, without loading them
