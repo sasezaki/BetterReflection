@@ -46,9 +46,8 @@ class ReflectionFunction implements Reflection
 
         $isClosure = $node instanceof Node\Expr\Closure || $node instanceof Node\Expr\ArrowFunction;
 
-        $this->isStatic    = $isClosure && $node->static;
-        $this->isClosure   = $isClosure;
-        $this->isGenerator = $this->nodeIsOrContainsYield($node);
+        $this->isStatic  = $isClosure && $node->static;
+        $this->isClosure = $isClosure;
     }
 
     /** @throws IdentifierNotFound */
