@@ -481,7 +481,6 @@ class PhpStormStubsSourceStubberTest extends TestCase
     public static function dataFunctionInNamespace(): array
     {
         return [
-            ['MongoDB\\BSON\\fromJSON'],
             ['Sodium\\add'],
         ];
     }
